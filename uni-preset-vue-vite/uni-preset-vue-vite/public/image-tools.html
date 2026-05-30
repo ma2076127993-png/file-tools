@@ -1,0 +1,3964 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>图片工具集合</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      background: #f5f5f7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px;
+      color: #1f1f1f;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 1100px;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+      border: 1px solid #e5e6eb;
+      overflow: hidden;
+    }
+
+    .app-header {
+      padding: 20px 28px 12px;
+      border-bottom: 1px solid #f2f3f5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .app-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .app-title-badge {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #2ed573, #1dd1a1);
+      font-size: 10px;
+      font-weight: 600;
+      color: #0b0c10;
+    }
+
+    .app-subtitle {
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.45);
+    }
+
+    .tab-nav {
+      display: flex;
+      padding: 0 18px 4px;
+      gap: 8px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .tab-item {
+      position: relative;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.65);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      background: transparent;
+      min-height: 40px;
+    }
+
+    .tab-item span {
+      font-size: 14px;
+    }
+
+    .tab-item:hover {
+      color: rgba(0, 0, 0, 0.85);
+      border-color: #d0d4db;
+      background: #f5f5f7;
+    }
+
+    .tab-item.active {
+      color: #ffffff;
+      background: linear-gradient(135deg, #1677ff, #4096ff);
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(22, 119, 255, 0.35);
+    }
+
+    .tab-item.active .tab-icon {
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+    }
+
+    .tab-icon {
+      font-size: 16px;
+    }
+
+    .app-body {
+      padding: 20px 24px 24px;
+      background: #fafafa;
+    }
+
+    .tool-panel {
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .tool-panel.active {
+      display: block;
+    }
+
+    .tool-placeholder {
+      border-radius: 18px;
+      padding: 40px;
+      border: 1px dashed rgba(0, 0, 0, 0.08);
+      background: #fafafa;
+      text-align: center;
+      color: rgba(0, 0, 0, 0.45);
+      font-size: 14px;
+    }
+
+    /* 首页样式 */
+    .home-container {
+      width: 100%;
+      max-width: 1100px;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+      border: 1px solid #e5e6eb;
+      overflow: hidden;
+      margin: 24px 0 18px;
+    }
+
+    .home-body {
+      padding: 22px 24px 26px;
+      background: #fafafa;
+    }
+
+    .home-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .home-card {
+      border-radius: 16px;
+      padding: 18px 18px 16px;
+      background: radial-gradient(circle at top left, rgba(64, 150, 255, 0.12), transparent 55%),
+        #ffffff;
+      border: 1px solid #e5e6eb;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .home-card.secondary {
+      background: radial-gradient(circle at top left, rgba(46, 213, 115, 0.12), transparent 55%),
+        #ffffff;
+    }
+
+    .home-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .home-card-title {
+      font-size: 18px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .home-card-tag {
+      font-size: 12px;
+      padding: 2px 10px;
+      border-radius: 999px;
+      background: rgba(22, 119, 255, 0.08);
+      color: #1677ff;
+      font-weight: 500;
+      border: 1px solid rgba(22, 119, 255, 0.16);
+    }
+
+    .home-card-desc {
+      font-size: 13px;
+      color: rgba(0, 0, 0, 0.55);
+      margin-top: 4px;
+    }
+
+    .home-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .home-card-meta {
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.45);
+    }
+
+    /* 顶部时钟样式 */
+    .clock-container {
+      width: 100%;
+      max-width: 1100px;
+      margin: 8px auto 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .clock-face {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, #ffffff, #f0f5ff 40%, #d6e4ff 75%);
+      box-shadow:
+        0 10px 25px rgba(15, 23, 42, 0.18),
+        0 0 0 1px rgba(22, 119, 255, 0.12);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .clock-center-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #1677ff;
+      box-shadow: 0 0 0 4px rgba(22, 119, 255, 0.2);
+      position: relative;
+      z-index: 3;
+    }
+
+    .clock-hand {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform-origin: 50% 90%;
+      transform: translate(-50%, -90%) rotate(0deg);
+      border-radius: 999px;
+    }
+
+    .clock-hand.hour {
+      width: 4px;
+      height: 34px;
+      background: #1f2933;
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.4);
+      z-index: 2;
+    }
+
+    .clock-hand.minute {
+      width: 3px;
+      height: 46px;
+      background: linear-gradient(180deg, #1677ff, #4096ff);
+      z-index: 2;
+    }
+
+    .clock-hand.second {
+      width: 2px;
+      height: 52px;
+      background: #ff4d4f;
+      z-index: 1;
+    }
+
+    .clock-tick {
+      position: absolute;
+      width: 2px;
+      height: 10px;
+      background: rgba(15, 23, 42, 0.18);
+      left: 50%;
+      top: 10px;
+      transform-origin: center 74px;
+      border-radius: 999px;
+    }
+
+    .clock-time-label {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #1f1f1f;
+    }
+
+    .clock-time-label span {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .clock-date-label {
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.45);
+    }
+
+    /* SVG 工具样式 */
+    .svg-tool-container {
+      border-radius: 18px;
+      padding: 22px 22px 20px;
+      background: #ffffff;
+      border: 1px solid #f0f0f0;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    .tool-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .tool-subtitle {
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.45);
+      margin-bottom: 18px;
+    }
+
+    .svg-upload-area {
+      border-radius: 18px;
+      padding: 26px 24px;
+      text-align: center;
+      background: linear-gradient(145deg, #ffffff, #f5f7ff);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-bottom: 20px;
+      border: 1px solid #e5e6eb;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .svg-upload-area:hover {
+      border-color: #1677ff;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.12);
+      transform: translateY(-1px);
+      background: linear-gradient(145deg, #f5f9ff, #ffffff);
+    }
+
+    .svg-upload-area.dragover {
+      border-color: #1677ff;
+      background: #e6f4ff;
+      transform: translateY(-2px) scale(1.01);
+    }
+
+    .svg-upload-icon {
+      font-size: 40px;
+      margin-bottom: 8px;
+    }
+
+    .svg-upload-main {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: rgba(22, 119, 255, 0.06);
+      color: #1677ff;
+      border: 1px solid rgba(22, 119, 255, 0.16);
+      display: inline-block;
+    }
+
+    .svg-upload-area:hover .svg-upload-main {
+      background: rgba(22, 119, 255, 0.12);
+      border-color: rgba(22, 119, 255, 0.28);
+    }
+
+    .svg-upload-hint {
+      font-size: 13px;
+      color: rgba(0, 0, 0, 0.45);
+    }
+
+    #svgFileInput {
+      display: none;
+    }
+
+    .svg-preview-section {
+      margin-top: 12px;
+    }
+
+    .svg-preview-item {
+      background: #fafafa;
+      border-radius: 14px;
+      padding: 14px 16px 10px;
+      border: 1px solid #f0f0f0;
+      margin-bottom: 12px;
+    }
+
+    .svg-preview-item h3 {
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .svg-output-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .svg-output-row label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .svg-size-input {
+      width: 96px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid #d9d9d9;
+      background: #ffffff;
+      color: #333333;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .svg-size-input:focus {
+      border-color: #1677ff;
+      box-shadow: 0 0 0 1px rgba(22, 119, 255, 0.35);
+    }
+
+    .svg-btn {
+      padding: 10px 22px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #1677ff, #4096ff);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(22, 119, 255, 0.3);
+      transition: all 0.18s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-width: 120px;
+      min-height: 40px;
+    }
+
+    .svg-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(22, 119, 255, 0.38);
+    }
+
+    .svg-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(22, 119, 255, 0.35);
+    }
+
+    .svg-btn:focus-visible {
+      outline: 2px solid #1677ff;
+      outline-offset: 2px;
+    }
+
+    .svg-preview-card {
+      background: radial-gradient(circle at top, rgba(255, 255, 255, 0.04), transparent 70%);
+      border-radius: 14px;
+      padding: 14px 16px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 10px;
+    }
+
+    .svg-preview-header {
+      font-size: 12px;
+      margin-bottom: 10px;
+      color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .svg-preview-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 70%;
+    }
+
+    .svg-preview-body {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .svg-preview-body canvas {
+      border-radius: 10px;
+      border: 1px solid #f0f0f0;
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+    }
+
+    .svg-preview-meta {
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.55);
+    }
+
+    .svg-preview-meta div {
+      margin-bottom: 4px;
+    }
+
+    /* JPG 工具额外样式（沿用深色风格） */
+    .jpg-loading {
+      display: none;
+      margin: 10px 0 14px;
+      text-align: center;
+      color: #1677ff;
+    }
+
+    .jpg-loading.active {
+      display: block;
+    }
+
+    .jpg-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .jpg-preview-image {
+      max-width: 220px;
+      max-height: 220px;
+      border-radius: 10px;
+      object-fit: contain;
+      background: #f5f5f5;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+    }
+
+    .jpg-button-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .jpg-button-row .svg-btn {
+      flex: 0 0 auto;
+    }
+
+    .jpg-success {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #389e0d;
+    }
+
+    /* 小屏适配，按钮更大更易点按 */
+    @media (max-width: 768px) {
+      body {
+        padding: 16px;
+        align-items: stretch;
+      }
+
+      .app-container {
+        border-radius: 16px;
+      }
+
+      .svg-tool-container {
+        padding: 18px 16px 16px;
+      }
+
+      .svg-upload-area {
+        padding: 24px 16px;
+      }
+
+      .svg-btn {
+        width: 100%;
+        min-height: 44px;
+      }
+
+      .jpg-button-row {
+        flex-direction: column;
+      }
+
+      .jpg-button-row .svg-btn {
+        width: 100%;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 精美时钟 -->
+  <div class="clock-container">
+    <div class="clock-face" id="clockFace">
+      <div class="clock-center-dot"></div>
+      <div class="clock-hand hour" id="clockHourHand"></div>
+      <div class="clock-hand minute" id="clockMinuteHand"></div>
+      <div class="clock-hand second" id="clockSecondHand"></div>
+    </div>
+    <div class="clock-time-label">
+      <span id="clockTimeText">00:00:00</span>
+    </div>
+    <div class="clock-date-label" id="clockDateText"></div>
+  </div>
+
+  <!-- 首页模块 -->
+  <div class="home-container" id="homePage">
+    <div class="app-header">
+      <div>
+        <div class="app-title">
+          工具控制台
+          <span class="app-title-badge">TOOLS</span>
+        </div>
+        <div class="app-subtitle">在这里选择你要使用的工具模块</div>
+      </div>
+    </div>
+    <div class="home-body">
+      <div class="home-grid">
+        <div class="home-card">
+          <div>
+            <div class="home-card-header">
+              <div class="home-card-title">
+                🖼️ 图片转换工具
+                <span class="home-card-tag">推荐</span>
+              </div>
+            </div>
+            <p class="home-card-desc">
+              支持 SVG 转 PNG、JPG 转 PNG 以及图片背景透明处理，适合图标、素材批量处理。
+            </p>
+          </div>
+          <div class="home-card-footer">
+            <div class="home-card-meta">包含 3 个子工具 · 本地浏览器直接完成处理</div>
+            <button class="svg-btn" id="enterImageToolBtn">进入图片转换工具</button>
+          </div>
+        </div>
+
+        <div class="home-card secondary">
+          <div>
+            <div class="home-card-header">
+              <div class="home-card-title">📄 文档转换工具</div>
+            </div>
+            <p class="home-card-desc">
+              支持 Word / 图片 / PDF 之间的常见互转（Word ⇄ PDF、图片转 PDF、PDF 转 Word / PPT / Excel）。
+            </p>
+          </div>
+          <div class="home-card-footer">
+            <div class="home-card-meta">已上线多个文档工具，点击右侧进入使用</div>
+            <button class="svg-btn" id="enterDocToolBtn">进入文档转换工具</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 原图片工具页面 -->
+  <div class="app-container" id="imageToolPage" style="display: none;">
+    <div class="app-header">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button class="svg-btn" id="backToHomeBtn" style="min-width:auto;padding:6px 14px;font-size:13px;">
+          ← 返回
+        </button>
+        <div>
+          <div class="app-title">
+            图片工具集合
+            <span class="app-title-badge">BETA</span>
+          </div>
+          <div class="app-subtitle">SVG 转 PNG · JPG 转 PNG · 背景透明，一页完成</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-nav">
+      <div class="tab-item active" data-tool="svg">
+        <span class="tab-icon">🧩</span>
+        <span>SVG 转 PNG</span>
+      </div>
+      <div class="tab-item" data-tool="jpg">
+        <span class="tab-icon">🖼️</span>
+        <span>JPG 转 PNG</span>
+      </div>
+      <div class="tab-item" data-tool="png2jpg">
+        <span class="tab-icon">🖼️</span>
+        <span>PNG 转 JPG</span>
+      </div>
+      <div class="tab-item" data-tool="png2svg">
+        <span class="tab-icon">🧩</span>
+        <span>PNG 转 SVG</span>
+      </div>
+      <div class="tab-item" data-tool="jpg2svg">
+        <span class="tab-icon">🧩</span>
+        <span>JPG 转 SVG</span>
+      </div>
+      <div class="tab-item" data-tool="svg2jpg">
+        <span class="tab-icon">🖼️</span>
+        <span>SVG 转 JPG</span>
+      </div>
+      <div class="tab-item" data-tool="bg">
+        <span class="tab-icon">✨</span>
+        <span>背景透明</span>
+      </div>
+    </div>
+
+    <div class="app-body">
+      <!-- SVG 转 PNG 工具容器 -->
+      <div class="tool-panel active" id="tool-svg">
+        <div class="svg-tool-container">
+          <h2 class="tool-title">🎨 SVG 转 PNG 工具</h2>
+          <p class="tool-subtitle">适合生成 TabBar 图标等小尺寸 PNG（推荐 81 × 81 像素）。</p>
+
+          <div class="svg-upload-area" id="svgUploadArea">
+            <div class="svg-upload-icon">📁</div>
+            <div class="svg-upload-main">点击选择 SVG 文件或拖拽文件到此处</div>
+            <div class="svg-upload-hint">支持单个或多个 .svg 文件</div>
+            <input type="file" id="svgFileInput" accept=".svg" multiple />
+          </div>
+
+          <div class="svg-preview-section" id="svgPreviewSection">
+            <div class="svg-preview-item">
+              <h3>输出设置</h3>
+              <div class="svg-output-row">
+                <label>宽度:
+                  <input
+                    type="number"
+                    id="svgWidthInput"
+                    class="svg-size-input"
+                    value="81"
+                    min="32"
+                    max="512"
+                  />
+                </label>
+                <label>高度:
+                  <input
+                    type="number"
+                    id="svgHeightInput"
+                    class="svg-size-input"
+                    value="81"
+                    min="32"
+                    max="512"
+                  />
+                </label>
+                <button class="svg-btn" id="svgConvertAllBtn">🔄 转换全部</button>
+              </div>
+            </div>
+            <div id="svgPreviewList"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- JPG 转 PNG 工具容器 -->
+      <div class="tool-panel" id="tool-jpg">
+        <div class="svg-tool-container">
+          <h2 class="tool-title">🖼️ JPG 转 PNG 工具</h2>
+          <p class="tool-subtitle">上传 JPG / JPEG 图片，支持调整尺寸后导出 PNG。</p>
+
+          <div class="svg-upload-area" id="jpgUploadArea">
+            <div class="svg-upload-icon">📤</div>
+            <div class="svg-upload-main">点击或拖拽上传 JPG 图片</div>
+            <div class="svg-upload-hint">支持 JPG、JPEG 格式，最大 10MB</div>
+            <input type="file" id="jpgFileInput" accept="image/jpeg,image/jpg" />
+          </div>
+
+          <div class="jpg-loading" id="jpgLoading">
+            <div class="spinner"></div>
+            <div style="margin-top: 6px; font-size: 13px;">正在转换中...</div>
+          </div>
+
+          <div class="jpg-preview-section" id="jpgPreviewSection">
+            <div class="svg-preview-item">
+              <h3>📐 尺寸设置</h3>
+              <div class="svg-output-row">
+                <label>宽度:
+                  <input
+                    type="number"
+                    id="jpgWidthInput"
+                    class="svg-size-input"
+                    value="81"
+                    min="1"
+                    max="2048"
+                  />
+                </label>
+                <label>高度:
+                  <input
+                    type="number"
+                    id="jpgHeightInput"
+                    class="svg-size-input"
+                    value="81"
+                    min="1"
+                    max="2048"
+                  />
+                </label>
+                <button class="svg-btn" id="jpgApplySizeBtn">🔄 应用尺寸</button>
+              </div>
+              <div class="svg-output-row" style="margin-top: 10px;">
+                <label style="gap: 8px;">
+                  <input type="checkbox" id="jpgKeepAspect" checked />
+                  <span>保持原始宽高比</span>
+                </label>
+              </div>
+              <div style="margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.7);">
+                快速尺寸：
+                <button class="svg-btn" type="button" id="jpgPreset81" style="padding:4px 10px;font-size:11px;">81×81</button>
+                <button class="svg-btn" type="button" id="jpgPreset128" style="padding:4px 10px;font-size:11px;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">128×128</button>
+                <button class="svg-btn" type="button" id="jpgPreset256" style="padding:4px 10px;font-size:11px;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">256×256</button>
+              </div>
+            </div>
+
+            <div class="jpg-preview-grid">
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>原始图片 (JPG)</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="jpgOriginalImage" class="jpg-preview-image" alt="原始图片" />
+                  <div class="svg-preview-meta" id="jpgOriginalInfo"></div>
+                </div>
+              </div>
+
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>转换后 (PNG)</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="jpgConvertedImage" class="jpg-preview-image" alt="转换后图片" />
+                  <div class="svg-preview-meta" id="jpgConvertedInfo"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="jpg-button-row">
+              <button class="svg-btn" id="jpgDownloadBtn">⬇️ 下载 PNG 图片</button>
+              <button class="svg-btn" id="jpgResetBtn" style="background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">
+                🔄 重新选择
+              </button>
+            </div>
+
+            <div class="jpg-success" id="jpgSuccess">
+              ✅ 转换成功！点击下载按钮保存 PNG 图片。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PNG 转 JPG 工具容器 -->
+      <div class="tool-panel" id="tool-png2jpg">
+        <div class="svg-tool-container">
+          <h2 class="tool-title">🖼️ PNG 转 JPG 工具</h2>
+          <p class="tool-subtitle">上传 PNG 图片，一键转换为 JPG（白色背景），适合减小体积、适配不支持透明背景的场景。</p>
+
+          <div class="svg-upload-area" id="png2JpgUploadArea">
+            <div class="svg-upload-icon">📤</div>
+            <div class="svg-upload-main">点击或拖拽上传 PNG 图片</div>
+            <div class="svg-upload-hint">只支持 PNG，最大 10MB</div>
+            <input type="file" id="png2JpgFileInput" accept="image/png" />
+          </div>
+
+          <div class="jpg-loading" id="png2JpgLoading">
+            <div class="spinner"></div>
+            <div style="margin-top: 6px; font-size: 13px;">正在转换为 JPG...</div>
+          </div>
+
+          <div class="jpg-preview-section" id="png2JpgPreviewSection" style="display:none;">
+            <div class="svg-preview-item">
+              <h3>📐 尺寸设置</h3>
+              <div class="svg-output-row">
+                <label>宽度:
+                  <input
+                    type="number"
+                    id="png2JpgWidthInput"
+                    class="svg-size-input"
+                    value="81"
+                    min="1"
+                    max="4096"
+                  />
+                </label>
+                <label>高度:
+                  <input
+                    type="number"
+                    id="png2JpgHeightInput"
+                    class="svg-size-input"
+                    value="81"
+                    min="1"
+                    max="4096"
+                  />
+                </label>
+                <button class="svg-btn" id="png2JpgApplySizeBtn">🔄 应用尺寸</button>
+              </div>
+              <div class="svg-output-row" style="margin-top: 10px;">
+                <label style="gap: 8px;">
+                  <input type="checkbox" id="png2JpgKeepAspect" checked />
+                  <span>保持原始宽高比</span>
+                </label>
+              </div>
+              <div style="margin-top: 10px; font-size: 12px; color: rgba(0,0,0,0.65);">
+                快速尺寸：
+                <button class="svg-btn" type="button" id="png2JpgPreset81" style="padding:4px 10px;font-size:11px;">81×81</button>
+                <button class="svg-btn" type="button" id="png2JpgPreset128" style="padding:4px 10px;font-size:11px;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">128×128</button>
+                <button class="svg-btn" type="button" id="png2JpgPreset256" style="padding:4px 10px;font-size:11px;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">256×256</button>
+              </div>
+            </div>
+
+            <div class="jpg-preview-grid">
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>原始图片 (PNG)</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="png2JpgOriginalImage" class="jpg-preview-image" alt="原始 PNG" />
+                  <div class="svg-preview-meta" id="png2JpgOriginalInfo"></div>
+                </div>
+              </div>
+
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>转换后 (JPG)</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="png2JpgConvertedImage" class="jpg-preview-image" alt="转换后 JPG" />
+                  <div class="svg-preview-meta" id="png2JpgConvertedInfo"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="jpg-button-row">
+              <button class="svg-btn" id="png2JpgDownloadBtn">⬇️ 下载 JPG 图片</button>
+              <button class="svg-btn" id="png2JpgResetBtn" style="background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">
+                🔄 重新选择
+              </button>
+            </div>
+
+            <div class="jpg-success" id="png2JpgSuccess" style="display:none;">
+              ✅ 转换成功！点击下载按钮保存 JPG 图片。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PNG 转 SVG 工具容器 -->
+      <div class="tool-panel" id="tool-png2svg">
+        <div class="svg-tool-container">
+          <h2 class="tool-title">🧩 PNG 转 SVG 工具</h2>
+          <p class="tool-subtitle">将 PNG 图片包裹到 SVG 文件中（位图嵌入方式），方便在需要 SVG 容器的场景中使用。</p>
+
+          <div class="svg-upload-area" id="png2SvgUploadArea">
+            <div class="svg-upload-icon">📤</div>
+            <div class="svg-upload-main">点击或拖拽上传 PNG 图片</div>
+            <div class="svg-upload-hint">只支持 PNG，最大 10MB</div>
+            <input type="file" id="png2SvgFileInput" accept="image/png" />
+          </div>
+
+          <div class="jpg-preview-section" id="png2SvgPreviewSection" style="display:none;">
+            <div class="svg-preview-item">
+              <h3>📐 尺寸设置</h3>
+              <div class="svg-output-row">
+                <label>宽度:
+                  <input
+                    type="number"
+                    id="png2SvgWidthInput"
+                    class="svg-size-input"
+                    value="81"
+                    min="1"
+                    max="4096"
+                  />
+                </label>
+                <label>高度:
+                  <input
+                    type="number"
+                    id="png2SvgHeightInput"
+                    class="svg-size-input"
+                    value="81"
+                    min="1"
+                    max="4096"
+                  />
+                </label>
+                <button class="svg-btn" id="png2SvgApplySizeBtn">🔄 应用尺寸</button>
+              </div>
+              <div class="svg-output-row" style="margin-top: 10px;">
+                <label style="gap: 8px;">
+                  <input type="checkbox" id="png2SvgKeepAspect" checked />
+                  <span>保持原始宽高比</span>
+                </label>
+              </div>
+              <div style="margin-top: 10px; font-size: 12px; color: rgba(0,0,0,0.65);">
+                快速尺寸：
+                <button class="svg-btn" type="button" id="png2SvgPreset81" style="padding:4px 10px;font-size:11px;">81×81</button>
+                <button class="svg-btn" type="button" id="png2SvgPreset128" style="padding:4px 10px;font-size:11px;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">128×128</button>
+                <button class="svg-btn" type="button" id="png2SvgPreset256" style="padding:4px 10px;font-size:11px;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">256×256</button>
+              </div>
+            </div>
+
+            <div class="jpg-preview-grid">
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>原始图片 (PNG)</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="png2SvgOriginalImage" class="jpg-preview-image" alt="原始 PNG" />
+                  <div class="svg-preview-meta" id="png2SvgOriginalInfo"></div>
+                </div>
+              </div>
+
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>生成的 SVG 预览</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="png2SvgPreviewImage" class="jpg-preview-image" alt="SVG 预览" />
+                  <div class="svg-preview-meta" id="png2SvgConvertedInfo"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="jpg-button-row">
+              <button class="svg-btn" id="png2SvgDownloadBtn">⬇️ 下载 SVG 文件</button>
+              <button class="svg-btn" id="png2SvgResetBtn" style="background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">
+                🔄 重新选择
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- JPG 转 SVG 工具容器 -->
+      <div class="tool-panel" id="tool-jpg2svg">
+        <div class="svg-tool-container">
+          <h2 class="tool-title">🧩 JPG 转 SVG 工具</h2>
+          <p class="tool-subtitle">将 JPG 图片嵌入到 SVG 文件中（位图嵌入方式），保持原始清晰度。</p>
+
+          <div class="svg-upload-area" id="jpg2SvgUploadArea">
+            <div class="svg-upload-icon">📤</div>
+            <div class="svg-upload-main">点击或拖拽上传 JPG 图片</div>
+            <div class="svg-upload-hint">只支持 JPG / JPEG，最大 10MB</div>
+            <input type="file" id="jpg2SvgFileInput" accept="image/jpeg,image/jpg" />
+          </div>
+
+          <div class="jpg-preview-section" id="jpg2SvgPreviewSection" style="display:none;">
+            <div class="svg-preview-item">
+              <h3>📐 尺寸设置</h3>
+              <div class="svg-output-row">
+                <label>宽度:
+                  <input
+                    type="number"
+                    id="jpg2SvgWidthInput"
+                    class="svg-size-input"
+                    value="81"
+                    min="1"
+                    max="4096"
+                  />
+                </label>
+                <label>高度:
+                  <input
+                    type="number"
+                    id="jpg2SvgHeightInput"
+                    class="svg-size-input"
+                    value="81"
+                    min="1"
+                    max="4096"
+                  />
+                </label>
+                <button class="svg-btn" id="jpg2SvgApplySizeBtn">🔄 应用尺寸</button>
+              </div>
+              <div class="svg-output-row" style="margin-top: 10px;">
+                <label style="gap: 8px;">
+                  <input type="checkbox" id="jpg2SvgKeepAspect" checked />
+                  <span>保持原始宽高比</span>
+                </label>
+              </div>
+              <div style="margin-top: 10px; font-size: 12px; color: rgba(0,0,0,0.65);">
+                快速尺寸：
+                <button class="svg-btn" type="button" id="jpg2SvgPreset81" style="padding:4px 10px;font-size:11px;">81×81</button>
+                <button class="svg-btn" type="button" id="jpg2SvgPreset128" style="padding:4px 10px;font-size:11px;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">128×128</button>
+                <button class="svg-btn" type="button" id="jpg2SvgPreset256" style="padding:4px 10px;font-size:11px;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">256×256</button>
+              </div>
+            </div>
+
+            <div class="jpg-preview-grid">
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>原始图片 (JPG)</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="jpg2SvgOriginalImage" class="jpg-preview-image" alt="原始 JPG" />
+                  <div class="svg-preview-meta" id="jpg2SvgOriginalInfo"></div>
+                </div>
+              </div>
+
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>生成的 SVG 预览</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="jpg2SvgPreviewImage" class="jpg-preview-image" alt="SVG 预览" />
+                  <div class="svg-preview-meta" id="jpg2SvgConvertedInfo"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="jpg-button-row">
+              <button class="svg-btn" id="jpg2SvgDownloadBtn">⬇️ 下载 SVG 文件</button>
+              <button class="svg-btn" id="jpg2SvgResetBtn" style="background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">
+                🔄 重新选择
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SVG 转 JPG 工具容器 -->
+      <div class="tool-panel" id="tool-svg2jpg">
+        <div class="svg-tool-container">
+          <h2 class="tool-title">🖼️ SVG 转 JPG 工具</h2>
+          <p class="tool-subtitle">将 SVG 矢量图渲染为 JPG（白色背景），适合用于不支持 SVG 的平台。</p>
+
+          <div class="svg-upload-area" id="svg2JpgUploadArea">
+            <div class="svg-upload-icon">🧩</div>
+            <div class="svg-upload-main">点击或拖拽上传 SVG 文件</div>
+            <div class="svg-upload-hint">只支持 .svg，最大 5MB</div>
+            <input type="file" id="svg2JpgFileInput" accept=".svg,image/svg+xml" />
+          </div>
+
+          <div class="jpg-loading" id="svg2JpgLoading">
+            <div class="spinner"></div>
+            <div style="margin-top: 6px; font-size: 13px;">正在转换为 JPG...</div>
+          </div>
+
+          <div class="jpg-preview-section" id="svg2JpgPreviewSection" style="display:none;">
+            <div class="svg-preview-item">
+              <h3>📐 尺寸设置</h3>
+              <div class="svg-output-row">
+                <label>宽度:
+                  <input
+                    type="number"
+                    id="svg2JpgWidthInput"
+                    class="svg-size-input"
+                    value="512"
+                    min="1"
+                    max="4096"
+                  />
+                </label>
+                <label>高度:
+                  <input
+                    type="number"
+                    id="svg2JpgHeightInput"
+                    class="svg-size-input"
+                    value="512"
+                    min="1"
+                    max="4096"
+                  />
+                </label>
+                <button class="svg-btn" id="svg2JpgApplySizeBtn">🔄 应用尺寸</button>
+              </div>
+              <div class="svg-output-row" style="margin-top: 10px;">
+                <label style="gap: 8px;">
+                  <input type="checkbox" id="svg2JpgKeepAspect" checked />
+                  <span>保持原始宽高比</span>
+                </label>
+              </div>
+              <div style="margin-top: 10px; font-size: 12px; color: rgba(0,0,0,0.65);">
+                快速尺寸：
+                <button class="svg-btn" type="button" id="svg2JpgPreset81" style="padding:4px 10px;font-size:11px;">81×81</button>
+                <button class="svg-btn" type="button" id="svg2JpgPreset128" style="padding:4px 10px;font-size:11px;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">128×128</button>
+                <button class="svg-btn" type="button" id="svg2JpgPreset256" style="padding:4px 10px;font-size:11px;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">256×256</button>
+              </div>
+            </div>
+
+            <div class="jpg-preview-grid">
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>SVG 预览</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="svg2JpgOriginalImage" class="jpg-preview-image" alt="原始 SVG 预览" />
+                  <div class="svg-preview-meta" id="svg2JpgOriginalInfo"></div>
+                </div>
+              </div>
+
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>转换后 (JPG)</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="svg2JpgConvertedImage" class="jpg-preview-image" alt="转换后 JPG" />
+                  <div class="svg-preview-meta" id="svg2JpgConvertedInfo"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="jpg-button-row">
+              <button class="svg-btn" id="svg2JpgDownloadBtn">⬇️ 下载 JPG 图片</button>
+              <button class="svg-btn" id="svg2JpgResetBtn" style="background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">
+                🔄 重新选择
+              </button>
+            </div>
+
+            <div class="jpg-success" id="svg2JpgSuccess" style="display:none;">
+              ✅ 转换成功！点击下载按钮保存 JPG 图片。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 背景透明工具容器 -->
+      <div class="tool-panel" id="tool-bg">
+        <div class="svg-tool-container">
+          <h2 class="tool-title">✨ 背景透明化工具</h2>
+          <p class="tool-subtitle">上传图片，选择背景颜色并调整容差，一键生成透明背景 PNG。</p>
+
+          <div class="svg-upload-area" id="bgUploadArea">
+            <div class="svg-upload-icon">📤</div>
+            <div class="svg-upload-main">点击或拖拽图片到此处</div>
+            <div class="svg-upload-hint">支持 JPG、PNG、WEBP，最大 10MB</div>
+            <input type="file" id="bgFileInput" accept="image/*" />
+          </div>
+
+          <div class="jpg-loading" id="bgLoading">
+            <div class="spinner"></div>
+            <div style="margin-top: 6px; font-size: 13px;">正在处理图片...</div>
+          </div>
+
+          <div class="jpg-preview-section" id="bgPreviewSection">
+            <div class="svg-preview-item">
+              <h3>🎨 背景移除设置</h3>
+
+              <div class="control-group">
+                <label class="control-label">选择要移除的背景颜色：</label>
+                <div class="tolerance-control" style="gap: 16px;">
+                  <input type="color" id="bgColorPicker" value="#ffffff" />
+                  <div
+                    id="bgColorPreview"
+                    style="flex:1;height:32px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);background:#ffffff;"
+                  ></div>
+                </div>
+                <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 6px;">
+                  💡 提示：点击原图可以自动拾取颜色
+                </div>
+              </div>
+
+              <div class="control-group" style="margin-top: 14px;">
+                <label class="control-label"
+                  >容差设置：<span class="tolerance-value" id="bgToleranceValue">30</span></label
+                >
+                <div class="tolerance-control">
+                  <input type="range" id="bgToleranceSlider" min="0" max="100" value="30" />
+                </div>
+                <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 6px;">
+                  数值越大，认为是“背景”的颜色范围越宽。
+                </div>
+              </div>
+
+              <div class="jpg-button-row" style="margin-top: 16px;">
+                <button class="svg-btn" id="bgProcessBtn">✨ 处理图片</button>
+                <button
+                  class="svg-btn"
+                  id="bgDownloadBtn"
+                  style="background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;opacity:0.7;"
+                  disabled
+                >
+                  ⬇️ 下载 PNG
+                </button>
+                <button
+                  class="svg-btn"
+                  id="bgResetBtn"
+                  style="background:linear-gradient(135deg,#444,#222);box-shadow:none;"
+                >
+                  🔄 重新选择
+                </button>
+              </div>
+            </div>
+
+            <div class="jpg-preview-grid" style="margin-top: 10px;">
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>原图</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="bgOriginalImage" class="jpg-preview-image" alt="原图" style="cursor: crosshair;" />
+                  <div class="svg-preview-meta" id="bgOriginalInfo"></div>
+                </div>
+              </div>
+
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>透明背景</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="bgTransparentImage" class="jpg-preview-image" alt="透明背景" />
+                  <div class="svg-preview-meta" id="bgTransparentInfo"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 文档转换工具页面 -->
+  <div class="app-container" id="docToolPage" style="display: none; margin-top: 18px;">
+    <div class="app-header">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button class="svg-btn" id="backToHomeFromDocBtn" style="min-width:auto;padding:6px 14px;font-size:13px;">
+          ← 返回
+        </button>
+        <div>
+          <div class="app-title">
+            文档转换工具
+            <span class="app-title-badge">BETA</span>
+          </div>
+          <div class="app-subtitle">将 Word 文档（DOC / DOCX）转换为 PDF 文件</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="app-body">
+      <div class="tool-panel active">
+        <div class="svg-tool-container">
+          <h2 class="tool-title">📄 Word 转 PDF</h2>
+          <p class="tool-subtitle">上传一个 Word 文档，点击按钮即可在本机完成 PDF 转换。</p>
+
+          <div class="svg-upload-area" id="docUploadArea">
+            <div class="svg-upload-icon">📄</div>
+            <div class="svg-upload-main">点击选择 Word 文档或拖拽文件到此处</div>
+            <div class="svg-upload-hint">支持 .doc / .docx，单个文件最大 20MB</div>
+            <input
+              type="file"
+              id="docFileInput"
+              accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              style="display:none;"
+            />
+          </div>
+
+          <div class="jpg-loading" id="docLoading">
+            <div class="spinner"></div>
+            <div style="margin-top: 6px; font-size: 13px;">正在转换为 PDF，请稍候...</div>
+          </div>
+
+          <div class="jpg-preview-section" id="docPreviewSection" style="display:none;">
+            <div class="svg-preview-item">
+              <h3>当前文件</h3>
+              <div class="svg-output-row" style="margin-bottom: 8px;">
+                <div id="docFileInfo" style="font-size:13px;color:rgba(0,0,0,0.65);"></div>
+              </div>
+              <div class="jpg-button-row">
+                <button class="svg-btn" id="docConvertBtn">🔄 转换为 PDF</button>
+                <button class="svg-btn" id="docResetBtn" style="background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">
+                  🔁 重新选择
+                </button>
+                <button class="svg-btn" id="docCancelBtn" style="background:linear-gradient(135deg,#ff4d4f,#ff7875);box-shadow:none;">
+                  ❌ 取消上传
+                </button>
+              </div>
+              <div class="jpg-success" id="docSuccess" style="display:none;">
+                ✅ 转换成功！如果浏览器未自动下载，请检查下载栏或弹窗。
+              </div>
+            </div>
+          </div>
+
+          <div class="svg-preview-item" style="margin-top: 16px;">
+            <h3>🖼️ 图片转 PDF</h3>
+            <p class="tool-subtitle" style="margin-bottom:12px;">
+              将多张图片合并到一个 PDF 中，适合导出预览稿、扫描件等。你可以多次添加图片，都会累积进列表。
+            </p>
+
+            <div class="svg-upload-area" id="imgPdfUploadArea">
+              <div class="svg-upload-icon">🖼️</div>
+              <div class="svg-upload-main">点击选择图片或拖拽到此处（支持多次添加）</div>
+              <div class="svg-upload-hint">支持 JPG / PNG / WEBP，单张最大 10MB</div>
+              <input type="file" id="imgPdfFileInput" accept="image/*" multiple style="display:none;" />
+            </div>
+
+            <div style="margin-bottom: 8px; text-align:right;">
+              <button class="svg-btn" id="imgPdfSelectDirBtn" style="min-width:auto;padding:6px 14px;font-size:13px;">
+                📂 从文件夹导入图片
+              </button>
+              <!-- 目录选择，仅在支持 webkitdirectory 的浏览器中可用 -->
+              <input
+                type="file"
+                id="imgPdfDirInput"
+                webkitdirectory
+                multiple
+                style="display:none;"
+                accept="image/*"
+              />
+            </div>
+
+            <div class="jpg-loading" id="imgPdfLoading">
+              <div class="spinner"></div>
+              <div style="margin-top: 6px; font-size: 13px;">正在合并图片并生成 PDF...</div>
+            </div>
+
+            <div class="jpg-preview-section" id="imgPdfPreviewSection" style="display:none;">
+              <div class="svg-output-row" style="margin-bottom: 8px;">
+                <div id="imgPdfFileInfo" style="font-size:13px;color:rgba(0,0,0,0.65);"></div>
+              </div>
+              <div style="margin-bottom: 8px;">
+                <details id="imgPdfListDetails">
+                  <summary style="cursor:pointer;font-size:13px;color:rgba(0,0,0,0.65);">
+                    查看已选择的图片文件
+                  </summary>
+                  <ul id="imgPdfFileList" style="margin-top:6px;padding-left:18px;font-size:12px;color:rgba(0,0,0,0.6);line-height:1.6;"></ul>
+                </details>
+              </div>
+              <div class="jpg-button-row">
+                <button class="svg-btn" id="imgPdfConvertBtn">🔄 图片合并为 PDF</button>
+                <button class="svg-btn" id="imgPdfResetBtn" style="background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">
+                  🔁 清空图片
+                </button>
+                <button class="svg-btn" id="imgPdfCancelBtn" style="background:linear-gradient(135deg,#ff4d4f,#ff7875);box-shadow:none;">
+                  ❌ 取消上传
+                </button>
+              </div>
+              <div class="jpg-success" id="imgPdfSuccess" style="display:none;">
+                ✅ 已生成 PDF！浏览器应已弹出下载，如果未看到请检查下载栏或弹窗设置。
+              </div>
+            </div>
+          </div>
+
+          <div class="svg-preview-item" style="margin-top: 16px;">
+            <h3>📄 PDF 转 Word</h3>
+            <p class="tool-subtitle" style="margin-bottom:12px;">
+              将 PDF 文档转换为可编辑的 Word（DOCX）文件，适合二次编辑、修订内容。
+            </p>
+
+            <div class="svg-upload-area" id="pdf2WordUploadArea">
+              <div class="svg-upload-icon">📑</div>
+              <div class="svg-upload-main">点击选择 PDF 文件或拖拽到此处</div>
+              <div class="svg-upload-hint">只支持 .pdf，单个文件最大 20MB</div>
+              <input type="file" id="pdf2WordFileInput" accept="application/pdf,.pdf" style="display:none;" />
+            </div>
+
+            <div class="jpg-loading" id="pdf2WordLoading">
+              <div class="spinner"></div>
+              <div style="margin-top: 6px; font-size: 13px;">正在将 PDF 转换为 Word，大文件可能需要3-4分钟，请耐心等待...</div>
+            </div>
+
+            <div class="jpg-preview-section" id="pdf2WordPreviewSection" style="display:none;">
+              <div class="svg-output-row" style="margin-bottom: 8px;">
+                <div id="pdf2WordFileInfo" style="font-size:13px;color:rgba(0,0,0,0.65);"></div>
+              </div>
+              <div class="jpg-button-row">
+                <button class="svg-btn" id="pdf2WordConvertBtn">🔄 转换为 Word</button>
+                <button class="svg-btn" id="pdf2WordResetBtn" style="background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">
+                  🔁 重新选择
+                </button>
+                <button class="svg-btn" id="pdf2WordCancelBtn" style="background:linear-gradient(135deg,#ff4d4f,#ff7875);box-shadow:none;">
+                  ❌ 取消上传
+                </button>
+              </div>
+              <div class="jpg-success" id="pdf2WordSuccess" style="display:none;">
+                ✅ 转换成功！如果浏览器未自动下载，请检查下载栏或弹窗。
+              </div>
+            </div>
+          </div>
+
+          <div class="svg-preview-item" style="margin-top: 16px;">
+            <h3>📊 PDF 转 PPT</h3>
+            <p class="tool-subtitle" style="margin-bottom:12px;">
+              将 PDF 文档转换为可编辑的 PPTX 演示文稿，便于拆分页面、添加动画和讲解备注。
+            </p>
+
+            <div class="svg-upload-area" id="pdf2PptUploadArea">
+              <div class="svg-upload-icon">📊</div>
+              <div class="svg-upload-main">点击选择 PDF 文件或拖拽到此处</div>
+              <div class="svg-upload-hint">只支持 .pdf，单个文件最大 20MB</div>
+              <input type="file" id="pdf2PptFileInput" accept="application/pdf,.pdf" style="display:none;" />
+            </div>
+
+            <div class="jpg-loading" id="pdf2PptLoading">
+              <div class="spinner"></div>
+              <div style="margin-top: 6px; font-size: 13px;">正在转换 PDF 为 PPT，大文件可能需要2-3分钟，请耐心等待...</div>
+            </div>
+
+            <div class="jpg-preview-section" id="pdf2PptPreviewSection" style="display:none;">
+              <div class="svg-output-row" style="margin-bottom: 8px;">
+                <div id="pdf2PptFileInfo" style="font-size:13px;color:rgba(0,0,0,0.65);"></div>
+              </div>
+              <div class="jpg-button-row">
+                <button class="svg-btn" id="pdf2PptConvertBtn">🔄 转换为 PPT</button>
+                <button class="svg-btn" id="pdf2PptResetBtn" style="background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">
+                  🔁 重新选择
+                </button>
+                <button class="svg-btn" id="pdf2PptCancelBtn" style="background:linear-gradient(135deg,#ff4d4f,#ff7875);box-shadow:none;">
+                  ❌ 取消上传
+                </button>
+              </div>
+              <div class="jpg-success" id="pdf2PptSuccess" style="display:none;">
+                ✅ 转换成功！如果浏览器未自动下载，请检查下载栏或弹窗。
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==================== 系统初始化 ====================
+    let serverStatus = {
+      available: false,
+      capabilities: {},
+      error: null
+    };
+
+    // 检查后端服务器状态
+    async function checkServerStatus() {
+      try {
+        const resp = await fetch('/api/system/status', { timeout: 5000 });
+        if (resp.ok) {
+          const data = await resp.json();
+          serverStatus.available = true;
+          serverStatus.capabilities = data.capabilities || {};
+          console.log('[✓] 后端服务器已连接', data);
+          
+          // 如果某些功能不可用，显示提示
+          const unavailable = [];
+          if (!data.capabilities.wordToPdf) unavailable.push('Word转PDF');
+          if (!data.capabilities.pdfToWord) unavailable.push('PDF转Word');
+          if (!data.capabilities.pdfToPpt) unavailable.push('PDF转PPT');
+          
+          if (unavailable.length > 0) {
+            console.warn('[⚠] 以下功能暂不可用: ' + unavailable.join(', '));
+          }
+        } else {
+          serverStatus.error = `服务器返回错误: ${resp.status}`;
+          serverStatus.available = false;
+          console.warn('[✗] 后端服务器不可用:', serverStatus.error);
+        }
+      } catch (e) {
+        serverStatus.available = false;
+        serverStatus.error = e.message;
+        console.warn('[✗] 无法连接后端服务器:', e.message);
+        console.warn('💡 请确保已运行: npm run dev:server');
+      }
+    }
+
+    // 启动时检查服务器
+    window.addEventListener('load', () => {
+      checkServerStatus();
+      // 每30秒重新检查一次服务器状态
+      setInterval(checkServerStatus, 30000);
+    });
+
+    // ==================== 时钟逻辑 ====================
+    // 顶部时钟逻辑
+    (function initClock() {
+      const hourHand = document.getElementById("clockHourHand");
+      const minuteHand = document.getElementById("clockMinuteHand");
+      const secondHand = document.getElementById("clockSecondHand");
+      const timeText = document.getElementById("clockTimeText");
+      const dateText = document.getElementById("clockDateText");
+      const clockFace = document.getElementById("clockFace");
+
+      if (clockFace) {
+        // 创建 12 个刻度
+        for (let i = 0; i < 12; i++) {
+          const tick = document.createElement("div");
+          tick.className = "clock-tick";
+          tick.style.transform = `rotate(${i * 30}deg)`;
+          clockFace.appendChild(tick);
+        }
+      }
+
+      function pad(n) {
+        return n < 10 ? "0" + n : String(n);
+      }
+
+      function updateClock() {
+        const now = new Date();
+        const h = now.getHours();
+        const m = now.getMinutes();
+        const s = now.getSeconds();
+
+        const secDeg = s * 6; // 360 / 60
+        const minDeg = m * 6 + s * 0.1; // 6 度/分 + 秒的细微移动
+        const hourDeg = (h % 12) * 30 + m * 0.5; // 30 度/小时 + 分钟偏移
+
+        if (secondHand) {
+          secondHand.style.transform = `translate(-50%, -90%) rotate(${secDeg}deg)`;
+        }
+        if (minuteHand) {
+          minuteHand.style.transform = `translate(-50%, -90%) rotate(${minDeg}deg)`;
+        }
+        if (hourHand) {
+          hourHand.style.transform = `translate(-50%, -90%) rotate(${hourDeg}deg)`;
+        }
+
+        if (timeText) {
+          timeText.textContent = `${pad(h)}:${pad(m)}:${pad(s)}`;
+        }
+        if (dateText) {
+          const year = now.getFullYear();
+          const month = pad(now.getMonth() + 1);
+          const day = pad(now.getDate());
+          const weekdays = ["日", "一", "二", "三", "四", "五", "六"];
+          const week = weekdays[now.getDay()];
+          dateText.textContent = `${year}-${month}-${day} · 星期${week}`;
+        }
+      }
+
+      updateClock();
+      setInterval(updateClock, 1000);
+    })();
+
+    // 全局工具：限制图片最大尺寸，避免移动端 Canvas/内存溢出
+    function capDimensions(width, height, maxDimension) {
+      const max = maxDimension || 2048; // 默认上限 2048
+      if (width <= max && height <= max) return { width, height };
+      const ratio = Math.min(max / width, max / height);
+      return { width: Math.max(1, Math.round(width * ratio)), height: Math.max(1, Math.round(height * ratio)) };
+    }
+
+    // 首页入口逻辑：从首页进入图片转换工具
+    const homePage = document.getElementById("homePage");
+    const imageToolPage = document.getElementById("imageToolPage");
+    const docToolPage = document.getElementById("docToolPage");
+    const clockContainer = document.querySelector(".clock-container");
+    const enterImageToolBtn = document.getElementById("enterImageToolBtn");
+    const enterDocToolBtn = document.getElementById("enterDocToolBtn");
+    const backToHomeBtn = document.getElementById("backToHomeBtn");
+    const backToHomeFromDocBtn = document.getElementById("backToHomeFromDocBtn");
+
+    function showImageTool() {
+      if (homePage) homePage.style.display = "none";
+      if (imageToolPage) imageToolPage.style.display = "block";
+      if (docToolPage) docToolPage.style.display = "none";
+      if (clockContainer) clockContainer.style.display = "none";
+    }
+
+    function showDocTool() {
+      if (homePage) homePage.style.display = "none";
+      if (imageToolPage) imageToolPage.style.display = "none";
+      if (docToolPage) docToolPage.style.display = "block";
+      if (clockContainer) clockContainer.style.display = "none";
+    }
+
+    if (enterImageToolBtn) {
+      enterImageToolBtn.addEventListener("click", showImageTool);
+    }
+    if (enterDocToolBtn) {
+      enterDocToolBtn.addEventListener("click", showDocTool);
+    }
+    if (backToHomeBtn) {
+      backToHomeBtn.addEventListener("click", () => {
+        if (imageToolPage) imageToolPage.style.display = "none";
+        if (homePage) homePage.style.display = "block";
+        if (clockContainer) clockContainer.style.display = "flex";
+      });
+    }
+    if (backToHomeFromDocBtn) {
+      backToHomeFromDocBtn.addEventListener("click", () => {
+        if (docToolPage) docToolPage.style.display = "none";
+        if (homePage) homePage.style.display = "block";
+        if (clockContainer) clockContainer.style.display = "flex";
+      });
+    }
+
+    if (enterDocToolBtn) {
+      enterDocToolBtn.addEventListener("click", showDocTool);
+    }
+
+    // 顶部标签切换逻辑
+    const tabs = document.querySelectorAll(".tab-item");
+    const panels = {
+      svg: document.getElementById("tool-svg"),
+      jpg: document.getElementById("tool-jpg"),
+      png2jpg: document.getElementById("tool-png2jpg"),
+      png2svg: document.getElementById("tool-png2svg"),
+      jpg2svg: document.getElementById("tool-jpg2svg"),
+      svg2jpg: document.getElementById("tool-svg2jpg"),
+      bg: document.getElementById("tool-bg"),
+    };
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const key = tab.getAttribute("data-tool");
+
+        tabs.forEach((t) => t.classList.remove("active"));
+        tab.classList.add("active");
+
+        Object.keys(panels).forEach((k) => {
+          panels[k].classList.toggle("active", k === key);
+        });
+      });
+    });
+
+    // SVG 转 PNG 工具逻辑
+    (function initSvgTool() {
+      const uploadArea = document.getElementById("svgUploadArea");
+      const fileInput = document.getElementById("svgFileInput");
+      const previewSection = document.getElementById("svgPreviewSection");
+      const previewList = document.getElementById("svgPreviewList");
+      const widthInput = document.getElementById("svgWidthInput");
+      const heightInput = document.getElementById("svgHeightInput");
+      const convertAllBtn = document.getElementById("svgConvertAllBtn");
+
+      /** @type {File[]} */
+      let files = [];
+
+      if (!uploadArea) return;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const droppedFiles = Array.from(e.dataTransfer.files || []).filter((f) =>
+          f.name.toLowerCase().endsWith(".svg")
+        );
+        handleFiles(droppedFiles);
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const target = e.target;
+        const selected = Array.from(target.files || []);
+        handleFiles(selected);
+        target.value = "";
+      });
+
+      function handleFiles(newFiles) {
+        if (!newFiles || newFiles.length === 0) return;
+        files = files.concat(newFiles);
+        displayPreviews();
+      }
+
+      function displayPreviews() {
+        if (!files.length) {
+          previewSection.style.display = "none";
+          previewList.innerHTML = "";
+          return;
+        }
+
+        previewSection.style.display = "block";
+        previewList.innerHTML = "";
+
+        files.forEach((file, index) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const svgContent = String(e.target?.result || "");
+
+            const card = document.createElement("div");
+            card.className = "svg-preview-card";
+            card.innerHTML = `
+              <div class="svg-preview-header">
+                <div class="svg-preview-name">${file.name}</div>
+                <div>${(file.size / 1024).toFixed(1)} KB</div>
+              </div>
+              <div class="svg-preview-body">
+                <canvas id="svg-canvas-${index}" width="81" height="81"></canvas>
+                <div class="svg-preview-meta">
+                  <div>预览尺寸：<span id="svg-size-${index}">81 × 81 px</span></div>
+                  <button class="svg-btn" data-index="${index}">⬇️ 下载 PNG</button>
+                </div>
+              </div>
+            `;
+            previewList.appendChild(card);
+
+            renderSvgToCanvas(svgContent, index);
+
+            const btn = card.querySelector(".svg-btn");
+            btn?.addEventListener("click", () => {
+              convertAndDownloadSingle(index);
+            });
+          };
+          reader.readAsText(file);
+        });
+      }
+
+      function getOutputSize() {
+        const w = parseInt(widthInput.value, 10) || 81;
+        const h = parseInt(heightInput.value, 10) || 81;
+        return { width: w, height: h };
+      }
+
+      function renderSvgToCanvas(svgContent, index) {
+        const canvas = document.getElementById(`svg-canvas-${index}`);
+        if (!canvas) return;
+
+        const ctx = canvas.getContext("2d");
+        const img = new Image();
+
+        const svgBlob = new Blob([svgContent], {
+          type: "image/svg+xml;charset=utf-8",
+        });
+        const url = URL.createObjectURL(svgBlob);
+
+        img.onload = () => {
+          const { width, height } = getOutputSize();
+          canvas.width = width;
+          canvas.height = height;
+          const sizeLabel = document.getElementById(`svg-size-${index}`);
+          if (sizeLabel) sizeLabel.textContent = `${width} × ${height} px`;
+
+          ctx.clearRect(0, 0, width, height);
+          ctx.drawImage(img, 0, 0, width, height);
+          URL.revokeObjectURL(url);
+        };
+
+        img.onerror = () => {
+          URL.revokeObjectURL(url);
+        };
+
+        img.src = url;
+      }
+
+      function convertAndDownloadSingle(index) {
+        const file = files[index];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const svgContent = String(e.target?.result || "");
+          const img = new Image();
+          const svgBlob = new Blob([svgContent], {
+            type: "image/svg+xml;charset=utf-8",
+          });
+          const url = URL.createObjectURL(svgBlob);
+
+          img.onload = () => {
+            const { width, height } = getOutputSize();
+            const canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, width, height);
+
+            canvas.toBlob(
+              (blob) => {
+                if (!blob) {
+                  URL.revokeObjectURL(url);
+                  return;
+                }
+                const downloadUrl = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                const fileName = file.name.replace(/\.svg$/i, ".png");
+                a.href = downloadUrl;
+                a.download = fileName;
+                a.click();
+                URL.revokeObjectURL(downloadUrl);
+                URL.revokeObjectURL(url);
+              },
+              "image/png",
+              1
+            );
+          };
+
+          img.onerror = () => {
+            URL.revokeObjectURL(url);
+          };
+
+          img.src = url;
+        };
+        reader.readAsText(file);
+      }
+
+      convertAllBtn.addEventListener("click", () => {
+        files.forEach((_, index) => {
+          setTimeout(() => {
+            convertAndDownloadSingle(index);
+          }, index * 180);
+        });
+      });
+
+      ["input", "change"].forEach((evt) => {
+        widthInput.addEventListener(evt, () => refreshAllPreviews());
+        heightInput.addEventListener(evt, () => refreshAllPreviews());
+      });
+
+      function refreshAllPreviews() {
+        if (!files.length) return;
+        files.forEach((file, index) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const svgContent = String(e.target?.result || "");
+            renderSvgToCanvas(svgContent, index);
+          };
+          reader.readAsText(file);
+        });
+      }
+    })();
+
+    // JPG 转 PNG 工具逻辑
+    (function initJpgTool() {
+      const uploadArea = document.getElementById("jpgUploadArea");
+      const fileInput = document.getElementById("jpgFileInput");
+      const previewSection = document.getElementById("jpgPreviewSection");
+      const loading = document.getElementById("jpgLoading");
+      const originalImage = document.getElementById("jpgOriginalImage");
+      const convertedImage = document.getElementById("jpgConvertedImage");
+      const originalInfo = document.getElementById("jpgOriginalInfo");
+      const convertedInfo = document.getElementById("jpgConvertedInfo");
+      const downloadBtn = document.getElementById("jpgDownloadBtn");
+      const resetBtn = document.getElementById("jpgResetBtn");
+      const successMessage = document.getElementById("jpgSuccess");
+      const widthInput = document.getElementById("jpgWidthInput");
+      const heightInput = document.getElementById("jpgHeightInput");
+      const keepAspect = document.getElementById("jpgKeepAspect");
+      const applySizeBtn = document.getElementById("jpgApplySizeBtn");
+      const preset81 = document.getElementById("jpgPreset81");
+      const preset128 = document.getElementById("jpgPreset128");
+      const preset256 = document.getElementById("jpgPreset256");
+
+      if (!uploadArea) return;
+
+      let convertedDataUrl = null;
+      let originalImageData = null;
+      let originalWidth = 0;
+      let originalHeight = 0;
+      let currentWidth = 81;
+      let currentHeight = 81;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) handleFile(file);
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file && (file.type === "image/jpeg" || file.type === "image/jpg")) {
+          handleFile(file);
+        } else {
+          alert("请上传 JPG 或 JPEG 格式的图片！");
+        }
+      });
+
+      function handleFile(file) {
+        if (file.size > 10 * 1024 * 1024) {
+          alert("文件大小不能超过 10MB！");
+          return;
+        }
+        if (file.type !== "image/jpeg" && file.type !== "image/jpg") {
+          alert("请上传 JPG 或 JPEG 格式的图片！");
+          return;
+        }
+
+        loading.classList.add("active");
+        previewSection.classList.remove("active");
+        successMessage.classList.remove("active");
+
+        // 使用 object URL 减少内存与解析开销（比 dataURL 更友好于移动端）
+        const objectUrl = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => {
+          // 对原始尺寸做上限保护，避免移动端 Canvas 创建失败
+          originalWidth = img.width;
+          originalHeight = img.height;
+          const capped = capDimensions(originalWidth, originalHeight, 2048);
+          currentWidth = capped.width;
+          currentHeight = capped.height;
+
+          widthInput.value = currentWidth;
+          heightInput.value = currentHeight;
+
+          originalImageData = img;
+          originalImage.src = objectUrl;
+          originalInfo.innerHTML = `
+            <div class="image-info-item"><strong>尺寸：</strong>${originalWidth} × ${originalHeight} 像素</div>
+            <div class="image-info-item"><strong>大小：</strong>${formatFileSize(file.size)}</div>
+          `;
+
+          convertToPNG(img, currentWidth, currentHeight);
+
+          // 保留 objectUrl 引用，稍后在 reset 时 revoke
+          if (!window._imageToolObjectUrls) window._imageToolObjectUrls = [];
+          window._imageToolObjectUrls.push(objectUrl);
+        };
+        img.onerror = () => {
+          URL.revokeObjectURL(objectUrl);
+          loading.classList.remove("active");
+          alert("无法解析图片，请尝试使用其他图片或在电脑端重试。");
+        };
+        img.src = objectUrl;
+      }
+
+      function convertToPNG(img, width, height) {
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        convertedDataUrl = canvas.toDataURL("image/png");
+        convertedImage.src = convertedDataUrl;
+
+        const pngSize = Math.round((convertedDataUrl.length - 22) * 0.75);
+        convertedInfo.innerHTML = `
+          <div class="image-info-item"><strong>尺寸：</strong>${width} × ${height} 像素</div>
+          <div class="image-info-item"><strong>大小：</strong>约 ${formatFileSize(pngSize)}</div>
+        `;
+
+        loading.classList.remove("active");
+        previewSection.classList.add("active");
+        successMessage.classList.add("active");
+      }
+
+      downloadBtn.addEventListener("click", () => {
+        if (!convertedDataUrl) return;
+        const link = document.createElement("a");
+        link.download = "converted-image.png";
+        link.href = convertedDataUrl;
+        link.click();
+      });
+
+      applySizeBtn.addEventListener("click", () => {
+        if (!originalImageData) return;
+
+        let newWidth = parseInt(widthInput.value, 10) || originalWidth;
+        let newHeight = parseInt(heightInput.value, 10) || originalHeight;
+
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          newHeight = Math.round(newWidth / aspect);
+          heightInput.value = String(newHeight);
+        }
+
+        newWidth = Math.max(1, Math.min(2048, newWidth));
+        newHeight = Math.max(1, Math.min(2048, newHeight));
+
+        currentWidth = newWidth;
+        currentHeight = newHeight;
+
+        loading.classList.add("active");
+        convertToPNG(originalImageData, currentWidth, currentHeight);
+      });
+
+      widthInput.addEventListener("input", () => {
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          const val = parseInt(widthInput.value, 10);
+          if (!isNaN(val)) {
+            const newHeight = Math.round(val / aspect);
+            heightInput.value = String(newHeight);
+          }
+        }
+      });
+
+      heightInput.addEventListener("input", () => {
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          const val = parseInt(heightInput.value, 10);
+          if (!isNaN(val)) {
+            const newWidth = Math.round(val * aspect);
+            widthInput.value = String(newWidth);
+          }
+        }
+      });
+
+      function applyPreset(width, height) {
+        widthInput.value = String(width);
+        heightInput.value = String(height);
+        if (width !== height) {
+          keepAspect.checked = false;
+        }
+        if (originalImageData) {
+          currentWidth = width;
+          currentHeight = height;
+          loading.classList.add("active");
+          convertToPNG(originalImageData, currentWidth, currentHeight);
+        }
+      }
+
+      preset81.addEventListener("click", () => applyPreset(81, 81));
+      preset128.addEventListener("click", () => applyPreset(128, 128));
+      preset256.addEventListener("click", () => applyPreset(256, 256));
+
+      resetBtn.addEventListener("click", () => {
+        fileInput.value = "";
+        previewSection.classList.remove("active");
+        successMessage.classList.remove("active");
+        convertedDataUrl = null;
+        originalImageData = null;
+        originalWidth = 0;
+        originalHeight = 0;
+        currentWidth = 81;
+        currentHeight = 81;
+        widthInput.value = "81";
+        heightInput.value = "81";
+        keepAspect.checked = true;
+        // 释放 object URL
+        if (window._imageToolObjectUrls && window._imageToolObjectUrls.length) {
+          window._imageToolObjectUrls.forEach((u) => {
+            try { URL.revokeObjectURL(u); } catch (e) {}
+          });
+          window._imageToolObjectUrls = [];
+        }
+      });
+
+      function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      }
+    })();
+
+    // PNG 转 JPG 工具逻辑
+    (function initPngToJpgTool() {
+      const uploadArea = document.getElementById("png2JpgUploadArea");
+      const fileInput = document.getElementById("png2JpgFileInput");
+      const previewSection = document.getElementById("png2JpgPreviewSection");
+      const loading = document.getElementById("png2JpgLoading");
+      const originalImage = document.getElementById("png2JpgOriginalImage");
+      const convertedImage = document.getElementById("png2JpgConvertedImage");
+      const originalInfo = document.getElementById("png2JpgOriginalInfo");
+      const convertedInfo = document.getElementById("png2JpgConvertedInfo");
+      const downloadBtn = document.getElementById("png2JpgDownloadBtn");
+      const resetBtn = document.getElementById("png2JpgResetBtn");
+      const successMessage = document.getElementById("png2JpgSuccess");
+
+      const widthInput = document.getElementById("png2JpgWidthInput");
+      const heightInput = document.getElementById("png2JpgHeightInput");
+      const keepAspect = document.getElementById("png2JpgKeepAspect");
+      const applySizeBtn = document.getElementById("png2JpgApplySizeBtn");
+      const preset81 = document.getElementById("png2JpgPreset81");
+      const preset128 = document.getElementById("png2JpgPreset128");
+      const preset256 = document.getElementById("png2JpgPreset256");
+
+      if (!uploadArea || !fileInput) return;
+
+      let convertedDataUrl = null;
+      let currentFileName = "image";
+      let originalImageData = null;
+      let originalWidth = 0;
+      let originalHeight = 0;
+      let currentWidth = 81;
+      let currentHeight = 81;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) handleFile(file);
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file && file.type === "image/png") {
+          handleFile(file);
+        } else {
+          alert("请上传 PNG 格式的图片！");
+        }
+      });
+
+      function handleFile(file) {
+        if (file.size > 10 * 1024 * 1024) {
+          alert("文件大小不能超过 10MB！");
+          return;
+        }
+        if (file.type !== "image/png") {
+          alert("请上传 PNG 格式的图片！");
+          return;
+        }
+        loading.classList.add("active");
+        previewSection.style.display = "none";
+        successMessage.style.display = "none";
+        currentFileName = file.name || "image";
+
+        // 使用 object URL 并对尺寸做上限保护（PNG 转 JPG 允许更大尺寸）
+        const objectUrl = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => {
+          originalImageData = img;
+          originalWidth = img.width;
+          originalHeight = img.height;
+          const capped = capDimensions(originalWidth, originalHeight, 4096);
+          currentWidth = capped.width;
+          currentHeight = capped.height;
+
+          widthInput.value = String(currentWidth);
+          heightInput.value = String(currentHeight);
+
+          originalImage.src = objectUrl;
+          originalInfo.textContent = `尺寸：${img.width} × ${img.height} 像素；大小：${formatFileSizePng2Jpg(
+            file.size
+          )}`;
+          convertToJpg(img, currentWidth, currentHeight);
+
+          if (!window._imageToolObjectUrls) window._imageToolObjectUrls = [];
+          window._imageToolObjectUrls.push(objectUrl);
+        };
+        img.onerror = () => {
+          URL.revokeObjectURL(objectUrl);
+          loading.classList.remove("active");
+          alert("无法解析图片，请尝试使用其他图片或在电脑端重试。");
+        };
+        img.src = objectUrl;
+      }
+
+      function convertToJpg(img, width, height) {
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, width, height);
+
+        convertedDataUrl = canvas.toDataURL("image/jpeg", 0.92);
+        convertedImage.src = convertedDataUrl;
+
+        const approxSize = Math.round((convertedDataUrl.length - 22) * 0.75);
+        convertedInfo.textContent = `尺寸：${width} × ${height} 像素；大小约：${formatFileSizePng2Jpg(
+          approxSize
+        )}`;
+
+        loading.classList.remove("active");
+        previewSection.style.display = "block";
+        successMessage.style.display = "block";
+      }
+
+      downloadBtn.addEventListener("click", () => {
+        if (!convertedDataUrl) return;
+        const a = document.createElement("a");
+        const baseName = currentFileName.replace(/\.png$/i, "") || "image";
+        a.download = `${baseName}.jpg`;
+        a.href = convertedDataUrl;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+
+      resetBtn.addEventListener("click", () => {
+        fileInput.value = "";
+        previewSection.style.display = "none";
+        successMessage.style.display = "none";
+        convertedDataUrl = null;
+        currentFileName = "image";
+        originalImageData = null;
+        originalWidth = 0;
+        originalHeight = 0;
+        currentWidth = 81;
+        currentHeight = 81;
+        widthInput.value = "81";
+        heightInput.value = "81";
+        keepAspect.checked = true;
+      });
+
+      function formatFileSizePng2Jpg(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      }
+
+      applySizeBtn.addEventListener("click", () => {
+        if (!originalImageData) return;
+
+        let newWidth = parseInt(widthInput.value, 10) || originalWidth;
+        let newHeight = parseInt(heightInput.value, 10) || originalHeight;
+
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          newHeight = Math.round(newWidth / aspect);
+          heightInput.value = String(newHeight);
+        }
+
+        newWidth = Math.max(1, Math.min(4096, newWidth));
+        newHeight = Math.max(1, Math.min(4096, newHeight));
+
+        currentWidth = newWidth;
+        currentHeight = newHeight;
+
+        loading.classList.add("active");
+        convertToJpg(originalImageData, currentWidth, currentHeight);
+      });
+
+      widthInput.addEventListener("input", () => {
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          const val = parseInt(widthInput.value, 10);
+          if (!isNaN(val)) {
+            const newHeight = Math.round(val / aspect);
+            heightInput.value = String(newHeight);
+          }
+        }
+      });
+
+      heightInput.addEventListener("input", () => {
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          const val = parseInt(heightInput.value, 10);
+          if (!isNaN(val)) {
+            const newWidth = Math.round(val * aspect);
+            widthInput.value = String(newWidth);
+          }
+        }
+      });
+
+      function applyPreset(width, height) {
+        widthInput.value = String(width);
+        heightInput.value = String(height);
+        if (width !== height) {
+          keepAspect.checked = false;
+        }
+        if (originalImageData) {
+          currentWidth = width;
+          currentHeight = height;
+          loading.classList.add("active");
+          convertToJpg(originalImageData, currentWidth, currentHeight);
+        }
+      }
+
+      preset81.addEventListener("click", () => applyPreset(81, 81));
+      preset128.addEventListener("click", () => applyPreset(128, 128));
+      preset256.addEventListener("click", () => applyPreset(256, 256));
+    })();
+
+    // PNG 转 SVG 工具逻辑（位图嵌入）
+    (function initPngToSvgTool() {
+      const uploadArea = document.getElementById("png2SvgUploadArea");
+      const fileInput = document.getElementById("png2SvgFileInput");
+      const previewSection = document.getElementById("png2SvgPreviewSection");
+      const originalImage = document.getElementById("png2SvgOriginalImage");
+      const originalInfo = document.getElementById("png2SvgOriginalInfo");
+      const previewImage = document.getElementById("png2SvgPreviewImage");
+      const convertedInfo = document.getElementById("png2SvgConvertedInfo");
+      const widthInput = document.getElementById("png2SvgWidthInput");
+      const heightInput = document.getElementById("png2SvgHeightInput");
+      const keepAspect = document.getElementById("png2SvgKeepAspect");
+      const applySizeBtn = document.getElementById("png2SvgApplySizeBtn");
+      const preset81 = document.getElementById("png2SvgPreset81");
+      const preset128 = document.getElementById("png2SvgPreset128");
+      const preset256 = document.getElementById("png2SvgPreset256");
+      const downloadBtn = document.getElementById("png2SvgDownloadBtn");
+      const resetBtn = document.getElementById("png2SvgResetBtn");
+
+      if (!uploadArea || !fileInput) return;
+
+      let currentSvgBlobUrl = null;
+      let currentFileName = "image";
+      let originalWidth = 0;
+      let originalHeight = 0;
+      let currentWidth = 81;
+      let currentHeight = 81;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) handleFile(file);
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file && file.type === "image/png") {
+          handleFile(file);
+        } else {
+          alert("请上传 PNG 格式的图片！");
+        }
+      });
+
+      function handleFile(file) {
+        if (file.size > 10 * 1024 * 1024) {
+          alert("文件大小不能超过 10MB！");
+          return;
+        }
+        if (file.type !== "image/png") {
+          alert("请上传 PNG 格式的图片！");
+          return;
+        }
+
+        if (currentSvgBlobUrl) {
+          URL.revokeObjectURL(currentSvgBlobUrl);
+          currentSvgBlobUrl = null;
+        }
+
+        currentFileName = file.name || "image";
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const dataUrl = String(e.target?.result || "");
+          const img = new Image();
+          img.onload = () => {
+            originalImage.src = dataUrl;
+            originalWidth = img.width;
+            originalHeight = img.height;
+            currentWidth = img.width;
+            currentHeight = img.height;
+
+            widthInput.value = String(img.width);
+            heightInput.value = String(img.height);
+
+            originalInfo.textContent = `尺寸：${img.width} × ${img.height} 像素；大小：${formatFileSizeCommon(
+              file.size
+            )}`;
+
+            const svgText =
+              `<svg xmlns="http://www.w3.org/2000/svg" width="${currentWidth}" height="${currentHeight}">` +
+              `<image href="${dataUrl}" width="${currentWidth}" height="${currentHeight}" />` +
+              `</svg>`;
+
+            const svgBlob = new Blob([svgText], { type: "image/svg+xml" });
+            currentSvgBlobUrl = URL.createObjectURL(svgBlob);
+            previewImage.src = currentSvgBlobUrl;
+
+            convertedInfo.textContent = `生成的 SVG 内部嵌入 PNG 位图，尺寸：${currentWidth} × ${currentHeight} 像素`;
+            previewSection.style.display = "block";
+          };
+          img.src = dataUrl;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      downloadBtn.addEventListener("click", () => {
+        if (!currentSvgBlobUrl) return;
+        const a = document.createElement("a");
+        const baseName = currentFileName.replace(/\.png$/i, "") || "image";
+        a.download = `${baseName}.svg`;
+        a.href = currentSvgBlobUrl;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+
+      resetBtn.addEventListener("click", () => {
+        fileInput.value = "";
+        previewSection.style.display = "none";
+        if (currentSvgBlobUrl) {
+          URL.revokeObjectURL(currentSvgBlobUrl);
+          currentSvgBlobUrl = null;
+        }
+        currentFileName = "image";
+        originalWidth = 0;
+        originalHeight = 0;
+        currentWidth = 81;
+        currentHeight = 81;
+        widthInput.value = "81";
+        heightInput.value = "81";
+        keepAspect.checked = true;
+      });
+
+      function formatFileSizeCommon(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      }
+
+      applySizeBtn.addEventListener("click", () => {
+        if (!originalWidth || !originalHeight || !currentSvgBlobUrl) return;
+
+        let newWidth = parseInt(widthInput.value, 10) || originalWidth;
+        let newHeight = parseInt(heightInput.value, 10) || originalHeight;
+
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          newHeight = Math.round(newWidth / aspect);
+          heightInput.value = String(newHeight);
+        }
+
+        newWidth = Math.max(1, Math.min(4096, newWidth));
+        newHeight = Math.max(1, Math.min(4096, newHeight));
+
+        currentWidth = newWidth;
+        currentHeight = newHeight;
+
+        // 重新创建 SVG
+        const href = previewImage.src;
+        const svgText =
+          `<svg xmlns="http://www.w3.org/2000/svg" width="${currentWidth}" height="${currentHeight}">` +
+          `<image href="${href}" width="${currentWidth}" height="${currentHeight}" />` +
+          `</svg>`;
+        if (currentSvgBlobUrl) {
+          URL.revokeObjectURL(currentSvgBlobUrl);
+        }
+        const svgBlob = new Blob([svgText], { type: "image/svg+xml" });
+        currentSvgBlobUrl = URL.createObjectURL(svgBlob);
+        previewImage.src = currentSvgBlobUrl;
+        convertedInfo.textContent = `生成的 SVG 内部嵌入 PNG 位图，尺寸：${currentWidth} × ${currentHeight} 像素`;
+      });
+
+      widthInput.addEventListener("input", () => {
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          const val = parseInt(widthInput.value, 10);
+          if (!isNaN(val)) {
+            const newHeight = Math.round(val / aspect);
+            heightInput.value = String(newHeight);
+          }
+        }
+      });
+
+      heightInput.addEventListener("input", () => {
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          const val = parseInt(heightInput.value, 10);
+          if (!isNaN(val)) {
+            const newWidth = Math.round(val * aspect);
+            widthInput.value = String(newWidth);
+          }
+        }
+      });
+
+      function applyPreset(width, height) {
+        widthInput.value = String(width);
+        heightInput.value = String(height);
+        if (width !== height) {
+          keepAspect.checked = false;
+        }
+        if (originalWidth && originalHeight && currentSvgBlobUrl) {
+          currentWidth = width;
+          currentHeight = height;
+          applySizeBtn.click();
+        }
+      }
+
+      preset81.addEventListener("click", () => applyPreset(81, 81));
+      preset128.addEventListener("click", () => applyPreset(128, 128));
+      preset256.addEventListener("click", () => applyPreset(256, 256));
+    })();
+
+    // JPG 转 SVG 工具逻辑（位图嵌入）
+    (function initJpgToSvgTool() {
+      const uploadArea = document.getElementById("jpg2SvgUploadArea");
+      const fileInput = document.getElementById("jpg2SvgFileInput");
+      const previewSection = document.getElementById("jpg2SvgPreviewSection");
+      const originalImage = document.getElementById("jpg2SvgOriginalImage");
+      const originalInfo = document.getElementById("jpg2SvgOriginalInfo");
+      const previewImage = document.getElementById("jpg2SvgPreviewImage");
+      const convertedInfo = document.getElementById("jpg2SvgConvertedInfo");
+      const widthInput = document.getElementById("jpg2SvgWidthInput");
+      const heightInput = document.getElementById("jpg2SvgHeightInput");
+      const keepAspect = document.getElementById("jpg2SvgKeepAspect");
+      const applySizeBtn = document.getElementById("jpg2SvgApplySizeBtn");
+      const preset81 = document.getElementById("jpg2SvgPreset81");
+      const preset128 = document.getElementById("jpg2SvgPreset128");
+      const preset256 = document.getElementById("jpg2SvgPreset256");
+      const downloadBtn = document.getElementById("jpg2SvgDownloadBtn");
+      const resetBtn = document.getElementById("jpg2SvgResetBtn");
+
+      if (!uploadArea || !fileInput) return;
+
+      let currentSvgBlobUrl = null;
+      let currentFileName = "image";
+      let originalWidth = 0;
+      let originalHeight = 0;
+      let currentWidth = 81;
+      let currentHeight = 81;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) handleFile(file);
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file && (file.type === "image/jpeg" || file.type === "image/jpg")) {
+          handleFile(file);
+        } else {
+          alert("请上传 JPG / JPEG 格式的图片！");
+        }
+      });
+
+      function handleFile(file) {
+        if (file.size > 10 * 1024 * 1024) {
+          alert("文件大小不能超过 10MB！");
+          return;
+        }
+        if (file.type !== "image/jpeg" && file.type !== "image/jpg") {
+          alert("请上传 JPG / JPEG 格式的图片！");
+          return;
+        }
+
+        if (currentSvgBlobUrl) {
+          URL.revokeObjectURL(currentSvgBlobUrl);
+          currentSvgBlobUrl = null;
+        }
+
+        currentFileName = file.name || "image";
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const dataUrl = String(e.target?.result || "");
+          const img = new Image();
+          img.onload = () => {
+            originalImage.src = dataUrl;
+            originalWidth = img.width;
+            originalHeight = img.height;
+            currentWidth = img.width;
+            currentHeight = img.height;
+
+            widthInput.value = String(img.width);
+            heightInput.value = String(img.height);
+
+            originalInfo.textContent = `尺寸：${img.width} × ${img.height} 像素；大小：${formatFileSizeCommon(
+              file.size
+            )}`;
+
+            const svgText =
+              `<svg xmlns="http://www.w3.org/2000/svg" width="${currentWidth}" height="${currentHeight}">` +
+              `<image href="${dataUrl}" width="${currentWidth}" height="${currentHeight}" />` +
+              `</svg>`;
+
+            const svgBlob = new Blob([svgText], { type: "image/svg+xml" });
+            currentSvgBlobUrl = URL.createObjectURL(svgBlob);
+            previewImage.src = currentSvgBlobUrl;
+
+            convertedInfo.textContent = `生成的 SVG 内部嵌入 JPG 位图，尺寸：${currentWidth} × ${currentHeight} 像素`;
+            previewSection.style.display = "block";
+          };
+          img.src = dataUrl;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      downloadBtn.addEventListener("click", () => {
+        if (!currentSvgBlobUrl) return;
+        const a = document.createElement("a");
+        const baseName = currentFileName.replace(/\.(jpg|jpeg)$/i, "") || "image";
+        a.download = `${baseName}.svg`;
+        a.href = currentSvgBlobUrl;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+
+      resetBtn.addEventListener("click", () => {
+        fileInput.value = "";
+        previewSection.style.display = "none";
+        if (currentSvgBlobUrl) {
+          URL.revokeObjectURL(currentSvgBlobUrl);
+          currentSvgBlobUrl = null;
+        }
+        currentFileName = "image";
+        originalWidth = 0;
+        originalHeight = 0;
+        currentWidth = 81;
+        currentHeight = 81;
+        widthInput.value = "81";
+        heightInput.value = "81";
+        keepAspect.checked = true;
+      });
+
+      function formatFileSizeCommon(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      }
+
+      applySizeBtn.addEventListener("click", () => {
+        if (!originalWidth || !originalHeight || !currentSvgBlobUrl) return;
+
+        let newWidth = parseInt(widthInput.value, 10) || originalWidth;
+        let newHeight = parseInt(heightInput.value, 10) || originalHeight;
+
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          newHeight = Math.round(newWidth / aspect);
+          heightInput.value = String(newHeight);
+        }
+
+        newWidth = Math.max(1, Math.min(4096, newWidth));
+        newHeight = Math.max(1, Math.min(4096, newHeight));
+
+        currentWidth = newWidth;
+        currentHeight = newHeight;
+
+        const href = previewImage.src;
+        const svgText =
+          `<svg xmlns="http://www.w3.org/2000/svg" width="${currentWidth}" height="${currentHeight}">` +
+          `<image href="${href}" width="${currentWidth}" height="${currentHeight}" />` +
+          `</svg>`;
+        if (currentSvgBlobUrl) {
+          URL.revokeObjectURL(currentSvgBlobUrl);
+        }
+        const svgBlob = new Blob([svgText], { type: "image/svg+xml" });
+        currentSvgBlobUrl = URL.createObjectURL(svgBlob);
+        previewImage.src = currentSvgBlobUrl;
+        convertedInfo.textContent = `生成的 SVG 内部嵌入 JPG 位图，尺寸：${currentWidth} × ${currentHeight} 像素`;
+      });
+
+      widthInput.addEventListener("input", () => {
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          const val = parseInt(widthInput.value, 10);
+          if (!isNaN(val)) {
+            const newHeight = Math.round(val / aspect);
+            heightInput.value = String(newHeight);
+          }
+        }
+      });
+
+      heightInput.addEventListener("input", () => {
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          const val = parseInt(heightInput.value, 10);
+          if (!isNaN(val)) {
+            const newWidth = Math.round(val * aspect);
+            widthInput.value = String(newWidth);
+          }
+        }
+      });
+
+      function applyPreset(width, height) {
+        widthInput.value = String(width);
+        heightInput.value = String(height);
+        if (width !== height) {
+          keepAspect.checked = false;
+        }
+        if (originalWidth && originalHeight && currentSvgBlobUrl) {
+          currentWidth = width;
+          currentHeight = height;
+          applySizeBtn.click();
+        }
+      }
+
+      preset81.addEventListener("click", () => applyPreset(81, 81));
+      preset128.addEventListener("click", () => applyPreset(128, 128));
+      preset256.addEventListener("click", () => applyPreset(256, 256));
+    })();
+
+    // SVG 转 JPG 工具逻辑
+    (function initSvgToJpgTool() {
+      const uploadArea = document.getElementById("svg2JpgUploadArea");
+      const fileInput = document.getElementById("svg2JpgFileInput");
+      const previewSection = document.getElementById("svg2JpgPreviewSection");
+      const loading = document.getElementById("svg2JpgLoading");
+      const originalImage = document.getElementById("svg2JpgOriginalImage");
+      const convertedImage = document.getElementById("svg2JpgConvertedImage");
+      const originalInfo = document.getElementById("svg2JpgOriginalInfo");
+      const convertedInfo = document.getElementById("svg2JpgConvertedInfo");
+      const downloadBtn = document.getElementById("svg2JpgDownloadBtn");
+      const resetBtn = document.getElementById("svg2JpgResetBtn");
+      const successMessage = document.getElementById("svg2JpgSuccess");
+
+      const widthInput = document.getElementById("svg2JpgWidthInput");
+      const heightInput = document.getElementById("svg2JpgHeightInput");
+      const keepAspect = document.getElementById("svg2JpgKeepAspect");
+      const applySizeBtn = document.getElementById("svg2JpgApplySizeBtn");
+      const preset81 = document.getElementById("svg2JpgPreset81");
+      const preset128 = document.getElementById("svg2JpgPreset128");
+      const preset256 = document.getElementById("svg2JpgPreset256");
+
+      if (!uploadArea || !fileInput) return;
+
+      let convertedDataUrl = null;
+      let currentFileName = "image";
+      let originalWidth = 512;
+      let originalHeight = 512;
+      let currentWidth = 512;
+      let currentHeight = 512;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) handleFile(file);
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file && (file.name.toLowerCase().endsWith(".svg") || file.type === "image/svg+xml")) {
+          handleFile(file);
+        } else {
+          alert("请上传 SVG 文件！");
+        }
+      });
+
+      function handleFile(file) {
+        if (file.size > 5 * 1024 * 1024) {
+          alert("文件大小不能超过 5MB！");
+          return;
+        }
+
+        loading.classList.add("active");
+        previewSection.style.display = "none";
+        successMessage.style.display = "none";
+        currentFileName = file.name || "image";
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const svgText = String(e.target?.result || "");
+          const svgBlob = new Blob([svgText], { type: "image/svg+xml;charset=utf-8" });
+          const url = URL.createObjectURL(svgBlob);
+          const img = new Image();
+          img.onload = () => {
+            originalImage.src = url;
+            originalWidth = img.width || 512;
+            originalHeight = img.height || 512;
+            currentWidth = originalWidth;
+            currentHeight = originalHeight;
+
+            widthInput.value = String(currentWidth);
+            heightInput.value = String(currentHeight);
+
+            originalInfo.textContent = `渲染尺寸：${img.width} × ${img.height} 像素；源文件大小：${formatFileSizeCommon(
+              file.size
+            )}`;
+            convertSvgToJpg(img, currentWidth, currentHeight);
+            URL.revokeObjectURL(url);
+          };
+          img.onerror = () => {
+            URL.revokeObjectURL(url);
+            loading.classList.remove("active");
+            alert("无法解析 SVG 文件，请检查文件是否有效。");
+          };
+          img.src = url;
+        };
+        reader.readAsText(file);
+      }
+
+      function convertSvgToJpg(img, width, height) {
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, width, height);
+        ctx.drawImage(img, 0, 0, width, height);
+
+        convertedDataUrl = canvas.toDataURL("image/jpeg", 0.92);
+        convertedImage.src = convertedDataUrl;
+
+        const approxSize = Math.round((convertedDataUrl.length - 22) * 0.75);
+        convertedInfo.textContent = `尺寸：${width} × ${height} 像素；大小约：${formatFileSizeCommon(
+          approxSize
+        )}`;
+
+        loading.classList.remove("active");
+        previewSection.style.display = "block";
+        successMessage.style.display = "block";
+      }
+
+      downloadBtn.addEventListener("click", () => {
+        if (!convertedDataUrl) return;
+        const a = document.createElement("a");
+        const baseName = currentFileName.replace(/\.svg$/i, "") || "image";
+        a.download = `${baseName}.jpg`;
+        a.href = convertedDataUrl;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+
+      resetBtn.addEventListener("click", () => {
+        fileInput.value = "";
+        previewSection.style.display = "none";
+        successMessage.style.display = "none";
+        convertedDataUrl = null;
+        currentFileName = "image";
+        originalWidth = 512;
+        originalHeight = 512;
+        currentWidth = 512;
+        currentHeight = 512;
+        widthInput.value = "512";
+        heightInput.value = "512";
+        keepAspect.checked = true;
+      });
+
+      function formatFileSizeCommon(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      }
+
+      applySizeBtn.addEventListener("click", () => {
+        if (!convertedDataUrl) return;
+
+        let newWidth = parseInt(widthInput.value, 10) || originalWidth;
+        let newHeight = parseInt(heightInput.value, 10) || originalHeight;
+
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          newHeight = Math.round(newWidth / aspect);
+          heightInput.value = String(newHeight);
+        }
+
+        newWidth = Math.max(1, Math.min(4096, newWidth));
+        newHeight = Math.max(1, Math.min(4096, newHeight));
+
+        currentWidth = newWidth;
+        currentHeight = newHeight;
+
+        const img = new Image();
+        img.onload = () => {
+          loading.classList.add("active");
+          convertSvgToJpg(img, currentWidth, currentHeight);
+        };
+        img.src = originalImage.src;
+      });
+
+      widthInput.addEventListener("input", () => {
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          const val = parseInt(widthInput.value, 10);
+          if (!isNaN(val)) {
+            const newHeight = Math.round(val / aspect);
+            heightInput.value = String(newHeight);
+          }
+        }
+      });
+
+      heightInput.addEventListener("input", () => {
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          const val = parseInt(heightInput.value, 10);
+          if (!isNaN(val)) {
+            const newWidth = Math.round(val * aspect);
+            widthInput.value = String(newWidth);
+          }
+        }
+      });
+
+      function applyPreset(width, height) {
+        widthInput.value = String(width);
+        heightInput.value = String(height);
+        if (width !== height) {
+          keepAspect.checked = false;
+        }
+        applySizeBtn.click();
+      }
+
+      preset81.addEventListener("click", () => applyPreset(81, 81));
+      preset128.addEventListener("click", () => applyPreset(128, 128));
+      preset256.addEventListener("click", () => applyPreset(256, 256));
+    })();
+
+    // 背景透明工具逻辑
+    (function initBgTool() {
+      const uploadArea = document.getElementById("bgUploadArea");
+      const fileInput = document.getElementById("bgFileInput");
+      const previewSection = document.getElementById("bgPreviewSection");
+      const loading = document.getElementById("bgLoading");
+      const originalImage = document.getElementById("bgOriginalImage");
+      const transparentImage = document.getElementById("bgTransparentImage");
+      const originalInfo = document.getElementById("bgOriginalInfo");
+      const transparentInfo = document.getElementById("bgTransparentInfo");
+      const colorPicker = document.getElementById("bgColorPicker");
+      const colorPreview = document.getElementById("bgColorPreview");
+      const toleranceSlider = document.getElementById("bgToleranceSlider");
+      const toleranceValue = document.getElementById("bgToleranceValue");
+      const processBtn = document.getElementById("bgProcessBtn");
+      const downloadBtn = document.getElementById("bgDownloadBtn");
+      const resetBtn = document.getElementById("bgResetBtn");
+
+      if (!uploadArea) return;
+
+      let currentImage = null;
+      let transparentDataUrl = null;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) handleFile(file);
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file && file.type.startsWith("image/")) {
+          handleFile(file);
+        } else {
+          alert("请上传图片文件！");
+        }
+      });
+
+      function handleFile(file) {
+        if (file.size > 10 * 1024 * 1024) {
+          alert("文件大小不能超过 10MB！");
+          return;
+        }
+        if (!file.type.startsWith("image/")) {
+          alert("请上传图片文件！");
+          return;
+        }
+
+        loading.classList.add("active");
+        previewSection.classList.remove("active");
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            currentImage = img;
+            const src = String(e.target?.result || "");
+            originalImage.src = src;
+            originalInfo.innerHTML = `
+              <div class="image-info-item"><strong>尺寸：</strong>${img.width} × ${img.height} 像素</div>
+              <div class="image-info-item"><strong>大小：</strong>${formatFileSizeBg(file.size)}</div>
+            `;
+
+            transparentImage.src = src;
+            transparentInfo.innerHTML = `
+              <div class="image-info-item"><strong>格式：</strong>PNG（透明背景）</div>
+              <div class="image-info-item"><strong>尺寸：</strong>${img.width} × ${img.height} 像素</div>
+              <div class="image-info-item" style="color: rgba(255,255,255,0.7);">点击“处理图片”按钮开始</div>
+            `;
+
+            autoDetectBackgroundColor(img);
+
+            loading.classList.remove("active");
+            previewSection.classList.add("active");
+            downloadBtn.disabled = true;
+            downloadBtn.style.opacity = "0.7";
+          };
+          img.src = String(e.target?.result || "");
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function formatFileSizeBg(bytes) {
+        if (bytes === 0) return "0 Bytes";
+        const k = 1024;
+        const sizes = ["Bytes", "KB", "MB", "GB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
+      }
+
+      function autoDetectBackgroundColor(img) {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+        const corners = [
+          [0, 0],
+          [canvas.width - 1, 0],
+          [0, canvas.height - 1],
+          [canvas.width - 1, canvas.height - 1],
+        ];
+
+        let r = 0,
+          g = 0,
+          b = 0;
+        corners.forEach(([x, y]) => {
+          const index = (y * canvas.width + x) * 4;
+          r += data[index];
+          g += data[index + 1];
+          b += data[index + 2];
+        });
+        r = Math.round(r / 4);
+        g = Math.round(g / 4);
+        b = Math.round(b / 4);
+
+        const hexColor =
+          "#" +
+          [r, g, b]
+            .map((x) => {
+              const hex = x.toString(16);
+              return hex.length === 1 ? "0" + hex : hex;
+            })
+            .join("");
+
+        colorPicker.value = hexColor;
+        colorPreview.style.backgroundColor = hexColor;
+      }
+
+      colorPicker.addEventListener("input", (e) => {
+        colorPreview.style.backgroundColor = e.target.value;
+      });
+
+      toleranceSlider.addEventListener("input", (e) => {
+        toleranceValue.textContent = String(e.target.value);
+      });
+
+      originalImage.addEventListener("click", (e) => {
+        if (!currentImage) return;
+
+        const canvas = document.createElement("canvas");
+        canvas.width = currentImage.width;
+        canvas.height = currentImage.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(currentImage, 0, 0);
+
+        const rect = originalImage.getBoundingClientRect();
+        const x = Math.floor(((e.clientX - rect.left) * currentImage.width) / rect.width);
+        const y = Math.floor(((e.clientY - rect.top) * currentImage.height) / rect.height);
+
+        const imageData = ctx.getImageData(x, y, 1, 1);
+        const [r, g, b] = imageData.data;
+        const hexColor =
+          "#" +
+          [r, g, b]
+            .map((x) => {
+              const hex = x.toString(16);
+              return hex.length === 1 ? "0" + hex : hex;
+            })
+            .join("");
+
+        colorPicker.value = hexColor;
+        colorPreview.style.backgroundColor = hexColor;
+      });
+
+      processBtn.addEventListener("click", () => {
+        if (!currentImage) {
+          alert("请先上传图片！");
+          return;
+        }
+        loading.classList.add("active");
+        setTimeout(() => {
+          removeBackground(currentImage);
+        }, 80);
+      });
+
+      function removeBackground(img) {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+
+        const targetColor = hexToRgb(colorPicker.value);
+        const tolerance = parseInt(toleranceSlider.value, 10);
+
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          const distance = Math.sqrt(
+            Math.pow(r - targetColor.r, 2) + Math.pow(g - targetColor.g, 2) + Math.pow(b - targetColor.b, 2)
+          );
+          if (distance <= tolerance) {
+            data[i + 3] = 0;
+          }
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+        transparentDataUrl = canvas.toDataURL("image/png");
+        transparentImage.src = transparentDataUrl;
+
+        transparentInfo.innerHTML = `
+          <div class="image-info-item"><strong>格式：</strong>PNG（透明背景）</div>
+          <div class="image-info-item"><strong>尺寸：</strong>${img.width} × ${img.height} 像素</div>
+          <div class="image-info-item" style="color:#2ed573;">✅ 处理完成！</div>
+        `;
+
+        loading.classList.remove("active");
+        downloadBtn.disabled = false;
+        downloadBtn.style.opacity = "1";
+      }
+
+      function hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result
+          ? {
+              r: parseInt(result[1], 16),
+              g: parseInt(result[2], 16),
+              b: parseInt(result[3], 16),
+            }
+          : { r: 255, g: 255, b: 255 };
+      }
+
+      downloadBtn.addEventListener("click", () => {
+        if (!transparentDataUrl) return;
+        const link = document.createElement("a");
+        link.download = "transparent-background.png";
+        link.href = transparentDataUrl;
+        link.click();
+      });
+
+      resetBtn.addEventListener("click", () => {
+        fileInput.value = "";
+        previewSection.classList.remove("active");
+        currentImage = null;
+        transparentDataUrl = null;
+        downloadBtn.disabled = true;
+        downloadBtn.style.opacity = "0.7";
+      });
+    })();
+
+    // 文档转换工具逻辑（Word -> PDF）
+    (function initDocTool() {
+      const uploadArea = document.getElementById("docUploadArea");
+      const fileInput = document.getElementById("docFileInput");
+      const previewSection = document.getElementById("docPreviewSection");
+      const loading = document.getElementById("docLoading");
+      const fileInfo = document.getElementById("docFileInfo");
+      const convertBtn = document.getElementById("docConvertBtn");
+      const resetBtn = document.getElementById("docResetBtn");
+      const cancelBtn = document.getElementById("docCancelBtn");
+      const successEl = document.getElementById("docSuccess");
+
+      if (!uploadArea || !fileInput) return;
+
+      /** @type {File | null} */
+      let currentFile = null;
+      /** @type {AbortController | null} */
+      let abortController = null;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) {
+          handleFile(file);
+        }
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file) {
+          handleFile(file);
+        }
+      });
+
+      function handleFile(file) {
+        const ext = (file.name || "").toLowerCase();
+        if (!ext.endsWith(".doc") && !ext.endsWith(".docx")) {
+          alert("请上传 .doc 或 .docx 格式的 Word 文档");
+          return;
+        }
+        if (file.size > 20 * 1024 * 1024) {
+          alert("文件大小不能超过 20MB！");
+          return;
+        }
+
+        currentFile = file;
+        if (previewSection) previewSection.style.display = "block";
+        if (successEl) successEl.style.display = "none";
+        if (fileInfo) {
+          fileInfo.textContent = `文件：${file.name}（${formatFileSize(file.size)}）`;
+        }
+      }
+
+      if (convertBtn) {
+        convertBtn.addEventListener("click", async () => {
+          if (!currentFile) {
+            alert("请先选择一个 Word 文档");
+            return;
+          }
+          if (loading) loading.classList.add("active");
+          if (successEl) successEl.style.display = "none";
+
+          // 创建新的 AbortController
+          abortController = new AbortController();
+
+          try {
+            const fd = new FormData();
+            fd.append("file", currentFile);
+
+            const resp = await fetch("/api/convert/word-to-pdf", {
+              method: "POST",
+              body: fd,
+              signal: abortController.signal,
+            });
+
+            if (!resp.ok) {
+              try {
+                const errorData = await resp.json();
+                let errorMsg = errorData.message || `转换失败 (${resp.status})`;
+                if (errorData.tips && errorData.tips.length > 0) {
+                  errorMsg += '\n\n' + errorData.tips.join('\n');
+                }
+                alert(errorMsg);
+              } catch {
+                alert(`转换失败 (${resp.status})，请稍后重试或检查后端服务。➡️ npm run dev:server`);
+              }
+              console.error("convert error:", resp.status);
+              return;
+            }
+
+            const blob = await resp.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            const baseName = (currentFile.name || "document").replace(/\.(docx?|DOCX?)$/, "");
+            a.href = url;
+            a.download = `${baseName || "document"}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            if (successEl) successEl.style.display = "block";
+            abortController = null;
+          } catch (e) {
+            if (e.name === "AbortError") {
+              console.log("上传已取消");
+              if (successEl) successEl.style.display = "none";
+            } else {
+              console.error("convert exception:", e);
+              alert("转换过程中出现错误，请检查网络或后端服务。");
+            }
+          } finally {
+            if (loading) loading.classList.remove("active");
+          }
+        });
+      }
+
+      if (cancelBtn) {
+        cancelBtn.addEventListener("click", () => {
+          if (abortController) {
+            abortController.abort();
+            abortController = null;
+            if (loading) loading.classList.remove("active");
+            if (successEl) successEl.style.display = "none";
+            alert("已取消上传");
+          }
+        });
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener("click", () => {
+          if (abortController) {
+            abortController.abort();
+            abortController = null;
+          }
+          currentFile = null;
+          fileInput.value = "";
+          if (previewSection) previewSection.style.display = "none";
+          if (successEl) successEl.style.display = "none";
+        });
+      }
+
+      function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      }
+    })();
+
+    // 文档转换工具逻辑（图片 -> 合并 PDF）
+    (function initImageToPdfTool() {
+      const uploadArea = document.getElementById("imgPdfUploadArea");
+      const fileInput = document.getElementById("imgPdfFileInput");
+      const previewSection = document.getElementById("imgPdfPreviewSection");
+      const loading = document.getElementById("imgPdfLoading");
+      const fileInfo = document.getElementById("imgPdfFileInfo");
+      const convertBtn = document.getElementById("imgPdfConvertBtn");
+      const resetBtn = document.getElementById("imgPdfResetBtn");
+      const cancelBtn = document.getElementById("imgPdfCancelBtn");
+      const successEl = document.getElementById("imgPdfSuccess");
+      const fileListEl = document.getElementById("imgPdfFileList");
+      const listDetailsEl = document.getElementById("imgPdfListDetails");
+      const selectDirBtn = document.getElementById("imgPdfSelectDirBtn");
+      const dirInput = document.getElementById("imgPdfDirInput");
+
+      if (!uploadArea || !fileInput) return;
+
+      /** @type {File[]} */
+      let images = [];
+      /** @type {AbortController | null} */
+      let abortController = null;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const files = Array.from(e.target.files || []);
+        handleFiles(files);
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const files = Array.from(e.dataTransfer.files || []);
+        handleFiles(files);
+      });
+
+      // 从文件夹导入：点击按钮触发目录选择
+      if (selectDirBtn && dirInput) {
+        selectDirBtn.addEventListener("click", () => {
+          dirInput.click();
+        });
+
+        dirInput.addEventListener("change", (e) => {
+          const files = Array.from(e.target.files || []);
+          if (!files.length) return;
+          // 使用 webkitRelativePath / name 按路径顺序排序，尽量贴近文件夹中的顺序
+          files.sort((a, b) => {
+            const pa = (a.webkitRelativePath || a.name).toLowerCase();
+            const pb = (b.webkitRelativePath || b.name).toLowerCase();
+            return pa.localeCompare(pb);
+          });
+          handleFiles(files);
+        });
+      }
+
+      function handleFiles(files) {
+        const valid = [];
+        for (const f of files) {
+          if (!f.type.startsWith("image/")) continue;
+          if (f.size > 10 * 1024 * 1024) {
+            alert(`图片 ${f.name} 超过 10MB，已跳过`);
+            continue;
+          }
+          valid.push(f);
+        }
+        if (!valid.length) {
+          alert("请上传 JPG / PNG / WEBP 格式的图片（单张 ≤ 10MB）。");
+          return;
+        }
+        // 累积添加图片，多次选择会不断追加
+        images = images.concat(valid);
+        if (previewSection) previewSection.style.display = "block";
+        if (successEl) successEl.style.display = "none";
+        if (fileInfo) {
+          const totalSize = images.reduce((sum, f) => sum + f.size, 0);
+          fileInfo.textContent = `共 ${images.length} 张图片，总大小约 ${formatFileSize(totalSize)}`;
+        }
+        if (fileListEl) {
+          fileListEl.innerHTML = "";
+          images.forEach((img) => {
+            const li = document.createElement("li");
+            li.textContent = img.name;
+            fileListEl.appendChild(li);
+          });
+        }
+        if (listDetailsEl) {
+          listDetailsEl.open = false;
+        }
+      }
+
+      if (convertBtn) {
+        convertBtn.addEventListener("click", async () => {
+          if (!images.length) {
+            alert("请先选择至少一张图片");
+            return;
+          }
+          if (loading) loading.classList.add("active");
+          if (successEl) successEl.style.display = "none";
+
+          // 创建新的 AbortController
+          abortController = new AbortController();
+
+          try {
+            const fd = new FormData();
+            images.forEach((img) => fd.append("images", img));
+
+            const resp = await fetch("/api/convert/image-to-pdf", {
+              method: "POST",
+              body: fd,
+              signal: abortController.signal,
+            });
+
+            if (!resp.ok) {
+              try {
+                const errorData = await resp.json();
+                let errorMsg = errorData.message || `生成 PDF 失败 (${resp.status})`;
+                if (errorData.tips && errorData.tips.length > 0) {
+                  errorMsg += '\n\n' + errorData.tips.join('\n');
+                }
+                alert(errorMsg);
+              } catch {
+                alert(`生成 PDF 失败 (${resp.status})，请稍后重试或检查后端服务。➡️ npm run dev:server`);
+              }
+              console.error("image->pdf error:", resp.status);
+              return;
+            }
+
+            const blob = await resp.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "images.pdf";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            if (successEl) successEl.style.display = "block";
+            abortController = null;
+          } catch (e) {
+            if (e.name === "AbortError") {
+              console.log("上传已取消");
+              if (successEl) successEl.style.display = "none";
+            } else {
+              console.error("image->pdf exception:", e);
+              alert("生成 PDF 过程中出现错误，请检查网络或后端服务。");
+            }
+          } finally {
+            if (loading) loading.classList.remove("active");
+          }
+        });
+      }
+
+      if (cancelBtn) {
+        cancelBtn.addEventListener("click", () => {
+          if (abortController) {
+            abortController.abort();
+            abortController = null;
+            if (loading) loading.classList.remove("active");
+            if (successEl) successEl.style.display = "none";
+            alert("已取消上传");
+          }
+        });
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener("click", () => {
+          if (abortController) {
+            abortController.abort();
+            abortController = null;
+          }
+          images = [];
+          fileInput.value = "";
+          if (previewSection) previewSection.style.display = "none";
+          if (successEl) successEl.style.display = "none";
+          if (fileListEl) fileListEl.innerHTML = "";
+        });
+      }
+
+      function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      }
+    })();
+
+    // 文档转换工具逻辑（PDF -> Word）
+    (function initPdfToWordTool() {
+      const uploadArea = document.getElementById("pdf2WordUploadArea");
+      const fileInput = document.getElementById("pdf2WordFileInput");
+      const previewSection = document.getElementById("pdf2WordPreviewSection");
+      const loading = document.getElementById("pdf2WordLoading");
+      const fileInfo = document.getElementById("pdf2WordFileInfo");
+      const convertBtn = document.getElementById("pdf2WordConvertBtn");
+      const resetBtn = document.getElementById("pdf2WordResetBtn");
+      const cancelBtn = document.getElementById("pdf2WordCancelBtn");
+      const successEl = document.getElementById("pdf2WordSuccess");
+
+      if (!uploadArea || !fileInput) return;
+
+      /** @type {File | null} */
+      let currentFile = null;
+      /** @type {AbortController | null} */
+      let abortController = null;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) handleFile(file);
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file) handleFile(file);
+      });
+
+      function handleFile(file) {
+        const name = (file.name || "").toLowerCase();
+        if (!name.endsWith(".pdf")) {
+          alert("请上传 .pdf 格式的文件");
+          return;
+        }
+        if (file.size > 20 * 1024 * 1024) {
+          alert("文件大小不能超过 20MB！");
+          return;
+        }
+
+        currentFile = file;
+        if (previewSection) previewSection.style.display = "block";
+        if (successEl) successEl.style.display = "none";
+        if (fileInfo) {
+          fileInfo.textContent = `文件：${file.name}（${formatFileSize(file.size)}）`;
+        }
+      }
+
+      if (convertBtn) {
+        convertBtn.addEventListener("click", async () => {
+          if (!currentFile) {
+            alert("请先选择一个 PDF 文件");
+            return;
+          }
+          if (loading) loading.classList.add("active");
+          if (successEl) successEl.style.display = "none";
+
+          // 创建新的 AbortController
+          abortController = new AbortController();
+
+          try {
+            const fd = new FormData();
+            fd.append("file", currentFile);
+
+            const resp = await fetch("/api/convert/pdf-to-word", {
+              method: "POST",
+              body: fd,
+              signal: abortController.signal,
+            });
+
+            if (!resp.ok) {
+              try {
+                const errorData = await resp.json();
+                let errorMsg = errorData.message || `转换失败 (${resp.status})`;
+                if (errorData.tips && errorData.tips.length > 0) {
+                  errorMsg += '\n\n' + errorData.tips.join('\n');
+                }
+                alert(errorMsg);
+              } catch {
+                alert(`转换失败 (${resp.status})，请稍后重试或检查后端服务。➡️ npm run dev:server`);
+              }
+              console.error("pdf->word error:", resp.status);
+              return;
+            }
+
+            const blob = await resp.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            const baseName = (currentFile.name || "document").replace(/\.pdf$/i, "");
+            a.href = url;
+            a.download = `${baseName || "document"}.docx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            if (successEl) successEl.style.display = "block";
+            abortController = null;
+          } catch (e) {
+            if (e.name === "AbortError") {
+              console.log("上传已取消");
+              if (successEl) successEl.style.display = "none";
+            } else {
+              console.error("pdf->word exception:", e);
+              alert("转换过程中出现错误，请检查网络或后端服务。");
+            }
+          } finally {
+            if (loading) loading.classList.remove("active");
+          }
+        });
+      }
+
+      if (cancelBtn) {
+        cancelBtn.addEventListener("click", () => {
+          if (abortController) {
+            abortController.abort();
+            abortController = null;
+            if (loading) loading.classList.remove("active");
+            if (successEl) successEl.style.display = "none";
+            alert("已取消上传");
+          }
+        });
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener("click", () => {
+          if (abortController) {
+            abortController.abort();
+            abortController = null;
+          }
+          currentFile = null;
+          fileInput.value = "";
+          if (previewSection) previewSection.style.display = "none";
+          if (successEl) successEl.style.display = "none";
+        });
+      }
+
+      function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      }
+    })();
+
+    // 文档转换工具逻辑（PDF -> PPTX）
+    (function initPdfToPptTool() {
+      const uploadArea = document.getElementById("pdf2PptUploadArea");
+      const fileInput = document.getElementById("pdf2PptFileInput");
+      const previewSection = document.getElementById("pdf2PptPreviewSection");
+      const loading = document.getElementById("pdf2PptLoading");
+      const fileInfo = document.getElementById("pdf2PptFileInfo");
+      const convertBtn = document.getElementById("pdf2PptConvertBtn");
+      const resetBtn = document.getElementById("pdf2PptResetBtn");
+      const cancelBtn = document.getElementById("pdf2PptCancelBtn");
+      const successEl = document.getElementById("pdf2PptSuccess");
+
+      if (!uploadArea || !fileInput) return;
+
+      /** @type {File | null} */
+      let currentFile = null;
+      /** @type {AbortController | null} */
+      let abortController = null;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) handleFile(file);
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file) handleFile(file);
+      });
+
+      function handleFile(file) {
+        const name = (file.name || "").toLowerCase();
+        if (!name.endsWith(".pdf")) {
+          alert("请上传 .pdf 格式的文件");
+          return;
+        }
+        if (file.size > 20 * 1024 * 1024) {
+          alert("文件大小不能超过 20MB！");
+          return;
+        }
+
+        currentFile = file;
+        if (previewSection) previewSection.style.display = "block";
+        if (successEl) successEl.style.display = "none";
+        if (fileInfo) {
+          fileInfo.textContent = `文件：${file.name}（${formatFileSize(file.size)}）`;
+        }
+      }
+
+      if (convertBtn) {
+        convertBtn.addEventListener("click", async () => {
+          if (!currentFile) {
+            alert("请先选择一个 PDF 文件");
+            return;
+          }
+          if (loading) loading.classList.add("active");
+          if (successEl) successEl.style.display = "none";
+
+          // 创建新的 AbortController
+          abortController = new AbortController();
+
+          try {
+            const fd = new FormData();
+            fd.append("file", currentFile);
+
+            const resp = await fetch("/api/convert/pdf-to-ppt", {
+              method: "POST",
+              body: fd,
+              signal: abortController.signal,
+            });
+
+            if (!resp.ok) {
+              try {
+                const errorData = await resp.json();
+                let errorMsg = errorData.message || `转换失败 (${resp.status})`;
+                if (errorData.tips && errorData.tips.length > 0) {
+                  errorMsg += '\n\n' + errorData.tips.join('\n');
+                }
+                alert(errorMsg);
+              } catch {
+                alert(`转换失败 (${resp.status})，请稍后重试或检查后端服务。➡️ npm run dev:server`);
+              }
+              console.error("pdf->ppt error:", resp.status);
+              return;
+            }
+
+            const blob = await resp.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            const baseName = (currentFile.name || "slides").replace(/\.pdf$/i, "");
+            a.href = url;
+            a.download = `${baseName || "slides"}.pptx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            if (successEl) successEl.style.display = "block";
+            abortController = null;
+          } catch (e) {
+            if (e.name === "AbortError") {
+              console.log("上传已取消");
+              if (successEl) successEl.style.display = "none";
+            } else {
+              console.error("pdf->ppt exception:", e);
+              alert("转换过程中出现错误，请检查网络或后端服务。");
+            }
+          } finally {
+            if (loading) loading.classList.remove("active");
+          }
+        });
+      }
+
+      if (cancelBtn) {
+        cancelBtn.addEventListener("click", () => {
+          if (abortController) {
+            abortController.abort();
+            abortController = null;
+            if (loading) loading.classList.remove("active");
+            if (successEl) successEl.style.display = "none";
+            alert("已取消上传");
+          }
+        });
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener("click", () => {
+          if (abortController) {
+            abortController.abort();
+            abortController = null;
+          }
+          currentFile = null;
+          fileInput.value = "";
+          if (previewSection) previewSection.style.display = "none";
+          if (successEl) successEl.style.display = "none";
+        });
+      }
+
+      function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      }
+    })();
+
+  </script>
+</body>
+</html>
+
+

@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>文件工具箱 - 手机端</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      color: #101828;
+      background:
+        radial-gradient(circle at 10% 2%, rgba(22,119,255,.16), transparent 32%),
+        radial-gradient(circle at 92% 10%, rgba(42,211,126,.14), transparent 30%),
+        #f4f7fb;
+    }
+    .page {
+      width: min(100%, 520px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: max(20px, env(safe-area-inset-top)) 16px 34px;
+    }
+    .hero {
+      padding: 22px;
+      border-radius: 24px;
+      background: linear-gradient(145deg, #fff, #eef6ff);
+      border: 1px solid #e4e7ec;
+      box-shadow: 0 18px 42px rgba(15,23,42,.08);
+    }
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .eyebrow {
+      display: block;
+      color: #1677ff;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+    h1 {
+      margin-top: 5px;
+      font-size: 31px;
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+    .subtitle {
+      margin-top: 10px;
+      color: #667085;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .status {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 30px;
+      padding: 0 10px;
+      border-radius: 999px;
+      color: #667085;
+      background: #f2f4f7;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .status.online { color: #079455; background: #ecfdf3; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+    .pc-tip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid #e4e7ec;
+    }
+    .pc-tip-text {
+      min-width: 0;
+      color: #475467;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .pc-tip-text strong {
+      display: block;
+      color: #101828;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+    .pc-copy-btn {
+      flex: 0 0 auto;
+      min-height: 36px;
+      padding: 0 13px;
+      border: 0;
+      border-radius: 999px;
+      color: #fff;
+      background: linear-gradient(135deg, #1677ff, #31a8ff);
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .smart-card,
+    .tool-card,
+    .result-card {
+      margin-top: 16px;
+      padding: 18px;
+      border-radius: 24px;
+      background: #fff;
+      border: 1px solid #e4e7ec;
+      box-shadow: 0 16px 38px rgba(15,23,42,.07);
+    }
+    .card-title {
+      font-size: 20px;
+      font-weight: 850;
+      letter-spacing: 0;
+    }
+    .card-subtitle {
+      margin-top: 6px;
+      color: #667085;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .upload {
+      position: relative;
+      margin-top: 16px;
+      padding: 30px 16px;
+      width: 100%;
+      border-radius: 22px;
+      border: 1.5px dashed rgba(22,119,255,.26);
+      background: linear-gradient(145deg, #f8fbff, #f1f7ff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+    }
+    .upload input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+    }
+    .upload-icon { font-size: 36px; }
+    .upload-title {
+      display: block;
+      margin-top: 10px;
+      font-size: 17px;
+      font-weight: 850;
+    }
+    .upload-hint {
+      display: block;
+      margin-top: 7px;
+      color: #667085;
+      font-size: 13px;
+    }
+    .detect {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 18px;
+      background: #f9fafb;
+      border: 1px solid #eaecf0;
+    }
+    .muted {
+      color: #98a2b3;
+      font-size: 12px;
+    }
+    .detected-type {
+      display: block;
+      margin-top: 4px;
+      font-size: 20px;
+      font-weight: 850;
+    }
+    .file-name {
+      display: block;
+      margin-top: 6px;
+      color: #667085;
+      font-size: 13px;
+      line-height: 1.45;
+      word-break: break-all;
+    }
+    .targets-title {
+      margin-top: 18px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      font-weight: 850;
+    }
+    .target-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .target-btn,
+    .primary-btn {
+      min-height: 44px;
+      border: 0;
+      border-radius: 999px;
+      color: #fff;
+      background: linear-gradient(135deg, #1677ff, #31a8ff);
+      box-shadow: 0 12px 24px rgba(22,119,255,.22);
+      font-size: 14px;
+      font-weight: 750;
+    }
+    .target-btn:disabled {
+      opacity: .58;
+    }
+    .section-title {
+      margin: 24px 0 12px;
+      font-size: 20px;
+      font-weight: 850;
+    }
+    .tool-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-height: 96px;
+      margin-top: 12px;
+    }
+    .tool-card.blue { background: linear-gradient(135deg, #fff, #eff7ff); }
+    .tool-card.green { background: linear-gradient(135deg, #fff, #effbf5); }
+    .tool-card.mint { background: linear-gradient(135deg, #fff, #effafa); }
+    .tool-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: rgba(22,119,255,.08);
+      font-size: 25px;
+    }
+    .tool-title {
+      font-size: 18px;
+      font-weight: 850;
+    }
+    .tool-desc {
+      margin-top: 6px;
+      color: #667085;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: max(22px, env(safe-area-inset-bottom));
+      z-index: 20;
+      transform: translateX(-50%);
+      max-width: calc(100vw - 36px);
+      padding: 11px 14px;
+      border-radius: 999px;
+      color: #fff;
+      background: rgba(16,24,40,.88);
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease, transform .18s ease;
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+    .result-preview {
+      margin-top: 14px;
+      display: grid;
+      gap: 12px;
+    }
+    .preview-box {
+      display: grid;
+      place-items: center;
+      min-height: 132px;
+      border-radius: 20px;
+      background: #f8fbff;
+      border: 1px solid #edf2f7;
+      overflow: hidden;
+    }
+    .preview-box img {
+      max-width: 100%;
+      max-height: 220px;
+      display: block;
+    }
+    .preview-box audio {
+      width: min(100%, 340px);
+    }
+    .file-preview-icon {
+      display: grid;
+      place-items: center;
+      width: 70px;
+      height: 70px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #eaf4ff, #f0fff8);
+      color: #1677ff;
+      font-size: 30px;
+      font-weight: 900;
+    }
+    .result-actions {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+    }
+    .result-action {
+      min-height: 42px;
+      border: 0;
+      border-radius: 999px;
+      background: #eef6ff;
+      color: #1262c4;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .result-action.primary {
+      color: #fff;
+      background: linear-gradient(135deg, #1677ff, #31a8ff);
+      box-shadow: 0 10px 22px rgba(22,119,255,.18);
+    }
+    .save-note {
+      color: #667085;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .update-mask {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(15,23,42,.38);
+      backdrop-filter: blur(8px);
+    }
+    .update-dialog {
+      width: min(100%, 390px);
+      padding: 22px;
+      border-radius: 24px;
+      background: #fff;
+      box-shadow: 0 22px 60px rgba(15,23,42,.22);
+      border: 1px solid rgba(255,255,255,.62);
+    }
+    .update-title {
+      font-size: 21px;
+      font-weight: 900;
+    }
+    .update-desc {
+      margin-top: 8px;
+      color: #667085;
+      font-size: 14px;
+      line-height: 1.55;
+      white-space: pre-line;
+    }
+    .update-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .update-btn {
+      min-height: 44px;
+      border: 0;
+      border-radius: 999px;
+      background: #eef2f7;
+      color: #344054;
+      font-size: 14px;
+      font-weight: 850;
+    }
+    .update-btn.primary {
+      color: #fff;
+      background: linear-gradient(135deg, #1677ff, #31a8ff);
+      box-shadow: 0 12px 24px rgba(22,119,255,.22);
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="hero-top">
+        <div>
+          <span class="eyebrow">SMART FILE TOOLS</span>
+          <h1>文件工具箱</h1>
+          <p class="subtitle">先上传文件，自动识别类型，再选择要转换成什么格式。</p>
+        </div>
+        <div class="status" id="serverStatus"><span class="dot"></span><span>检测中</span></div>
+      </div>
+      <div class="pc-tip">
+        <div class="pc-tip-text">
+          <strong>需要在电脑上使用？</strong>
+          在 PC 浏览器输入当前部署的网址
+        </div>
+        <button class="pc-copy-btn" id="copyPcUrlBtn" type="button">复制网址</button>
+      </div>
+    </section>
+
+    <section class="smart-card">
+      <div class="card-title">智能转换</div>
+      <div class="card-subtitle">不用先找工具。上传 Word、PDF、图片或音频后，系统会自动推荐转换选项。</div>
+
+      <label class="upload">
+        <input id="fileInput" type="file" multiple />
+        <div class="upload-icon">☁️</div>
+        <span class="upload-title" id="uploadTitle">上传文件自动识别</span>
+        <span class="upload-hint">支持 Word、PDF、图片、音频文件</span>
+      </label>
+
+      <div class="detect hidden" id="detectBox">
+        <span class="muted">已识别为</span>
+        <span class="detected-type" id="detectedType">未知文件</span>
+        <span class="file-name" id="fileName"></span>
+      </div>
+
+      <div class="hidden" id="targetsBox">
+        <div class="targets-title">可以转换为</div>
+        <div class="target-grid" id="targetGrid"></div>
+      </div>
+
+      <div class="result-card hidden" id="resultBox">
+        <span class="muted">处理状态</span>
+        <span class="detected-type" id="resultText">等待选择文件</span>
+        <div class="result-preview hidden" id="resultPreview">
+          <div class="preview-box" id="previewBox"></div>
+          <span class="file-name" id="resultFileName"></span>
+          <div class="result-actions">
+            <button class="result-action primary" id="openResultBtn" type="button">打开</button>
+            <button class="result-action" id="shareResultBtn" type="button">分享</button>
+            <button class="result-action" id="saveResultBtn" type="button">保存</button>
+          </div>
+          <span class="save-note" id="saveNote">转换结果已准备好，可以打开查看，也可以保存到手机。</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-title">按工具查看</div>
+    <section class="tool-card blue">
+      <div class="tool-icon">🖼️</div>
+      <div>
+        <div class="tool-title">图片转换工具</div>
+        <div class="tool-desc">上传图片后自动提供图片转 PDF。复杂批处理可用电脑完整版。</div>
+      </div>
+    </section>
+    <section class="tool-card green">
+      <div class="tool-icon">📄</div>
+      <div>
+        <div class="tool-title">文档转换工具</div>
+        <div class="tool-desc">Word 转 PDF，PDF 转 Word / PPT / Excel。</div>
+      </div>
+    </section>
+    <section class="tool-card mint">
+      <div class="tool-icon">🎧</div>
+      <div>
+        <div class="tool-title">音频转换工具</div>
+        <div class="tool-desc">MP3、WAV、FLAC、M4A、OGG 等常见格式互转。</div>
+      </div>
+    </section>
+  </main>
+
+  <div class="update-mask hidden" id="updateMask">
+    <div class="update-dialog">
+      <div class="update-title" id="updateTitle">发现新版本</div>
+      <div class="update-desc" id="updateDesc">有新的安装包可以更新。</div>
+      <div class="update-actions">
+        <button class="update-btn" id="updateLaterBtn" type="button">稍后</button>
+        <button class="update-btn primary" id="updateNowBtn" type="button">立即更新</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const API_BASE = window.FILETOOLS_API_BASE || '';
+
+    const fileInput = document.getElementById('fileInput');
+    const uploadTitle = document.getElementById('uploadTitle');
+    const detectBox = document.getElementById('detectBox');
+    const detectedType = document.getElementById('detectedType');
+    const fileName = document.getElementById('fileName');
+    const targetsBox = document.getElementById('targetsBox');
+    const targetGrid = document.getElementById('targetGrid');
+    const resultBox = document.getElementById('resultBox');
+    const resultText = document.getElementById('resultText');
+    const resultPreview = document.getElementById('resultPreview');
+    const previewBox = document.getElementById('previewBox');
+    const resultFileName = document.getElementById('resultFileName');
+    const openResultBtn = document.getElementById('openResultBtn');
+    const shareResultBtn = document.getElementById('shareResultBtn');
+    const saveResultBtn = document.getElementById('saveResultBtn');
+    const saveNote = document.getElementById('saveNote');
+    const updateMask = document.getElementById('updateMask');
+    const updateTitle = document.getElementById('updateTitle');
+    const updateDesc = document.getElementById('updateDesc');
+    const updateLaterBtn = document.getElementById('updateLaterBtn');
+    const updateNowBtn = document.getElementById('updateNowBtn');
+    const copyPcUrlBtn = document.getElementById('copyPcUrlBtn');
+    const toast = document.getElementById('toast');
+    const statusEl = document.getElementById('serverStatus');
+
+    const audioFormats = ['mp3', 'wav', 'flac', 'aac', 'm4a', 'ogg', 'opus', 'wma', 'aiff'];
+    const imageFormats = ['png', 'jpg', 'webp'];
+    const wordTargets = ['pdf', 'docx', 'doc', 'rtf', 'odt', 'html', 'txt'];
+    const spreadsheetTargets = ['pdf', 'xlsx', 'xls', 'csv'];
+    const presentationTargets = ['pdf', 'pptx', 'ppt'];
+    let currentFile = null;
+    let currentFiles = [];
+    let currentExt = '';
+    let resultFile = null;
+    let pendingUpdate = null;
+
+    const typeLabels = {
+      word: 'Word 文档',
+      spreadsheet: '表格文件',
+      presentation: '演示文稿',
+      pdf: 'PDF 文档',
+      image: '图片文件',
+      audio: '音频文件',
+      imageBatch: '多张图片',
+      unknown: '未知文件',
+    };
+
+    checkServer();
+    checkAppUpdate();
+
+    if (copyPcUrlBtn) {
+      copyPcUrlBtn.addEventListener('click', copyPcUrl);
+    }
+
+    fileInput.addEventListener('change', () => {
+      const selectedFiles = Array.from(fileInput.files || []);
+      const file = selectedFiles[0];
+      if (!file) return;
+      currentFile = file;
+      currentFiles = selectedFiles;
+      currentExt = getExtension(file.name);
+      const type = detectSelectionType(selectedFiles);
+      uploadTitle.textContent = '重新选择文件';
+      detectBox.classList.remove('hidden');
+      resultBox.classList.add('hidden');
+      clearResultPreview();
+      detectedType.textContent = typeLabels[type] || typeLabels.unknown;
+      fileName.textContent = formatSelectionName(selectedFiles);
+      renderTargets(type);
+    });
+
+    async function checkServer() {
+      try {
+        const res = await fetch(`${API_BASE}/api/system/status`, { cache: 'no-store' });
+        if (!res.ok) throw new Error('offline');
+        statusEl.classList.add('online');
+        statusEl.lastElementChild.textContent = '服务在线';
+      } catch {
+        statusEl.classList.remove('online');
+        statusEl.lastElementChild.textContent = '服务异常';
+      }
+    }
+
+    async function checkAppUpdate() {
+      if (!window.FileToolsAndroid) return;
+      try {
+        const current = typeof window.FileToolsAndroid.getAppInfo === 'function'
+          ? JSON.parse(window.FileToolsAndroid.getAppInfo() || '{}')
+          : { versionCode: 0, versionName: '' };
+        const res = await fetch(`${API_BASE}/app-update.json?v=${Date.now()}`, { cache: 'no-store' });
+        if (!res.ok) return;
+        const latest = await res.json();
+        const latestCode = Number(latest.versionCode || 0);
+        const currentCode = Number(current.versionCode || 0);
+        if (!latestCode || latestCode <= currentCode) return;
+        pendingUpdate = {
+          versionName: latest.versionName || '',
+          versionCode: latestCode,
+          apkUrl: new URL(latest.apkUrl || '/filetools-app.apk', location.origin).href,
+          notes: latest.notes || '',
+          force: !!latest.force,
+        };
+        showUpdateDialog(pendingUpdate);
+      } catch (error) {
+        console.warn('[update] check failed', error);
+      }
+    }
+
+    function showUpdateDialog(update) {
+      updateTitle.textContent = `发现新版本 ${update.versionName || update.versionCode}`;
+      updateDesc.textContent = update.notes || '有新的功能和体验优化，建议立即更新。';
+      updateLaterBtn.style.display = update.force ? 'none' : '';
+      updateMask.classList.remove('hidden');
+    }
+
+    updateLaterBtn.addEventListener('click', () => {
+      updateMask.classList.add('hidden');
+    });
+
+    updateNowBtn.addEventListener('click', () => {
+      if (!pendingUpdate) return;
+      updateNowBtn.disabled = true;
+      updateNowBtn.textContent = '下载中';
+      showToast('正在下载更新');
+      if (window.FileToolsAndroid && typeof window.FileToolsAndroid.installUpdate === 'function') {
+        window.FileToolsAndroid.installUpdate(pendingUpdate.apkUrl);
+      } else {
+        location.href = pendingUpdate.apkUrl;
+      }
+    });
+
+    window.onAndroidUpdateProgress = function(percent) {
+      updateNowBtn.textContent = percent > 0 ? `${percent}%` : '下载中';
+    };
+
+    window.onAndroidUpdateReady = function() {
+      updateNowBtn.textContent = '打开安装';
+      showToast('下载完成，请确认安装');
+    };
+
+    window.onAndroidUpdateError = function(message) {
+      updateNowBtn.disabled = false;
+      updateNowBtn.textContent = '立即更新';
+      showToast(message || '更新失败');
+    };
+
+    function getExtension(name) {
+      const parts = String(name || '').toLowerCase().split('.');
+      return parts.length > 1 ? parts.pop() : '';
+    }
+
+    async function copyPcUrl() {
+      const pcUrl = location.origin;
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(pcUrl);
+        } else {
+          const input = document.createElement('input');
+          input.value = pcUrl;
+          document.body.appendChild(input);
+          input.select();
+          document.execCommand('copy');
+          document.body.removeChild(input);
+        }
+        showToast('PC 端网址已复制');
+      } catch {
+        showToast('复制失败，请手动输入网址');
+      }
+    }
+
+    function detectType(ext, mime) {
+      if (['doc', 'docx'].includes(ext)) return 'word';
+      if (['xls', 'xlsx', 'csv'].includes(ext)) return 'spreadsheet';
+      if (['ppt', 'pptx'].includes(ext)) return 'presentation';
+      if (ext === 'pdf') return 'pdf';
+      if (['jpg', 'jpeg', 'png', 'webp', 'bmp', 'gif'].includes(ext) || String(mime).startsWith('image/')) return 'image';
+      if (audioFormats.includes(ext) || String(mime).startsWith('audio/')) return 'audio';
+      return 'unknown';
+    }
+
+    function detectSelectionType(files) {
+      if (files.length > 1) {
+        return files.every(file => detectType(getExtension(file.name), file.type) === 'image')
+          ? 'imageBatch'
+          : 'unknown';
+      }
+      const file = files[0];
+      return detectType(getExtension(file.name), file.type);
+    }
+
+    function formatSelectionName(files) {
+      if (files.length <= 1) {
+        const file = files[0];
+        return `${file.name} · ${formatSize(file.size)}`;
+      }
+      const total = files.reduce((sum, file) => sum + file.size, 0);
+      const firstNames = files.slice(0, 3).map(file => file.name).join('、');
+      const suffix = files.length > 3 ? ` 等 ${files.length} 张` : ` 共 ${files.length} 张`;
+      return `${firstNames}${suffix} · ${formatSize(total)} · 将按选择顺序合并`;
+    }
+
+    function renderTargets(type) {
+      const targets = getTargets(type);
+      targetGrid.innerHTML = '';
+      if (!targets.length) {
+        targetsBox.classList.add('hidden');
+        showToast('暂时没有匹配的转换方式');
+        return;
+      }
+      for (const target of targets) {
+        const btn = document.createElement('button');
+        btn.className = 'target-btn';
+        btn.textContent = target.label;
+        btn.onclick = () => convertFile(target, btn);
+        targetGrid.appendChild(btn);
+      }
+      targetsBox.classList.remove('hidden');
+    }
+
+    function getTargets(type) {
+      if (type === 'word') {
+        return officeTargets(wordTargets);
+      }
+      if (type === 'spreadsheet') {
+        return officeTargets(spreadsheetTargets);
+      }
+      if (type === 'presentation') {
+        return officeTargets(presentationTargets);
+      }
+      if (type === 'pdf') {
+        return [
+          { label: '转为 Word', endpoint: '/api/convert/pdf-to-word', field: 'file', name: 'document.docx' },
+          { label: '转为 PPT', endpoint: '/api/convert/pdf-to-ppt', field: 'file', name: 'slides.pptx' },
+          { label: '转为 Excel', endpoint: '/api/convert/pdf-to-excel', field: 'file', name: 'sheet.xlsx' },
+        ];
+      }
+      if (type === 'image') {
+        return [
+          ...imageFormats
+            .filter(format => normalizeImageExt(currentExt) !== format)
+            .map(format => ({
+              label: `转为 ${format.toUpperCase()}`,
+              client: 'image',
+              format,
+              name: `image.${format}`,
+            })),
+          { label: '转为 PDF', endpoint: '/api/convert/image-to-pdf', field: 'images', name: 'images.pdf' },
+        ];
+      }
+      if (type === 'imageBatch') {
+        return [
+          { label: `合并为 PDF（${currentFiles.length} 张）`, endpoint: '/api/convert/image-to-pdf', field: 'images', name: 'images.pdf', multiple: true },
+        ];
+      }
+      if (type === 'audio') {
+        return audioFormats
+          .filter(format => format !== currentExt)
+          .map(format => ({
+            label: `转为 ${format.toUpperCase()}`,
+            endpoint: '/api/convert/audio',
+            field: 'file',
+            name: `audio.${format}`,
+            extra: { format },
+          }));
+      }
+      return [];
+    }
+
+    function officeTargets(formats) {
+      return formats
+        .filter(format => format !== currentExt)
+        .map(format => ({
+          label: `转为 ${format.toUpperCase()}`,
+          endpoint: '/api/convert/office',
+          field: 'file',
+          name: `document.${format}`,
+          extra: { format },
+        }));
+    }
+
+    function normalizeImageExt(ext) {
+      return ext === 'jpeg' ? 'jpg' : ext;
+    }
+
+    async function convertFile(target, button) {
+      if (!currentFile) return;
+      const previousText = button.textContent;
+      setBusy(button, true, '转换中');
+      setResult(target.client === 'image' ? '正在处理图片...' : '正在上传并转换...');
+
+      try {
+        if (target.client === 'image') {
+          const blob = await convertImageInBrowser(currentFile, target.format);
+          await downloadBlob(blob, makeDownloadName(target.name));
+          setResult('转换完成，文件已开始下载');
+          showToast('转换完成');
+          return;
+        }
+
+        const form = new FormData();
+        if (target.multiple) {
+          currentFiles.forEach(file => form.append(target.field, file));
+        } else {
+          form.append(target.field, currentFile);
+        }
+        Object.entries(target.extra || {}).forEach(([key, value]) => form.append(key, value));
+
+        const res = await fetch(`${API_BASE}${target.endpoint}`, { method: 'POST', body: form });
+        if (!res.ok) {
+          let message = '转换失败，请换个文件重试';
+          try {
+            const errorData = await res.json();
+            if (errorData.message) message = errorData.message;
+          } catch {}
+          throw new Error(message);
+        }
+
+        const blob = await res.blob();
+        await downloadBlob(blob, makeDownloadName(target.name));
+        setResult('转换完成，文件已准备好');
+        showToast('转换完成');
+      } catch (error) {
+        setResult(error.message || '转换失败');
+        showToast(error.message || '转换失败');
+      } finally {
+        setBusy(button, false, previousText);
+      }
+    }
+
+    function setBusy(button, busy, text) {
+      button.disabled = busy;
+      button.textContent = text;
+    }
+
+    function setResult(text) {
+      resultText.textContent = text;
+      resultBox.classList.remove('hidden');
+    }
+
+    function clearResultPreview() {
+      resultFile = null;
+      resultPreview.classList.add('hidden');
+      previewBox.innerHTML = '';
+      resultFileName.textContent = '';
+    }
+
+    function showResultPreview(file) {
+      resultFile = file;
+      resultFileName.textContent = `${file.name}${file.savedPath ? ' · ' + file.savedPath : ''}`;
+      previewBox.innerHTML = '';
+
+      if (file.mime && file.mime.startsWith('image/') && file.previewUrl) {
+        const img = document.createElement('img');
+        img.src = file.previewUrl;
+        img.alt = file.name;
+        previewBox.appendChild(img);
+      } else if (file.mime && file.mime.startsWith('audio/') && file.previewUrl) {
+        const audio = document.createElement('audio');
+        audio.src = file.previewUrl;
+        audio.controls = true;
+        previewBox.appendChild(audio);
+      } else {
+        const icon = document.createElement('div');
+        icon.className = 'file-preview-icon';
+        icon.textContent = getPreviewExt(file.name);
+        previewBox.appendChild(icon);
+      }
+
+      saveNote.textContent = window.FileToolsAndroid
+        ? '转换结果已准备好。可以直接打开查看、分享，或保存到 Download/文件工具箱。'
+        : '转换结果已准备好。浏览器中可打开或再次下载，具体位置以浏览器下载记录为准。';
+      resultPreview.classList.remove('hidden');
+    }
+
+    function getPreviewExt(name) {
+      const ext = getExtension(name).slice(0, 4);
+      return ext ? ext.toUpperCase() : 'FILE';
+    }
+
+    function openResult() {
+      if (!resultFile) return;
+      if (window.FileToolsAndroid && resultFile.native) {
+        window.FileToolsAndroid.openResult();
+        return;
+      }
+      if (resultFile.previewUrl) window.open(resultFile.previewUrl, '_blank');
+    }
+
+    async function shareResult() {
+      if (!resultFile) return;
+      if (window.FileToolsAndroid && resultFile.native) {
+        window.FileToolsAndroid.shareResult();
+        return;
+      }
+      if (navigator.share && resultFile.blob) {
+        const file = new File([resultFile.blob], resultFile.name, { type: resultFile.mime || 'application/octet-stream' });
+        if (!navigator.canShare || navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], title: resultFile.name });
+          return;
+        }
+      }
+      showToast('当前环境不支持直接分享，请先保存文件');
+    }
+
+    async function saveResult() {
+      if (!resultFile) return;
+      if (window.FileToolsAndroid && resultFile.native) {
+        window.FileToolsAndroid.saveResultToDownloads();
+        return;
+      }
+      if (resultFile.blob) {
+        saveBrowserDownload(resultFile.blob, resultFile.name);
+        showToast('已重新发起下载');
+      }
+    }
+
+    openResultBtn.addEventListener('click', openResult);
+    shareResultBtn.addEventListener('click', () => shareResult().catch(() => showToast('分享失败')));
+    saveResultBtn.addEventListener('click', () => saveResult().catch(() => showToast('保存失败')));
+
+    window.onAndroidFileReady = function(info) {
+      if (!resultFile) return;
+      resultFile.native = true;
+      resultFile.savedPath = info && info.path ? info.path : '';
+      setResult('转换完成，可以打开、分享或保存');
+      showResultPreview(resultFile);
+    };
+
+    window.onAndroidFileSaved = function(info) {
+      const pathText = info && info.path ? info.path : 'Download/文件工具箱';
+      setResult(`已保存到 ${pathText}`);
+      showToast('保存成功');
+    };
+
+    window.onAndroidFileError = function(message) {
+      setResult(message || '文件处理失败');
+      showToast(message || '文件处理失败');
+    };
+
+    function makeDownloadName(defaultName) {
+      const base = currentFiles.length > 1
+        ? `合并图片_${currentFiles.length}张`
+        : (currentFile && currentFile.name ? currentFile.name : 'file').replace(/\.[^.]+$/, '');
+      const ext = defaultName.includes('.') ? defaultName.split('.').pop() : 'bin';
+      return `${base}.${ext}`;
+    }
+
+    function convertImageInBrowser(file, format) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = () => {
+          try {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.naturalWidth || img.width;
+            canvas.height = img.naturalHeight || img.height;
+            const ctx = canvas.getContext('2d');
+            if (format === 'jpg') {
+              ctx.fillStyle = '#fff';
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+            ctx.drawImage(img, 0, 0);
+            const mime = format === 'jpg' ? 'image/jpeg' : `image/${format}`;
+            canvas.toBlob((blob) => {
+              URL.revokeObjectURL(url);
+              if (!blob) {
+                reject(new Error('当前浏览器不支持这个图片格式'));
+                return;
+              }
+              resolve(blob);
+            }, mime, 0.92);
+          } catch (error) {
+            URL.revokeObjectURL(url);
+            reject(error);
+          }
+        };
+        img.onerror = () => {
+          URL.revokeObjectURL(url);
+          reject(new Error('图片读取失败，请换一张图片重试'));
+        };
+        img.src = url;
+      });
+    }
+
+    function blobToBase64(blob) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = String(reader.result || '');
+          resolve(result.includes(',') ? result.split(',')[1] : result);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    async function downloadBlob(blob, name) {
+      const previewUrl = URL.createObjectURL(blob);
+      showResultPreview({
+        name,
+        mime: blob.type || 'application/octet-stream',
+        previewUrl,
+        blob,
+        native: false,
+      });
+
+      if (window.FileToolsAndroid && typeof window.FileToolsAndroid.saveBlob === 'function') {
+        const base64 = await blobToBase64(blob);
+        window.FileToolsAndroid.saveBlob(base64, name, blob.type || 'application/octet-stream');
+        return;
+      }
+
+      saveBrowserDownload(blob, name);
+    }
+
+    function saveBrowserDownload(blob, name) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1200);
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+
+    function formatSize(bytes) {
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+      return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+    }
+  </script>
+</body>
+</html>

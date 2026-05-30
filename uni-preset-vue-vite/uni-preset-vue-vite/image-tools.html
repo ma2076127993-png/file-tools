@@ -1,0 +1,4452 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>鍥剧墖宸ュ叿闆嗗悎</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      background: #f5f5f7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px;
+      color: #1f1f1f;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 1100px;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+      border: 1px solid #e5e6eb;
+      overflow: hidden;
+    }
+
+    .app-header {
+      padding: 20px 28px 12px;
+      border-bottom: 1px solid #f2f3f5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .app-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .app-title-badge {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #2ed573, #1dd1a1);
+      font-size: 10px;
+      font-weight: 600;
+      color: #0b0c10;
+    }
+
+    .app-subtitle {
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.45);
+    }
+
+    .tab-nav {
+      display: flex;
+      padding: 0 18px 4px;
+      gap: 8px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .tab-item {
+      position: relative;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.65);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      background: transparent;
+      min-height: 40px;
+    }
+
+    .tab-item span {
+      font-size: 14px;
+    }
+
+    .tab-item:hover {
+      color: rgba(0, 0, 0, 0.85);
+      border-color: #d0d4db;
+      background: #f5f5f7;
+    }
+
+    .tab-item.active {
+      color: #ffffff;
+      background: linear-gradient(135deg, #1677ff, #4096ff);
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(22, 119, 255, 0.35);
+    }
+
+    .tab-item.active .tab-icon {
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+    }
+
+    .tab-icon {
+      font-size: 16px;
+    }
+
+    .app-body {
+      padding: 20px 24px 24px;
+      background: #fafafa;
+    }
+
+    .tool-panel {
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .tool-panel.active {
+      display: block;
+    }
+
+    .tool-placeholder {
+      border-radius: 18px;
+      padding: 40px;
+      border: 1px dashed rgba(0, 0, 0, 0.08);
+      background: #fafafa;
+      text-align: center;
+      color: rgba(0, 0, 0, 0.45);
+      font-size: 14px;
+    }
+
+    /* 棣栭〉鏍峰紡 */
+    .home-container {
+      width: 100%;
+      max-width: 1300px;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+      border: 1px solid #e5e6eb;
+      overflow: hidden;
+      margin: 24px 0 18px;
+    }
+
+    .home-body {
+      padding: 28px 30px 32px;
+      background: #fafafa;
+    }
+
+    .home-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 28px 30px;
+    }
+
+    .home-card {
+      border-radius: 16px;
+      min-height: 210px;
+      padding: 26px 28px 24px;
+      background: radial-gradient(circle at top left, rgba(64, 150, 255, 0.12), transparent 55%),
+        #ffffff;
+      border: 1px solid #e5e6eb;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    .home-card.secondary {
+      background: radial-gradient(circle at top left, rgba(46, 213, 115, 0.12), transparent 55%),
+        #ffffff;
+    }
+
+    .home-card.utility {
+      background: radial-gradient(circle at top left, rgba(255, 169, 64, 0.16), transparent 55%),
+        #ffffff;
+    }
+
+    .home-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(22, 119, 255, 0.25);
+      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.1);
+    }
+
+    .home-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .home-card-title {
+      font-size: 22px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      line-height: 1.2;
+    }
+
+    .home-card-tag {
+      font-size: 12px;
+      padding: 2px 10px;
+      border-radius: 999px;
+      background: rgba(22, 119, 255, 0.08);
+      color: #1677ff;
+      font-weight: 500;
+      border: 1px solid rgba(22, 119, 255, 0.16);
+    }
+
+    .home-card-desc {
+      font-size: 15px;
+      color: rgba(0, 0, 0, 0.55);
+      line-height: 1.7;
+      margin-top: 10px;
+    }
+
+    .home-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .home-card-meta {
+      font-size: 13px;
+      color: rgba(0, 0, 0, 0.45);
+    }
+
+    .home-card .svg-btn {
+      padding: 10px 24px;
+      font-size: 15px;
+    }
+
+    .mobile-download-btn {
+      min-height: 40px;
+      padding: 9px 16px;
+      border: 0;
+      border-radius: 999px;
+      color: #fff;
+      background: linear-gradient(135deg, #1677ff, #31a8ff);
+      box-shadow: 0 10px 22px rgba(22, 119, 255, 0.22);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .mobile-app-mask {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: none;
+      place-items: center;
+      padding: 24px;
+      background: rgba(15, 23, 42, 0.42);
+      backdrop-filter: blur(8px);
+    }
+
+    .mobile-app-mask.show {
+      display: grid;
+    }
+
+    .mobile-app-dialog {
+      width: min(100%, 460px);
+      padding: 24px;
+      border-radius: 20px;
+      background: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.22);
+    }
+
+    .mobile-app-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #101828;
+    }
+
+    .mobile-app-desc {
+      margin-top: 8px;
+      color: rgba(0, 0, 0, 0.58);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .mobile-app-content {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 18px;
+      align-items: center;
+      margin-top: 18px;
+    }
+
+    .mobile-app-qr {
+      width: 170px;
+      height: 170px;
+      padding: 10px;
+      border-radius: 16px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+    }
+
+    .mobile-app-qr img {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .mobile-app-meta {
+      display: grid;
+      gap: 10px;
+      color: rgba(0, 0, 0, 0.55);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .mobile-app-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .mobile-app-action {
+      min-height: 42px;
+      border: 0;
+      border-radius: 999px;
+      background: #eef2f7;
+      color: #344054;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      display: grid;
+      place-items: center;
+    }
+
+    .mobile-app-action.primary {
+      color: #fff;
+      background: linear-gradient(135deg, #1677ff, #31a8ff);
+      box-shadow: 0 10px 22px rgba(22, 119, 255, 0.18);
+    }
+
+    /* 椤堕儴鏃堕挓鏍峰紡 */
+    .clock-container {
+      width: 100%;
+      max-width: 1100px;
+      margin: 8px auto 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .clock-face {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, #ffffff, #f0f5ff 40%, #d6e4ff 75%);
+      box-shadow:
+        0 10px 25px rgba(15, 23, 42, 0.18),
+        0 0 0 1px rgba(22, 119, 255, 0.12);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .clock-center-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #1677ff;
+      box-shadow: 0 0 0 4px rgba(22, 119, 255, 0.2);
+      position: relative;
+      z-index: 3;
+    }
+
+    .clock-hand {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform-origin: 50% 90%;
+      transform: translate(-50%, -90%) rotate(0deg);
+      border-radius: 999px;
+    }
+
+    .clock-hand.hour {
+      width: 4px;
+      height: 34px;
+      background: #1f2933;
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.4);
+      z-index: 2;
+    }
+
+    .clock-hand.minute {
+      width: 3px;
+      height: 46px;
+      background: linear-gradient(180deg, #1677ff, #4096ff);
+      z-index: 2;
+    }
+
+    .clock-hand.second {
+      width: 2px;
+      height: 52px;
+      background: #ff4d4f;
+      z-index: 1;
+    }
+
+    .clock-tick {
+      position: absolute;
+      width: 2px;
+      height: 10px;
+      background: rgba(15, 23, 42, 0.18);
+      left: 50%;
+      top: 10px;
+      transform-origin: center 74px;
+      border-radius: 999px;
+    }
+
+    .clock-time-label {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #1f1f1f;
+    }
+
+    .clock-time-label span {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .clock-date-label {
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.45);
+    }
+
+    /* SVG 宸ュ叿鏍峰紡 */
+    .svg-tool-container {
+      border-radius: 18px;
+      padding: 22px 22px 20px;
+      background: #ffffff;
+      border: 1px solid #f0f0f0;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    .tool-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .tool-subtitle {
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.45);
+      margin-bottom: 18px;
+    }
+
+    .svg-upload-area {
+      border-radius: 18px;
+      padding: 26px 24px;
+      text-align: center;
+      background: linear-gradient(145deg, #ffffff, #f5f7ff);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-bottom: 20px;
+      border: 1px solid #e5e6eb;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .svg-upload-area:hover {
+      border-color: #1677ff;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.12);
+      transform: translateY(-1px);
+      background: linear-gradient(145deg, #f5f9ff, #ffffff);
+    }
+
+    .svg-upload-area.dragover {
+      border-color: #1677ff;
+      background: #e6f4ff;
+      transform: translateY(-2px) scale(1.01);
+    }
+
+    .svg-upload-icon {
+      font-size: 40px;
+      margin-bottom: 8px;
+    }
+
+    .svg-upload-main {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: rgba(22, 119, 255, 0.06);
+      color: #1677ff;
+      border: 1px solid rgba(22, 119, 255, 0.16);
+      display: inline-block;
+    }
+
+    .svg-upload-area:hover .svg-upload-main {
+      background: rgba(22, 119, 255, 0.12);
+      border-color: rgba(22, 119, 255, 0.28);
+    }
+
+    .svg-upload-hint {
+      font-size: 13px;
+      color: rgba(0, 0, 0, 0.45);
+    }
+
+    #svgFileInput {
+      display: none;
+    }
+
+    .svg-preview-section {
+      margin-top: 12px;
+    }
+
+    .svg-preview-item {
+      background: #fafafa;
+      border-radius: 14px;
+      padding: 14px 16px 10px;
+      border: 1px solid #f0f0f0;
+      margin-bottom: 12px;
+    }
+
+    .svg-preview-item h3 {
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .svg-output-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .svg-output-row label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .svg-size-input {
+      width: 96px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid #d9d9d9;
+      background: #ffffff;
+      color: #333333;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .svg-size-input:focus {
+      border-color: #1677ff;
+      box-shadow: 0 0 0 1px rgba(22, 119, 255, 0.35);
+    }
+
+    .svg-btn {
+      padding: 10px 22px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #1677ff, #4096ff);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(22, 119, 255, 0.3);
+      transition: all 0.18s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-width: 120px;
+      min-height: 40px;
+    }
+
+    .svg-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(22, 119, 255, 0.38);
+    }
+
+    .svg-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(22, 119, 255, 0.35);
+    }
+
+    .svg-btn:focus-visible {
+      outline: 2px solid #1677ff;
+      outline-offset: 2px;
+    }
+
+    .svg-preview-card {
+      background: radial-gradient(circle at top, rgba(255, 255, 255, 0.04), transparent 70%);
+      border-radius: 14px;
+      padding: 14px 16px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 10px;
+    }
+
+    .svg-preview-header {
+      font-size: 12px;
+      margin-bottom: 10px;
+      color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .svg-preview-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 70%;
+    }
+
+    .svg-preview-body {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .svg-preview-body canvas {
+      border-radius: 10px;
+      border: 1px solid #f0f0f0;
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+    }
+
+    .svg-preview-meta {
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.55);
+    }
+
+    .svg-preview-meta div {
+      margin-bottom: 4px;
+    }
+
+    /* JPG 宸ュ叿棰濆鏍峰紡锛堟部鐢ㄦ繁鑹查鏍硷級 */
+    .jpg-loading {
+      display: none;
+      margin: 10px 0 14px;
+      text-align: center;
+      color: #1677ff;
+    }
+
+    .jpg-loading.active {
+      display: block;
+    }
+
+    .jpg-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .jpg-preview-image {
+      max-width: 220px;
+      max-height: 220px;
+      border-radius: 10px;
+      object-fit: contain;
+      background: #f5f5f5;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+    }
+
+    .jpg-button-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .jpg-button-row .svg-btn {
+      flex: 0 0 auto;
+    }
+
+    .jpg-success {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #389e0d;
+    }
+
+    /* 灏忓睆閫傞厤锛屾寜閽洿澶ф洿鏄撶偣鎸?*/
+    @media (max-width: 768px) {
+      body {
+        padding: 16px;
+        align-items: stretch;
+      }
+
+      .app-container {
+        border-radius: 16px;
+      }
+
+      .home-container {
+        max-width: 100%;
+      }
+
+      .home-body {
+        padding: 18px 16px 20px;
+      }
+
+      .home-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .home-card {
+        min-height: auto;
+        padding: 20px;
+      }
+
+      .home-card-title {
+        font-size: 20px;
+      }
+
+      .svg-tool-container {
+        padding: 18px 16px 16px;
+      }
+
+      .svg-upload-area {
+        padding: 24px 16px;
+      }
+
+      .svg-btn {
+        width: 100%;
+        min-height: 44px;
+      }
+
+      .jpg-button-row {
+        flex-direction: column;
+      }
+
+      .jpg-button-row .svg-btn {
+        width: 100%;
+      }
+
+      .mobile-app-content {
+        grid-template-columns: 1fr;
+      }
+
+      .mobile-app-qr {
+        margin: 0 auto;
+      }
+
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 绮剧編鏃堕挓 -->
+  <div class="clock-container">
+    <div class="clock-face" id="clockFace">
+      <div class="clock-center-dot"></div>
+      <div class="clock-hand hour" id="clockHourHand"></div>
+      <div class="clock-hand minute" id="clockMinuteHand"></div>
+      <div class="clock-hand second" id="clockSecondHand"></div>
+    </div>
+    <div class="clock-time-label">
+      <span id="clockTimeText">00:00:00</span>
+    </div>
+    <div class="clock-date-label" id="clockDateText"></div>
+  </div>
+
+  <!-- 棣栭〉妯″潡 -->
+  <div class="home-container" id="homePage">
+    <div class="app-header">
+      <div>
+        <div class="app-title">
+          宸ュ叿鎺у埗鍙?          <span class="app-title-badge">TOOLS</span>
+        </div>
+        <div class="app-subtitle">鍦ㄨ繖閲岄€夋嫨浣犺浣跨敤鐨勫伐鍏锋ā鍧?/div>
+      </div>
+      <button class="mobile-download-btn" id="openMobileDownloadBtn" type="button">涓嬭浇鎵嬫満绔?/button>
+    </div>
+    <div class="home-body">
+      <div class="home-grid">
+        <div class="home-card">
+          <div>
+            <div class="home-card-header">
+              <div class="home-card-title">
+                馃柤锔?鍥剧墖杞崲宸ュ叿
+                <span class="home-card-tag">鎺ㄨ崘</span>
+              </div>
+            </div>
+            <p class="home-card-desc">
+              鏀寔 SVG 杞?PNG銆丣PG 杞?PNG 浠ュ強鍥剧墖鑳屾櫙閫忔槑澶勭悊锛岄€傚悎鍥炬爣銆佺礌鏉愭壒閲忓鐞嗐€?
+            </p>
+          </div>
+          <div class="home-card-footer">
+            <div class="home-card-meta">鍖呭惈 3 涓瓙宸ュ叿 路 鏈湴娴忚鍣ㄧ洿鎺ュ畬鎴愬鐞?/div>
+            <button class="svg-btn" id="enterImageToolBtn">杩涘叆鍥剧墖杞崲宸ュ叿</button>
+          </div>
+        </div>
+
+        <div class="home-card secondary">
+          <div>
+            <div class="home-card-header">
+              <div class="home-card-title">馃搫 鏂囨。杞崲宸ュ叿</div>
+            </div>
+            <p class="home-card-desc">
+              鏀寔 Word / 鍥剧墖 / PDF 涔嬮棿鐨勫父瑙佷簰杞紙Word 鈬?PDF銆佸浘鐗囪浆 PDF銆丳DF 杞?Word / PPT / Excel锛夈€?
+            </p>
+          </div>
+          <div class="home-card-footer">
+            <div class="home-card-meta">宸蹭笂绾垮涓枃妗ｅ伐鍏凤紝鐐瑰嚮鍙充晶杩涘叆浣跨敤</div>
+            <button class="svg-btn" id="enterDocToolBtn">杩涘叆鏂囨。杞崲宸ュ叿</button>
+          </div>
+        </div>
+
+        <div class="home-card secondary">
+          <div>
+            <div class="home-card-header">
+              <div class="home-card-title">
+                馃帶 闊抽杞崲宸ュ叿
+                <span class="home-card-tag">NEW</span>
+              </div>
+            </div>
+            <p class="home-card-desc">
+              鏀寔 MP3 / WAV / FLAC / AAC / M4A / OGG / OPUS / WMA / AIFF 绛夊父瑙侀煶棰戞牸寮忎簰杞€?            </p>
+          </div>
+          <div class="home-card-footer">
+            <div class="home-card-meta">閫傚悎闊充箰銆佸綍闊炽€佹挱瀹㈢礌鏉愪繚瀛樺墠杞崲鏍煎紡</div>
+            <button class="svg-btn" id="enterAudioToolBtn">杩涘叆闊抽杞崲宸ュ叿</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="mobile-app-mask" id="mobileAppModal" aria-hidden="true">
+    <div class="mobile-app-dialog" role="dialog" aria-modal="true" aria-labelledby="mobileAppTitle">
+      <div class="mobile-app-title" id="mobileAppTitle">鎵嬫満绔枃浠跺伐鍏风</div>
+      <div class="mobile-app-desc">鐢ㄦ墜鏈烘壂鐮佸嵆鍙墦寮€涓嬭浇椤甸潰锛屽畨瑁呭悗鍙互鍦ㄦ墜鏈轰笂涓婁紶鏂囦欢銆佽浆鎹㈡牸寮忋€佹墦寮€銆佸垎浜拰淇濆瓨缁撴灉銆?/div>
+      <div class="mobile-app-content">
+        <div class="mobile-app-qr">
+          <img id="mobileAppQr" alt="鎵嬫満绔笅杞戒簩缁寸爜" />
+        </div>
+        <div class="mobile-app-meta">
+          <div>褰撳墠鐗堟湰锛?strong id="mobileAppVersion">1.0.4</strong></div>
+          <div>涓嬭浇鍦板潃锛?span id="mobileAppUrlText">当前网站/filetools-app.apk</span></div>
+          <div>寤鸿浣跨敤鎵嬫満娴忚鍣ㄦ壂鐮佷笅杞?Android 瀹夎鍖呫€?/div>
+        </div>
+      </div>
+      <div class="mobile-app-actions">
+        <button class="mobile-app-action" id="closeMobileAppModal" type="button">鍏抽棴</button>
+        <a class="mobile-app-action primary" id="mobileAppDownloadLink" href="/filetools-app.apk" download>涓嬭浇 Android 瀹夎鍖?/a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 鍘熷浘鐗囧伐鍏烽〉闈?-->
+  <div class="app-container" id="imageToolPage" style="display: none;">
+    <div class="app-header">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button class="svg-btn" id="backToHomeBtn" style="min-width:auto;padding:6px 14px;font-size:13px;">
+          鈫?杩斿洖
+        </button>
+        <div>
+          <div class="app-title">
+            鍥剧墖宸ュ叿闆嗗悎
+            <span class="app-title-badge">BETA</span>
+          </div>
+          <div class="app-subtitle">SVG 杞?PNG 路 JPG 杞?PNG 路 鑳屾櫙閫忔槑锛屼竴椤靛畬鎴?/div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-nav">
+      <div class="tab-item active" data-tool="svg">
+        <span class="tab-icon">馃З</span>
+        <span>SVG 杞?PNG</span>
+      </div>
+      <div class="tab-item" data-tool="jpg">
+        <span class="tab-icon">馃柤锔?/span>
+        <span>JPG 杞?PNG</span>
+      </div>
+      <div class="tab-item" data-tool="png2jpg">
+        <span class="tab-icon">馃柤锔?/span>
+        <span>PNG 杞?JPG</span>
+      </div>
+      <div class="tab-item" data-tool="png2svg">
+        <span class="tab-icon">馃З</span>
+        <span>PNG 杞?SVG</span>
+      </div>
+      <div class="tab-item" data-tool="jpg2svg">
+        <span class="tab-icon">馃З</span>
+        <span>JPG 杞?SVG</span>
+      </div>
+      <div class="tab-item" data-tool="svg2jpg">
+        <span class="tab-icon">馃柤锔?/span>
+        <span>SVG 杞?JPG</span>
+      </div>
+      <div class="tab-item" data-tool="bg">
+        <span class="tab-icon">鉁?/span>
+        <span>鑳屾櫙閫忔槑</span>
+      </div>
+    </div>
+
+    <div class="app-body">
+      <!-- SVG 杞?PNG 宸ュ叿瀹瑰櫒 -->
+      <div class="tool-panel active" id="tool-svg">
+        <div class="svg-tool-container">
+          <h2 class="tool-title">馃帹 SVG 杞?PNG 宸ュ叿</h2>
+          <p class="tool-subtitle">閫傚悎鐢熸垚 TabBar 鍥炬爣绛夊皬灏哄 PNG锛堟帹鑽?81 脳 81 鍍忕礌锛夈€?/p>
+
+          <div class="svg-upload-area" id="svgUploadArea">
+            <div class="svg-upload-icon">馃搧</div>
+            <div class="svg-upload-main">鐐瑰嚮閫夋嫨 SVG 鏂囦欢鎴栨嫋鎷芥枃浠跺埌姝ゅ</div>
+            <div class="svg-upload-hint">鏀寔鍗曚釜鎴栧涓?.svg 鏂囦欢</div>
+            <input type="file" id="svgFileInput" accept=".svg" multiple />
+          </div>
+
+          <div class="svg-preview-section" id="svgPreviewSection">
+            <div class="svg-preview-item">
+              <h3>杈撳嚭璁剧疆</h3>
+              <div class="svg-output-row">
+                <label>瀹藉害:
+                  <input
+                    type="number"
+                    id="svgWidthInput"
+                    class="svg-size-input"
+                    value="81"
+                    min="32"
+                    max="512"
+                  />
+                </label>
+                <label>楂樺害:
+                  <input
+                    type="number"
+                    id="svgHeightInput"
+                    class="svg-size-input"
+                    value="81"
+                    min="32"
+                    max="512"
+                  />
+                </label>
+                <button class="svg-btn" id="svgConvertAllBtn">馃攧 杞崲鍏ㄩ儴</button>
+              </div>
+            </div>
+            <div id="svgPreviewList"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- JPG 杞?PNG 宸ュ叿瀹瑰櫒 -->
+      <div class="tool-panel" id="tool-jpg">
+        <div class="svg-tool-container">
+          <h2 class="tool-title">馃柤锔?JPG 杞?PNG 宸ュ叿</h2>
+          <p class="tool-subtitle">涓婁紶 JPG / JPEG 鍥剧墖锛屾敮鎸佽皟鏁村昂瀵稿悗瀵煎嚭 PNG銆?/p>
+
+          <div class="svg-upload-area" id="jpgUploadArea">
+            <div class="svg-upload-icon">馃摛</div>
+            <div class="svg-upload-main">鐐瑰嚮鎴栨嫋鎷戒笂浼?JPG 鍥剧墖</div>
+            <div class="svg-upload-hint">鏀寔 JPG銆丣PEG 鏍煎紡锛屾渶澶?10MB</div>
+            <input type="file" id="jpgFileInput" accept="image/jpeg,image/jpg" />
+          </div>
+
+          <div class="jpg-loading" id="jpgLoading">
+            <div class="spinner"></div>
+            <div style="margin-top: 6px; font-size: 13px;">姝ｅ湪杞崲涓?..</div>
+          </div>
+
+          <div class="jpg-preview-section" id="jpgPreviewSection">
+            <div class="svg-preview-item">
+              <h3>馃搻 灏哄璁剧疆</h3>
+              <div class="svg-output-row">
+                <label>瀹藉害:
+                  <input
+                    type="number"
+                    id="jpgWidthInput"
+                    class="svg-size-input"
+                    value="81"
+                    min="1"
+                    max="2048"
+                  />
+                </label>
+                <label>楂樺害:
+                  <input
+                    type="number"
+                    id="jpgHeightInput"
+                    class="svg-size-input"
+                    value="81"
+                    min="1"
+                    max="2048"
+                  />
+                </label>
+                <button class="svg-btn" id="jpgApplySizeBtn">馃攧 搴旂敤灏哄</button>
+              </div>
+              <div class="svg-output-row" style="margin-top: 10px;">
+                <label style="gap: 8px;">
+                  <input type="checkbox" id="jpgKeepAspect" checked />
+                  <span>淇濇寔鍘熷瀹介珮姣?/span>
+                </label>
+              </div>
+              <div style="margin-top: 10px; font-size: 12px; color: rgba(255,255,255,0.7);">
+                蹇€熷昂瀵革細
+                <button class="svg-btn" type="button" id="jpgPreset81" style="padding:4px 10px;font-size:11px;">81脳81</button>
+                <button class="svg-btn" type="button" id="jpgPreset128" style="padding:4px 10px;font-size:11px;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">128脳128</button>
+                <button class="svg-btn" type="button" id="jpgPreset256" style="padding:4px 10px;font-size:11px;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">256脳256</button>
+              </div>
+            </div>
+
+            <div class="jpg-preview-grid">
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>鍘熷鍥剧墖 (JPG)</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="jpgOriginalImage" class="jpg-preview-image" alt="鍘熷鍥剧墖" />
+                  <div class="svg-preview-meta" id="jpgOriginalInfo"></div>
+                </div>
+              </div>
+
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>杞崲鍚?(PNG)</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="jpgConvertedImage" class="jpg-preview-image" alt="杞崲鍚庡浘鐗? />
+                  <div class="svg-preview-meta" id="jpgConvertedInfo"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="jpg-button-row">
+              <button class="svg-btn" id="jpgDownloadBtn">猬囷笍 涓嬭浇 PNG 鍥剧墖</button>
+              <button class="svg-btn" id="jpgResetBtn" style="background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">
+                馃攧 閲嶆柊閫夋嫨
+              </button>
+            </div>
+
+            <div class="jpg-success" id="jpgSuccess">
+              鉁?杞崲鎴愬姛锛佺偣鍑讳笅杞芥寜閽繚瀛?PNG 鍥剧墖銆?
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PNG 杞?JPG 宸ュ叿瀹瑰櫒 -->
+      <div class="tool-panel" id="tool-png2jpg">
+        <div class="svg-tool-container">
+          <h2 class="tool-title">馃柤锔?PNG 杞?JPG 宸ュ叿</h2>
+          <p class="tool-subtitle">涓婁紶 PNG 鍥剧墖锛屼竴閿浆鎹负 JPG锛堢櫧鑹茶儗鏅級锛岄€傚悎鍑忓皬浣撶Н銆侀€傞厤涓嶆敮鎸侀€忔槑鑳屾櫙鐨勫満鏅€?/p>
+
+          <div class="svg-upload-area" id="png2JpgUploadArea">
+            <div class="svg-upload-icon">馃摛</div>
+            <div class="svg-upload-main">鐐瑰嚮鎴栨嫋鎷戒笂浼?PNG 鍥剧墖</div>
+            <div class="svg-upload-hint">鍙敮鎸?PNG锛屾渶澶?10MB</div>
+            <input type="file" id="png2JpgFileInput" accept="image/png" />
+          </div>
+
+          <div class="jpg-loading" id="png2JpgLoading">
+            <div class="spinner"></div>
+            <div style="margin-top: 6px; font-size: 13px;">姝ｅ湪杞崲涓?JPG...</div>
+          </div>
+
+          <div class="jpg-preview-section" id="png2JpgPreviewSection" style="display:none;">
+            <div class="svg-preview-item">
+              <h3>馃搻 灏哄璁剧疆</h3>
+              <div class="svg-output-row">
+                <label>瀹藉害:
+                  <input
+                    type="number"
+                    id="png2JpgWidthInput"
+                    class="svg-size-input"
+                    value="81"
+                    min="1"
+                    max="4096"
+                  />
+                </label>
+                <label>楂樺害:
+                  <input
+                    type="number"
+                    id="png2JpgHeightInput"
+                    class="svg-size-input"
+                    value="81"
+                    min="1"
+                    max="4096"
+                  />
+                </label>
+                <button class="svg-btn" id="png2JpgApplySizeBtn">馃攧 搴旂敤灏哄</button>
+              </div>
+              <div class="svg-output-row" style="margin-top: 10px;">
+                <label style="gap: 8px;">
+                  <input type="checkbox" id="png2JpgKeepAspect" checked />
+                  <span>淇濇寔鍘熷瀹介珮姣?/span>
+                </label>
+              </div>
+              <div style="margin-top: 10px; font-size: 12px; color: rgba(0,0,0,0.65);">
+                蹇€熷昂瀵革細
+                <button class="svg-btn" type="button" id="png2JpgPreset81" style="padding:4px 10px;font-size:11px;">81脳81</button>
+                <button class="svg-btn" type="button" id="png2JpgPreset128" style="padding:4px 10px;font-size:11px;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">128脳128</button>
+                <button class="svg-btn" type="button" id="png2JpgPreset256" style="padding:4px 10px;font-size:11px;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">256脳256</button>
+              </div>
+            </div>
+
+            <div class="jpg-preview-grid">
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>鍘熷鍥剧墖 (PNG)</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="png2JpgOriginalImage" class="jpg-preview-image" alt="鍘熷 PNG" />
+                  <div class="svg-preview-meta" id="png2JpgOriginalInfo"></div>
+                </div>
+              </div>
+
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>杞崲鍚?(JPG)</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="png2JpgConvertedImage" class="jpg-preview-image" alt="杞崲鍚?JPG" />
+                  <div class="svg-preview-meta" id="png2JpgConvertedInfo"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="jpg-button-row">
+              <button class="svg-btn" id="png2JpgDownloadBtn">猬囷笍 涓嬭浇 JPG 鍥剧墖</button>
+              <button class="svg-btn" id="png2JpgResetBtn" style="background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">
+                馃攧 閲嶆柊閫夋嫨
+              </button>
+            </div>
+
+            <div class="jpg-success" id="png2JpgSuccess" style="display:none;">
+              鉁?杞崲鎴愬姛锛佺偣鍑讳笅杞芥寜閽繚瀛?JPG 鍥剧墖銆?
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PNG 杞?SVG 宸ュ叿瀹瑰櫒 -->
+      <div class="tool-panel" id="tool-png2svg">
+        <div class="svg-tool-container">
+          <h2 class="tool-title">馃З PNG 杞?SVG 宸ュ叿</h2>
+          <p class="tool-subtitle">灏?PNG 鍥剧墖鍖呰９鍒?SVG 鏂囦欢涓紙浣嶅浘宓屽叆鏂瑰紡锛夛紝鏂逛究鍦ㄩ渶瑕?SVG 瀹瑰櫒鐨勫満鏅腑浣跨敤銆?/p>
+
+          <div class="svg-upload-area" id="png2SvgUploadArea">
+            <div class="svg-upload-icon">馃摛</div>
+            <div class="svg-upload-main">鐐瑰嚮鎴栨嫋鎷戒笂浼?PNG 鍥剧墖</div>
+            <div class="svg-upload-hint">鍙敮鎸?PNG锛屾渶澶?10MB</div>
+            <input type="file" id="png2SvgFileInput" accept="image/png" />
+          </div>
+
+          <div class="jpg-preview-section" id="png2SvgPreviewSection" style="display:none;">
+            <div class="svg-preview-item">
+              <h3>馃搻 灏哄璁剧疆</h3>
+              <div class="svg-output-row">
+                <label>瀹藉害:
+                  <input
+                    type="number"
+                    id="png2SvgWidthInput"
+                    class="svg-size-input"
+                    value="81"
+                    min="1"
+                    max="4096"
+                  />
+                </label>
+                <label>楂樺害:
+                  <input
+                    type="number"
+                    id="png2SvgHeightInput"
+                    class="svg-size-input"
+                    value="81"
+                    min="1"
+                    max="4096"
+                  />
+                </label>
+                <button class="svg-btn" id="png2SvgApplySizeBtn">馃攧 搴旂敤灏哄</button>
+              </div>
+              <div class="svg-output-row" style="margin-top: 10px;">
+                <label style="gap: 8px;">
+                  <input type="checkbox" id="png2SvgKeepAspect" checked />
+                  <span>淇濇寔鍘熷瀹介珮姣?/span>
+                </label>
+              </div>
+              <div style="margin-top: 10px; font-size: 12px; color: rgba(0,0,0,0.65);">
+                蹇€熷昂瀵革細
+                <button class="svg-btn" type="button" id="png2SvgPreset81" style="padding:4px 10px;font-size:11px;">81脳81</button>
+                <button class="svg-btn" type="button" id="png2SvgPreset128" style="padding:4px 10px;font-size:11px;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">128脳128</button>
+                <button class="svg-btn" type="button" id="png2SvgPreset256" style="padding:4px 10px;font-size:11px;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">256脳256</button>
+              </div>
+            </div>
+
+            <div class="jpg-preview-grid">
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>鍘熷鍥剧墖 (PNG)</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="png2SvgOriginalImage" class="jpg-preview-image" alt="鍘熷 PNG" />
+                  <div class="svg-preview-meta" id="png2SvgOriginalInfo"></div>
+                </div>
+              </div>
+
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>鐢熸垚鐨?SVG 棰勮</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="png2SvgPreviewImage" class="jpg-preview-image" alt="SVG 棰勮" />
+                  <div class="svg-preview-meta" id="png2SvgConvertedInfo"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="jpg-button-row">
+              <button class="svg-btn" id="png2SvgDownloadBtn">猬囷笍 涓嬭浇 SVG 鏂囦欢</button>
+              <button class="svg-btn" id="png2SvgResetBtn" style="background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">
+                馃攧 閲嶆柊閫夋嫨
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- JPG 杞?SVG 宸ュ叿瀹瑰櫒 -->
+      <div class="tool-panel" id="tool-jpg2svg">
+        <div class="svg-tool-container">
+          <h2 class="tool-title">馃З JPG 杞?SVG 宸ュ叿</h2>
+          <p class="tool-subtitle">灏?JPG 鍥剧墖宓屽叆鍒?SVG 鏂囦欢涓紙浣嶅浘宓屽叆鏂瑰紡锛夛紝淇濇寔鍘熷娓呮櫚搴︺€?/p>
+
+          <div class="svg-upload-area" id="jpg2SvgUploadArea">
+            <div class="svg-upload-icon">馃摛</div>
+            <div class="svg-upload-main">鐐瑰嚮鎴栨嫋鎷戒笂浼?JPG 鍥剧墖</div>
+            <div class="svg-upload-hint">鍙敮鎸?JPG / JPEG锛屾渶澶?10MB</div>
+            <input type="file" id="jpg2SvgFileInput" accept="image/jpeg,image/jpg" />
+          </div>
+
+          <div class="jpg-preview-section" id="jpg2SvgPreviewSection" style="display:none;">
+            <div class="svg-preview-item">
+              <h3>馃搻 灏哄璁剧疆</h3>
+              <div class="svg-output-row">
+                <label>瀹藉害:
+                  <input
+                    type="number"
+                    id="jpg2SvgWidthInput"
+                    class="svg-size-input"
+                    value="81"
+                    min="1"
+                    max="4096"
+                  />
+                </label>
+                <label>楂樺害:
+                  <input
+                    type="number"
+                    id="jpg2SvgHeightInput"
+                    class="svg-size-input"
+                    value="81"
+                    min="1"
+                    max="4096"
+                  />
+                </label>
+                <button class="svg-btn" id="jpg2SvgApplySizeBtn">馃攧 搴旂敤灏哄</button>
+              </div>
+              <div class="svg-output-row" style="margin-top: 10px;">
+                <label style="gap: 8px;">
+                  <input type="checkbox" id="jpg2SvgKeepAspect" checked />
+                  <span>淇濇寔鍘熷瀹介珮姣?/span>
+                </label>
+              </div>
+              <div style="margin-top: 10px; font-size: 12px; color: rgba(0,0,0,0.65);">
+                蹇€熷昂瀵革細
+                <button class="svg-btn" type="button" id="jpg2SvgPreset81" style="padding:4px 10px;font-size:11px;">81脳81</button>
+                <button class="svg-btn" type="button" id="jpg2SvgPreset128" style="padding:4px 10px;font-size:11px;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">128脳128</button>
+                <button class="svg-btn" type="button" id="jpg2SvgPreset256" style="padding:4px 10px;font-size:11px;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">256脳256</button>
+              </div>
+            </div>
+
+            <div class="jpg-preview-grid">
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>鍘熷鍥剧墖 (JPG)</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="jpg2SvgOriginalImage" class="jpg-preview-image" alt="鍘熷 JPG" />
+                  <div class="svg-preview-meta" id="jpg2SvgOriginalInfo"></div>
+                </div>
+              </div>
+
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>鐢熸垚鐨?SVG 棰勮</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="jpg2SvgPreviewImage" class="jpg-preview-image" alt="SVG 棰勮" />
+                  <div class="svg-preview-meta" id="jpg2SvgConvertedInfo"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="jpg-button-row">
+              <button class="svg-btn" id="jpg2SvgDownloadBtn">猬囷笍 涓嬭浇 SVG 鏂囦欢</button>
+              <button class="svg-btn" id="jpg2SvgResetBtn" style="background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">
+                馃攧 閲嶆柊閫夋嫨
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SVG 杞?JPG 宸ュ叿瀹瑰櫒 -->
+      <div class="tool-panel" id="tool-svg2jpg">
+        <div class="svg-tool-container">
+          <h2 class="tool-title">馃柤锔?SVG 杞?JPG 宸ュ叿</h2>
+          <p class="tool-subtitle">灏?SVG 鐭㈤噺鍥炬覆鏌撲负 JPG锛堢櫧鑹茶儗鏅級锛岄€傚悎鐢ㄤ簬涓嶆敮鎸?SVG 鐨勫钩鍙般€?/p>
+
+          <div class="svg-upload-area" id="svg2JpgUploadArea">
+            <div class="svg-upload-icon">馃З</div>
+            <div class="svg-upload-main">鐐瑰嚮鎴栨嫋鎷戒笂浼?SVG 鏂囦欢</div>
+            <div class="svg-upload-hint">鍙敮鎸?.svg锛屾渶澶?5MB</div>
+            <input type="file" id="svg2JpgFileInput" accept=".svg,image/svg+xml" />
+          </div>
+
+          <div class="jpg-loading" id="svg2JpgLoading">
+            <div class="spinner"></div>
+            <div style="margin-top: 6px; font-size: 13px;">姝ｅ湪杞崲涓?JPG...</div>
+          </div>
+
+          <div class="jpg-preview-section" id="svg2JpgPreviewSection" style="display:none;">
+            <div class="svg-preview-item">
+              <h3>馃搻 灏哄璁剧疆</h3>
+              <div class="svg-output-row">
+                <label>瀹藉害:
+                  <input
+                    type="number"
+                    id="svg2JpgWidthInput"
+                    class="svg-size-input"
+                    value="512"
+                    min="1"
+                    max="4096"
+                  />
+                </label>
+                <label>楂樺害:
+                  <input
+                    type="number"
+                    id="svg2JpgHeightInput"
+                    class="svg-size-input"
+                    value="512"
+                    min="1"
+                    max="4096"
+                  />
+                </label>
+                <button class="svg-btn" id="svg2JpgApplySizeBtn">馃攧 搴旂敤灏哄</button>
+              </div>
+              <div class="svg-output-row" style="margin-top: 10px;">
+                <label style="gap: 8px;">
+                  <input type="checkbox" id="svg2JpgKeepAspect" checked />
+                  <span>淇濇寔鍘熷瀹介珮姣?/span>
+                </label>
+              </div>
+              <div style="margin-top: 10px; font-size: 12px; color: rgba(0,0,0,0.65);">
+                蹇€熷昂瀵革細
+                <button class="svg-btn" type="button" id="svg2JpgPreset81" style="padding:4px 10px;font-size:11px;">81脳81</button>
+                <button class="svg-btn" type="button" id="svg2JpgPreset128" style="padding:4px 10px;font-size:11px;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">128脳128</button>
+                <button class="svg-btn" type="button" id="svg2JpgPreset256" style="padding:4px 10px;font-size:11px;background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">256脳256</button>
+              </div>
+            </div>
+
+            <div class="jpg-preview-grid">
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>SVG 棰勮</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="svg2JpgOriginalImage" class="jpg-preview-image" alt="鍘熷 SVG 棰勮" />
+                  <div class="svg-preview-meta" id="svg2JpgOriginalInfo"></div>
+                </div>
+              </div>
+
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>杞崲鍚?(JPG)</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="svg2JpgConvertedImage" class="jpg-preview-image" alt="杞崲鍚?JPG" />
+                  <div class="svg-preview-meta" id="svg2JpgConvertedInfo"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="jpg-button-row">
+              <button class="svg-btn" id="svg2JpgDownloadBtn">猬囷笍 涓嬭浇 JPG 鍥剧墖</button>
+              <button class="svg-btn" id="svg2JpgResetBtn" style="background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">
+                馃攧 閲嶆柊閫夋嫨
+              </button>
+            </div>
+
+            <div class="jpg-success" id="svg2JpgSuccess" style="display:none;">
+              鉁?杞崲鎴愬姛锛佺偣鍑讳笅杞芥寜閽繚瀛?JPG 鍥剧墖銆?
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 鑳屾櫙閫忔槑宸ュ叿瀹瑰櫒 -->
+      <div class="tool-panel" id="tool-bg">
+        <div class="svg-tool-container">
+          <h2 class="tool-title">鉁?鑳屾櫙閫忔槑鍖栧伐鍏?/h2>
+          <p class="tool-subtitle">涓婁紶鍥剧墖锛岄€夋嫨鑳屾櫙棰滆壊骞惰皟鏁村宸紝涓€閿敓鎴愰€忔槑鑳屾櫙 PNG銆?/p>
+
+          <div class="svg-upload-area" id="bgUploadArea">
+            <div class="svg-upload-icon">馃摛</div>
+            <div class="svg-upload-main">鐐瑰嚮鎴栨嫋鎷藉浘鐗囧埌姝ゅ</div>
+            <div class="svg-upload-hint">鏀寔 JPG銆丳NG銆乄EBP锛屾渶澶?10MB</div>
+            <input type="file" id="bgFileInput" accept="image/*" />
+          </div>
+
+          <div class="jpg-loading" id="bgLoading">
+            <div class="spinner"></div>
+            <div style="margin-top: 6px; font-size: 13px;">姝ｅ湪澶勭悊鍥剧墖...</div>
+          </div>
+
+          <div class="jpg-preview-section" id="bgPreviewSection">
+            <div class="svg-preview-item">
+              <h3>馃帹 鑳屾櫙绉婚櫎璁剧疆</h3>
+
+              <div class="control-group">
+                <label class="control-label">閫夋嫨瑕佺Щ闄ょ殑鑳屾櫙棰滆壊锛?/label>
+                <div class="tolerance-control" style="gap: 16px;">
+                  <input type="color" id="bgColorPicker" value="#ffffff" />
+                  <div
+                    id="bgColorPreview"
+                    style="flex:1;height:32px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);background:#ffffff;"
+                  ></div>
+                </div>
+                <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 6px;">
+                  馃挕 鎻愮ず锛氱偣鍑诲師鍥惧彲浠ヨ嚜鍔ㄦ嬀鍙栭鑹?
+                </div>
+              </div>
+
+              <div class="control-group" style="margin-top: 14px;">
+                <label class="control-label"
+                  >瀹瑰樊璁剧疆锛?span class="tolerance-value" id="bgToleranceValue">30</span></label
+                >
+                <div class="tolerance-control">
+                  <input type="range" id="bgToleranceSlider" min="0" max="100" value="30" />
+                </div>
+                <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 6px;">
+                  鏁板€艰秺澶э紝璁や负鏄€滆儗鏅€濈殑棰滆壊鑼冨洿瓒婂銆?
+                </div>
+              </div>
+
+              <div class="jpg-button-row" style="margin-top: 16px;">
+                <button class="svg-btn" id="bgProcessBtn">鉁?澶勭悊鍥剧墖</button>
+                <button
+                  class="svg-btn"
+                  id="bgDownloadBtn"
+                  style="background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;opacity:0.7;"
+                  disabled
+                >
+                  猬囷笍 涓嬭浇 PNG
+                </button>
+                <button
+                  class="svg-btn"
+                  id="bgResetBtn"
+                  style="background:linear-gradient(135deg,#444,#222);box-shadow:none;"
+                >
+                  馃攧 閲嶆柊閫夋嫨
+                </button>
+              </div>
+            </div>
+
+            <div class="jpg-preview-grid" style="margin-top: 10px;">
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>鍘熷浘</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="bgOriginalImage" class="jpg-preview-image" alt="鍘熷浘" style="cursor: crosshair;" />
+                  <div class="svg-preview-meta" id="bgOriginalInfo"></div>
+                </div>
+              </div>
+
+              <div class="svg-preview-card">
+                <div class="svg-preview-header">
+                  <div>閫忔槑鑳屾櫙</div>
+                </div>
+                <div class="svg-preview-body">
+                  <img id="bgTransparentImage" class="jpg-preview-image" alt="閫忔槑鑳屾櫙" />
+                  <div class="svg-preview-meta" id="bgTransparentInfo"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 鏂囨。杞崲宸ュ叿椤甸潰 -->
+  <div class="app-container" id="docToolPage" style="display: none; margin-top: 18px;">
+    <div class="app-header">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button class="svg-btn" id="backToHomeFromDocBtn" style="min-width:auto;padding:6px 14px;font-size:13px;">
+          鈫?杩斿洖
+        </button>
+        <div>
+          <div class="app-title">
+            鏂囨。杞崲宸ュ叿
+            <span class="app-title-badge">BETA</span>
+          </div>
+          <div class="app-subtitle">灏?Word 鏂囨。锛圖OC / DOCX锛夎浆鎹负 PDF 鏂囦欢</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="app-body">
+      <div class="tool-panel active">
+        <div class="svg-tool-container">
+          <h2 class="tool-title">馃搫 Word 杞?PDF</h2>
+          <p class="tool-subtitle">涓婁紶涓€涓?Word 鏂囨。锛岀偣鍑绘寜閽嵆鍙湪鏈満瀹屾垚 PDF 杞崲銆?/p>
+
+          <div class="svg-upload-area" id="docUploadArea">
+            <div class="svg-upload-icon">馃搫</div>
+            <div class="svg-upload-main">鐐瑰嚮閫夋嫨 Word 鏂囨。鎴栨嫋鎷芥枃浠跺埌姝ゅ</div>
+            <div class="svg-upload-hint">鏀寔 .doc / .docx锛屽崟涓枃浠舵渶澶?20MB</div>
+            <input
+              type="file"
+              id="docFileInput"
+              accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              style="display:none;"
+            />
+          </div>
+
+          <div class="jpg-loading" id="docLoading">
+            <div class="spinner"></div>
+            <div style="margin-top: 6px; font-size: 13px;">姝ｅ湪杞崲涓?PDF锛岃绋嶅€?..</div>
+          </div>
+
+          <div class="jpg-preview-section" id="docPreviewSection" style="display:none;">
+            <div class="svg-preview-item">
+              <h3>褰撳墠鏂囦欢</h3>
+              <div class="svg-output-row" style="margin-bottom: 8px;">
+                <div id="docFileInfo" style="font-size:13px;color:rgba(0,0,0,0.65);"></div>
+              </div>
+              <div class="jpg-button-row">
+                <button class="svg-btn" id="docConvertBtn">馃攧 杞崲涓?PDF</button>
+                <button class="svg-btn" id="docResetBtn" style="background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">
+                  馃攣 閲嶆柊閫夋嫨
+                </button>
+                <button class="svg-btn" id="docCancelBtn" style="background:linear-gradient(135deg,#ff4d4f,#ff7875);box-shadow:none;">
+                  鉂?鍙栨秷涓婁紶
+                </button>
+              </div>
+              <div class="jpg-success" id="docSuccess" style="display:none;">
+                鉁?杞崲鎴愬姛锛佸鏋滄祻瑙堝櫒鏈嚜鍔ㄤ笅杞斤紝璇锋鏌ヤ笅杞芥爮鎴栧脊绐椼€?
+              </div>
+            </div>
+          </div>
+
+          <div class="svg-preview-item" style="margin-top: 16px;">
+            <h3>馃柤锔?鍥剧墖杞?PDF</h3>
+            <p class="tool-subtitle" style="margin-bottom:12px;">
+              灏嗗寮犲浘鐗囧悎骞跺埌涓€涓?PDF 涓紝閫傚悎瀵煎嚭棰勮绋裤€佹壂鎻忎欢绛夈€備綘鍙互澶氭娣诲姞鍥剧墖锛岄兘浼氱疮绉繘鍒楄〃銆?
+            </p>
+
+            <div class="svg-upload-area" id="imgPdfUploadArea">
+              <div class="svg-upload-icon">馃柤锔?/div>
+              <div class="svg-upload-main">鐐瑰嚮閫夋嫨鍥剧墖鎴栨嫋鎷藉埌姝ゅ锛堟敮鎸佸娆℃坊鍔狅級</div>
+              <div class="svg-upload-hint">鏀寔 JPG / PNG / WEBP锛屽崟寮犳渶澶?10MB</div>
+              <input type="file" id="imgPdfFileInput" accept="image/*" multiple style="display:none;" />
+            </div>
+
+            <div style="margin-bottom: 8px; text-align:right;">
+              <button class="svg-btn" id="imgPdfSelectDirBtn" style="min-width:auto;padding:6px 14px;font-size:13px;">
+                馃搨 浠庢枃浠跺す瀵煎叆鍥剧墖
+              </button>
+              <!-- 鐩綍閫夋嫨锛屼粎鍦ㄦ敮鎸?webkitdirectory 鐨勬祻瑙堝櫒涓彲鐢?-->
+              <input
+                type="file"
+                id="imgPdfDirInput"
+                webkitdirectory
+                multiple
+                style="display:none;"
+                accept="image/*"
+              />
+            </div>
+
+            <div class="jpg-loading" id="imgPdfLoading">
+              <div class="spinner"></div>
+              <div style="margin-top: 6px; font-size: 13px;">姝ｅ湪鍚堝苟鍥剧墖骞剁敓鎴?PDF...</div>
+            </div>
+
+            <div class="jpg-preview-section" id="imgPdfPreviewSection" style="display:none;">
+              <div class="svg-output-row" style="margin-bottom: 8px;">
+                <div id="imgPdfFileInfo" style="font-size:13px;color:rgba(0,0,0,0.65);"></div>
+              </div>
+              <div style="margin-bottom: 8px;">
+                <details id="imgPdfListDetails">
+                  <summary style="cursor:pointer;font-size:13px;color:rgba(0,0,0,0.65);">
+                    鏌ョ湅宸查€夋嫨鐨勫浘鐗囨枃浠?
+                  </summary>
+                  <ul id="imgPdfFileList" style="margin-top:6px;padding-left:18px;font-size:12px;color:rgba(0,0,0,0.6);line-height:1.6;"></ul>
+                </details>
+              </div>
+              <div class="jpg-button-row">
+                <button class="svg-btn" id="imgPdfConvertBtn">馃攧 鍥剧墖鍚堝苟涓?PDF</button>
+                <button class="svg-btn" id="imgPdfResetBtn" style="background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">
+                  馃攣 娓呯┖鍥剧墖
+                </button>
+                <button class="svg-btn" id="imgPdfCancelBtn" style="background:linear-gradient(135deg,#ff4d4f,#ff7875);box-shadow:none;">
+                  鉂?鍙栨秷涓婁紶
+                </button>
+              </div>
+              <div class="jpg-success" id="imgPdfSuccess" style="display:none;">
+                鉁?宸茬敓鎴?PDF锛佹祻瑙堝櫒搴斿凡寮瑰嚭涓嬭浇锛屽鏋滄湭鐪嬪埌璇锋鏌ヤ笅杞芥爮鎴栧脊绐楄缃€?
+              </div>
+            </div>
+          </div>
+
+          <div class="svg-preview-item" style="margin-top: 16px;">
+            <h3>馃搫 PDF 杞?Word</h3>
+            <p class="tool-subtitle" style="margin-bottom:12px;">
+              灏?PDF 鏂囨。杞崲涓哄彲缂栬緫鐨?Word锛圖OCX锛夋枃浠讹紝閫傚悎浜屾缂栬緫銆佷慨璁㈠唴瀹广€?
+            </p>
+
+            <div class="svg-upload-area" id="pdf2WordUploadArea">
+              <div class="svg-upload-icon">馃搼</div>
+              <div class="svg-upload-main">鐐瑰嚮閫夋嫨 PDF 鏂囦欢鎴栨嫋鎷藉埌姝ゅ</div>
+              <div class="svg-upload-hint">鍙敮鎸?.pdf锛屽崟涓枃浠舵渶澶?20MB</div>
+              <input type="file" id="pdf2WordFileInput" accept="application/pdf,.pdf" style="display:none;" />
+            </div>
+
+            <div class="jpg-loading" id="pdf2WordLoading">
+              <div class="spinner"></div>
+              <div style="margin-top: 6px; font-size: 13px;">姝ｅ湪灏?PDF 杞崲涓?Word锛屽ぇ鏂囦欢鍙兘闇€瑕?-4鍒嗛挓锛岃鑰愬績绛夊緟...</div>
+            </div>
+
+            <div class="jpg-preview-section" id="pdf2WordPreviewSection" style="display:none;">
+              <div class="svg-output-row" style="margin-bottom: 8px;">
+                <div id="pdf2WordFileInfo" style="font-size:13px;color:rgba(0,0,0,0.65);"></div>
+              </div>
+              <div class="jpg-button-row">
+                <button class="svg-btn" id="pdf2WordConvertBtn">馃攧 杞崲涓?Word</button>
+                <button class="svg-btn" id="pdf2WordResetBtn" style="background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">
+                  馃攣 閲嶆柊閫夋嫨
+                </button>
+                <button class="svg-btn" id="pdf2WordCancelBtn" style="background:linear-gradient(135deg,#ff4d4f,#ff7875);box-shadow:none;">
+                  鉂?鍙栨秷涓婁紶
+                </button>
+              </div>
+              <div class="jpg-success" id="pdf2WordSuccess" style="display:none;">
+                鉁?杞崲鎴愬姛锛佸鏋滄祻瑙堝櫒鏈嚜鍔ㄤ笅杞斤紝璇锋鏌ヤ笅杞芥爮鎴栧脊绐椼€?
+              </div>
+            </div>
+          </div>
+
+          <div class="svg-preview-item" style="margin-top: 16px;">
+            <h3>馃搳 PDF 杞?PPT</h3>
+            <p class="tool-subtitle" style="margin-bottom:12px;">
+              灏?PDF 鏂囨。杞崲涓哄彲缂栬緫鐨?PPTX 婕旂ず鏂囩锛屼究浜庢媶鍒嗛〉闈€佹坊鍔犲姩鐢诲拰璁茶В澶囨敞銆?
+            </p>
+
+            <div class="svg-upload-area" id="pdf2PptUploadArea">
+              <div class="svg-upload-icon">馃搳</div>
+              <div class="svg-upload-main">鐐瑰嚮閫夋嫨 PDF 鏂囦欢鎴栨嫋鎷藉埌姝ゅ</div>
+              <div class="svg-upload-hint">鍙敮鎸?.pdf锛屽崟涓枃浠舵渶澶?20MB</div>
+              <input type="file" id="pdf2PptFileInput" accept="application/pdf,.pdf" style="display:none;" />
+            </div>
+
+            <div class="jpg-loading" id="pdf2PptLoading">
+              <div class="spinner"></div>
+              <div style="margin-top: 6px; font-size: 13px;">姝ｅ湪杞崲 PDF 涓?PPT锛屽ぇ鏂囦欢鍙兘闇€瑕?-3鍒嗛挓锛岃鑰愬績绛夊緟...</div>
+            </div>
+
+            <div class="jpg-preview-section" id="pdf2PptPreviewSection" style="display:none;">
+              <div class="svg-output-row" style="margin-bottom: 8px;">
+                <div id="pdf2PptFileInfo" style="font-size:13px;color:rgba(0,0,0,0.65);"></div>
+              </div>
+              <div class="jpg-button-row">
+                <button class="svg-btn" id="pdf2PptConvertBtn">馃攧 杞崲涓?PPT</button>
+                <button class="svg-btn" id="pdf2PptResetBtn" style="background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">
+                  馃攣 閲嶆柊閫夋嫨
+                </button>
+                <button class="svg-btn" id="pdf2PptCancelBtn" style="background:linear-gradient(135deg,#ff4d4f,#ff7875);box-shadow:none;">
+                  鉂?鍙栨秷涓婁紶
+                </button>
+              </div>
+              <div class="jpg-success" id="pdf2PptSuccess" style="display:none;">
+                鉁?杞崲鎴愬姛锛佸鏋滄祻瑙堝櫒鏈嚜鍔ㄤ笅杞斤紝璇锋鏌ヤ笅杞芥爮鎴栧脊绐椼€?
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 闊抽杞崲宸ュ叿椤甸潰 -->
+  <div class="app-container" id="audioToolPage" style="display: none; margin-top: 18px;">
+    <div class="app-header">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button class="svg-btn" id="backToHomeFromAudioBtn" style="min-width:auto;padding:6px 14px;font-size:13px;">
+          鈫?杩斿洖
+        </button>
+        <div>
+          <div class="app-title">
+            闊抽杞崲宸ュ叿
+            <span class="app-title-badge">NEW</span>
+          </div>
+          <div class="app-subtitle">MP3銆乄AV銆丗LAC銆丄AC銆丮4A銆丱GG銆丱PUS銆乄MA銆丄IFF 甯歌鏍煎紡浜掕浆</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="app-body">
+      <div class="tool-panel active">
+        <div class="svg-tool-container">
+          <h2 class="tool-title">馃帶 闊抽鏍煎紡杞崲</h2>
+          <p class="tool-subtitle">涓婁紶涓€涓煶棰戞枃浠讹紝閫夋嫨鐩爣鏍煎紡鍚庡嵆鍙笅杞借浆鎹㈠悗鐨勬枃浠躲€?/p>
+
+          <div class="svg-upload-area" id="audioUploadArea">
+            <div class="svg-upload-icon">馃幍</div>
+            <div class="svg-upload-main">鐐瑰嚮閫夋嫨闊抽鏂囦欢鎴栨嫋鎷芥枃浠跺埌姝ゅ</div>
+            <div class="svg-upload-hint">鏀寔 MP3 / WAV / FLAC / AAC / M4A / OGG / OPUS / WMA / AIFF锛屽崟涓枃浠舵渶澶?100MB</div>
+            <input
+              type="file"
+              id="audioFileInput"
+              accept=".mp3,.wav,.flac,.aac,.m4a,.ogg,.opus,.wma,.aiff,audio/*"
+              style="display:none;"
+            />
+          </div>
+
+          <div class="jpg-loading" id="audioLoading">
+            <div class="spinner"></div>
+            <div style="margin-top: 6px; font-size: 13px;">姝ｅ湪杞崲闊抽锛岃绋嶅€?..</div>
+          </div>
+
+          <div class="jpg-preview-section" id="audioPreviewSection" style="display:none;">
+            <div class="svg-preview-item">
+              <h3>褰撳墠闊抽</h3>
+              <div class="svg-output-row" style="margin-bottom: 8px;">
+                <div id="audioFileInfo" style="font-size:13px;color:rgba(0,0,0,0.65);"></div>
+              </div>
+              <div class="svg-output-row" style="margin-bottom: 12px;">
+                <label>
+                  鐩爣鏍煎紡:
+                  <select id="audioFormatSelect" class="svg-size-input" style="width: 120px;">
+                    <option value="mp3">MP3</option>
+                    <option value="wav">WAV</option>
+                    <option value="flac">FLAC</option>
+                    <option value="aac">AAC</option>
+                    <option value="m4a">M4A</option>
+                    <option value="ogg">OGG</option>
+                    <option value="opus">OPUS</option>
+                    <option value="wma">WMA</option>
+                    <option value="aiff">AIFF</option>
+                  </select>
+                </label>
+              </div>
+              <div class="jpg-button-row">
+                <button class="svg-btn" id="audioConvertBtn">馃攧 杞崲闊抽</button>
+                <button class="svg-btn" id="audioResetBtn" style="background:linear-gradient(135deg,#667eea,#764ba2);box-shadow:none;">
+                  馃攣 閲嶆柊閫夋嫨
+                </button>
+                <button class="svg-btn" id="audioCancelBtn" style="background:linear-gradient(135deg,#ff4d4f,#ff7875);box-shadow:none;">
+                  鉂?鍙栨秷涓婁紶
+                </button>
+              </div>
+              <div class="jpg-success" id="audioSuccess" style="display:none;">
+                鉁?杞崲鎴愬姛锛佸鏋滄祻瑙堝櫒鏈嚜鍔ㄤ笅杞斤紝璇锋鏌ヤ笅杞芥爮鎴栧脊绐椼€?              </div>
+            </div>
+          </div>
+
+          <div class="svg-preview-item" style="margin-top: 16px;">
+            <h3>鏀寔鏍煎紡</h3>
+            <p class="tool-subtitle" style="margin-bottom:0;">
+              MP3銆乄AV銆丗LAC銆丄AC銆丮4A銆丱GG銆丱PUS銆乄MA銆丄IFF銆備笉鍚屾牸寮忛€傚悎涓嶅悓鐢ㄩ€旓細MP3/M4A 浣撶Н灏忥紝WAV/FLAC 鏇撮€傚悎淇濈暀闊宠川銆?            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==================== 绯荤粺鍒濆鍖?====================
+    let serverStatus = {
+      available: false,
+      capabilities: {},
+      error: null
+    };
+
+    // 妫€鏌ュ悗绔湇鍔″櫒鐘舵€?
+    async function checkServerStatus() {
+      try {
+        const resp = await fetch('/api/system/status', { timeout: 5000 });
+        if (resp.ok) {
+          const data = await resp.json();
+          serverStatus.available = true;
+          serverStatus.capabilities = data.capabilities || {};
+          console.log('[鉁揮 鍚庣鏈嶅姟鍣ㄥ凡杩炴帴', data);
+          
+          // 濡傛灉鏌愪簺鍔熻兘涓嶅彲鐢紝鏄剧ず鎻愮ず
+          const unavailable = [];
+          if (!data.capabilities.wordToPdf) unavailable.push('Word杞琍DF');
+          if (!data.capabilities.pdfToWord) unavailable.push('PDF杞琖ord');
+          if (!data.capabilities.pdfToPpt) unavailable.push('PDF杞琍PT');
+          if (!data.capabilities.pdfToExcel) unavailable.push('PDF杞珽xcel');
+          if (!data.capabilities.audioConvert) unavailable.push('闊抽鏍煎紡杞崲');
+          
+          if (unavailable.length > 0) {
+            console.warn('[鈿燷 浠ヤ笅鍔熻兘鏆備笉鍙敤: ' + unavailable.join(', '));
+          }
+        } else {
+          serverStatus.error = `鏈嶅姟鍣ㄨ繑鍥為敊璇? ${resp.status}`;
+          serverStatus.available = false;
+          console.warn('[鉁梋 鍚庣鏈嶅姟鍣ㄤ笉鍙敤:', serverStatus.error);
+        }
+      } catch (e) {
+        serverStatus.available = false;
+        serverStatus.error = e.message;
+        console.warn('[鉁梋 鏃犳硶杩炴帴鍚庣鏈嶅姟鍣?', e.message);
+        console.warn('馃挕 璇风‘淇濆凡杩愯: npm run dev:server');
+      }
+    }
+
+    // 鍚姩鏃舵鏌ユ湇鍔″櫒
+    window.addEventListener('load', () => {
+      checkServerStatus();
+      // 姣?0绉掗噸鏂版鏌ヤ竴娆℃湇鍔″櫒鐘舵€?
+      setInterval(checkServerStatus, 30000);
+    });
+
+    // ==================== 鏃堕挓閫昏緫 ====================
+    // 椤堕儴鏃堕挓閫昏緫
+    (function initClock() {
+      const hourHand = document.getElementById("clockHourHand");
+      const minuteHand = document.getElementById("clockMinuteHand");
+      const secondHand = document.getElementById("clockSecondHand");
+      const timeText = document.getElementById("clockTimeText");
+      const dateText = document.getElementById("clockDateText");
+      const clockFace = document.getElementById("clockFace");
+
+      if (clockFace) {
+        // 鍒涘缓 12 涓埢搴?
+        for (let i = 0; i < 12; i++) {
+          const tick = document.createElement("div");
+          tick.className = "clock-tick";
+          tick.style.transform = `rotate(${i * 30}deg)`;
+          clockFace.appendChild(tick);
+        }
+      }
+
+      function pad(n) {
+        return n < 10 ? "0" + n : String(n);
+      }
+
+      function updateClock() {
+        const now = new Date();
+        const h = now.getHours();
+        const m = now.getMinutes();
+        const s = now.getSeconds();
+
+        const secDeg = s * 6; // 360 / 60
+        const minDeg = m * 6 + s * 0.1; // 6 搴?鍒?+ 绉掔殑缁嗗井绉诲姩
+        const hourDeg = (h % 12) * 30 + m * 0.5; // 30 搴?灏忔椂 + 鍒嗛挓鍋忕Щ
+
+        if (secondHand) {
+          secondHand.style.transform = `translate(-50%, -90%) rotate(${secDeg}deg)`;
+        }
+        if (minuteHand) {
+          minuteHand.style.transform = `translate(-50%, -90%) rotate(${minDeg}deg)`;
+        }
+        if (hourHand) {
+          hourHand.style.transform = `translate(-50%, -90%) rotate(${hourDeg}deg)`;
+        }
+
+        if (timeText) {
+          timeText.textContent = `${pad(h)}:${pad(m)}:${pad(s)}`;
+        }
+        if (dateText) {
+          const year = now.getFullYear();
+          const month = pad(now.getMonth() + 1);
+          const day = pad(now.getDate());
+          const weekdays = ["鏃?, "涓€", "浜?, "涓?, "鍥?, "浜?, "鍏?];
+          const week = weekdays[now.getDay()];
+          dateText.textContent = `${year}-${month}-${day} 路 鏄熸湡${week}`;
+        }
+      }
+
+      updateClock();
+      setInterval(updateClock, 1000);
+    })();
+
+    // 棣栭〉鍏ュ彛閫昏緫锛氫粠棣栭〉杩涘叆鍥剧墖杞崲宸ュ叿
+    const homePage = document.getElementById("homePage");
+    const imageToolPage = document.getElementById("imageToolPage");
+    const docToolPage = document.getElementById("docToolPage");
+    const audioToolPage = document.getElementById("audioToolPage");
+    const clockContainer = document.querySelector(".clock-container");
+    const enterImageToolBtn = document.getElementById("enterImageToolBtn");
+    const enterDocToolBtn = document.getElementById("enterDocToolBtn");
+    const enterAudioToolBtn = document.getElementById("enterAudioToolBtn");
+    const backToHomeBtn = document.getElementById("backToHomeBtn");
+    const backToHomeFromDocBtn = document.getElementById("backToHomeFromDocBtn");
+    const backToHomeFromAudioBtn = document.getElementById("backToHomeFromAudioBtn");
+    const mobileAppUrl = `${window.location.origin}/filetools-app.apk`;
+    const openMobileDownloadBtn = document.getElementById("openMobileDownloadBtn");
+    const mobileAppModal = document.getElementById("mobileAppModal");
+    const closeMobileAppModal = document.getElementById("closeMobileAppModal");
+    const mobileAppDownloadLink = document.getElementById("mobileAppDownloadLink");
+    const mobileAppQr = document.getElementById("mobileAppQr");
+    const mobileAppUrlText = document.getElementById("mobileAppUrlText");
+
+    if (mobileAppDownloadLink) {
+      mobileAppDownloadLink.href = mobileAppUrl;
+    }
+    if (mobileAppUrlText) {
+      mobileAppUrlText.textContent = mobileAppUrl.replace(/^https?:\/\//, "");
+    }
+    if (mobileAppQr) {
+      mobileAppQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=10&data=${encodeURIComponent(mobileAppUrl)}`;
+    }
+    if (openMobileDownloadBtn && mobileAppModal) {
+      openMobileDownloadBtn.addEventListener("click", () => {
+        mobileAppModal.classList.add("show");
+        mobileAppModal.setAttribute("aria-hidden", "false");
+      });
+    }
+    if (closeMobileAppModal && mobileAppModal) {
+      closeMobileAppModal.addEventListener("click", () => {
+        mobileAppModal.classList.remove("show");
+        mobileAppModal.setAttribute("aria-hidden", "true");
+      });
+    }
+    if (mobileAppModal) {
+      mobileAppModal.addEventListener("click", (event) => {
+        if (event.target === mobileAppModal) {
+          mobileAppModal.classList.remove("show");
+          mobileAppModal.setAttribute("aria-hidden", "true");
+        }
+      });
+    }
+
+    function showImageTool() {
+      if (homePage) homePage.style.display = "none";
+      if (imageToolPage) imageToolPage.style.display = "block";
+      if (docToolPage) docToolPage.style.display = "none";
+      if (audioToolPage) audioToolPage.style.display = "none";
+      if (clockContainer) clockContainer.style.display = "none";
+    }
+
+    function showDocTool() {
+      if (homePage) homePage.style.display = "none";
+      if (imageToolPage) imageToolPage.style.display = "none";
+      if (docToolPage) docToolPage.style.display = "block";
+      if (audioToolPage) audioToolPage.style.display = "none";
+      if (clockContainer) clockContainer.style.display = "none";
+    }
+
+    function showAudioTool() {
+      if (homePage) homePage.style.display = "none";
+      if (imageToolPage) imageToolPage.style.display = "none";
+      if (docToolPage) docToolPage.style.display = "none";
+      if (audioToolPage) audioToolPage.style.display = "block";
+      if (clockContainer) clockContainer.style.display = "none";
+    }
+
+    if (enterImageToolBtn) {
+      enterImageToolBtn.addEventListener("click", showImageTool);
+    }
+    if (enterDocToolBtn) {
+      enterDocToolBtn.addEventListener("click", showDocTool);
+    }
+    if (enterAudioToolBtn) {
+      enterAudioToolBtn.addEventListener("click", showAudioTool);
+    }
+    if (backToHomeBtn) {
+      backToHomeBtn.addEventListener("click", () => {
+        if (imageToolPage) imageToolPage.style.display = "none";
+        if (audioToolPage) audioToolPage.style.display = "none";
+        if (homePage) homePage.style.display = "block";
+        if (clockContainer) clockContainer.style.display = "flex";
+      });
+    }
+    if (backToHomeFromDocBtn) {
+      backToHomeFromDocBtn.addEventListener("click", () => {
+        if (docToolPage) docToolPage.style.display = "none";
+        if (audioToolPage) audioToolPage.style.display = "none";
+        if (homePage) homePage.style.display = "block";
+        if (clockContainer) clockContainer.style.display = "flex";
+      });
+    }
+    if (backToHomeFromAudioBtn) {
+      backToHomeFromAudioBtn.addEventListener("click", () => {
+        if (audioToolPage) audioToolPage.style.display = "none";
+        if (homePage) homePage.style.display = "block";
+        if (clockContainer) clockContainer.style.display = "flex";
+      });
+    }
+
+    // 椤堕儴鏍囩鍒囨崲閫昏緫
+    const tabs = document.querySelectorAll(".tab-item");
+    const panels = {
+      svg: document.getElementById("tool-svg"),
+      jpg: document.getElementById("tool-jpg"),
+      png2jpg: document.getElementById("tool-png2jpg"),
+      png2svg: document.getElementById("tool-png2svg"),
+      jpg2svg: document.getElementById("tool-jpg2svg"),
+      svg2jpg: document.getElementById("tool-svg2jpg"),
+      bg: document.getElementById("tool-bg"),
+    };
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const key = tab.getAttribute("data-tool");
+
+        tabs.forEach((t) => t.classList.remove("active"));
+        tab.classList.add("active");
+
+        Object.keys(panels).forEach((k) => {
+          panels[k].classList.toggle("active", k === key);
+        });
+      });
+    });
+
+    // SVG 杞?PNG 宸ュ叿閫昏緫
+    (function initSvgTool() {
+      const uploadArea = document.getElementById("svgUploadArea");
+      const fileInput = document.getElementById("svgFileInput");
+      const previewSection = document.getElementById("svgPreviewSection");
+      const previewList = document.getElementById("svgPreviewList");
+      const widthInput = document.getElementById("svgWidthInput");
+      const heightInput = document.getElementById("svgHeightInput");
+      const convertAllBtn = document.getElementById("svgConvertAllBtn");
+
+      /** @type {File[]} */
+      let files = [];
+
+      if (!uploadArea) return;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const droppedFiles = Array.from(e.dataTransfer.files || []).filter((f) =>
+          f.name.toLowerCase().endsWith(".svg")
+        );
+        handleFiles(droppedFiles);
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const target = e.target;
+        const selected = Array.from(target.files || []);
+        handleFiles(selected);
+        target.value = "";
+      });
+
+      function handleFiles(newFiles) {
+        if (!newFiles || newFiles.length === 0) return;
+        files = files.concat(newFiles);
+        displayPreviews();
+      }
+
+      function displayPreviews() {
+        if (!files.length) {
+          previewSection.style.display = "none";
+          previewList.innerHTML = "";
+          return;
+        }
+
+        previewSection.style.display = "block";
+        previewList.innerHTML = "";
+
+        files.forEach((file, index) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const svgContent = String(e.target?.result || "");
+
+            const card = document.createElement("div");
+            card.className = "svg-preview-card";
+            card.innerHTML = `
+              <div class="svg-preview-header">
+                <div class="svg-preview-name">${file.name}</div>
+                <div>${(file.size / 1024).toFixed(1)} KB</div>
+              </div>
+              <div class="svg-preview-body">
+                <canvas id="svg-canvas-${index}" width="81" height="81"></canvas>
+                <div class="svg-preview-meta">
+                  <div>棰勮灏哄锛?span id="svg-size-${index}">81 脳 81 px</span></div>
+                  <button class="svg-btn" data-index="${index}">猬囷笍 涓嬭浇 PNG</button>
+                </div>
+              </div>
+            `;
+            previewList.appendChild(card);
+
+            renderSvgToCanvas(svgContent, index);
+
+            const btn = card.querySelector(".svg-btn");
+            btn?.addEventListener("click", () => {
+              convertAndDownloadSingle(index);
+            });
+          };
+          reader.readAsText(file);
+        });
+      }
+
+      function getOutputSize() {
+        const w = parseInt(widthInput.value, 10) || 81;
+        const h = parseInt(heightInput.value, 10) || 81;
+        return { width: w, height: h };
+      }
+
+      function renderSvgToCanvas(svgContent, index) {
+        const canvas = document.getElementById(`svg-canvas-${index}`);
+        if (!canvas) return;
+
+        const ctx = canvas.getContext("2d");
+        const img = new Image();
+
+        const svgBlob = new Blob([svgContent], {
+          type: "image/svg+xml;charset=utf-8",
+        });
+        const url = URL.createObjectURL(svgBlob);
+
+        img.onload = () => {
+          const { width, height } = getOutputSize();
+          canvas.width = width;
+          canvas.height = height;
+          const sizeLabel = document.getElementById(`svg-size-${index}`);
+          if (sizeLabel) sizeLabel.textContent = `${width} 脳 ${height} px`;
+
+          ctx.clearRect(0, 0, width, height);
+          ctx.drawImage(img, 0, 0, width, height);
+          URL.revokeObjectURL(url);
+        };
+
+        img.onerror = () => {
+          URL.revokeObjectURL(url);
+        };
+
+        img.src = url;
+      }
+
+      function convertAndDownloadSingle(index) {
+        const file = files[index];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const svgContent = String(e.target?.result || "");
+          const img = new Image();
+          const svgBlob = new Blob([svgContent], {
+            type: "image/svg+xml;charset=utf-8",
+          });
+          const url = URL.createObjectURL(svgBlob);
+
+          img.onload = () => {
+            const { width, height } = getOutputSize();
+            const canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, width, height);
+
+            canvas.toBlob(
+              (blob) => {
+                if (!blob) {
+                  URL.revokeObjectURL(url);
+                  return;
+                }
+                const downloadUrl = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                const fileName = file.name.replace(/\.svg$/i, ".png");
+                a.href = downloadUrl;
+                a.download = fileName;
+                a.click();
+                URL.revokeObjectURL(downloadUrl);
+                URL.revokeObjectURL(url);
+              },
+              "image/png",
+              1
+            );
+          };
+
+          img.onerror = () => {
+            URL.revokeObjectURL(url);
+          };
+
+          img.src = url;
+        };
+        reader.readAsText(file);
+      }
+
+      convertAllBtn.addEventListener("click", () => {
+        files.forEach((_, index) => {
+          setTimeout(() => {
+            convertAndDownloadSingle(index);
+          }, index * 180);
+        });
+      });
+
+      ["input", "change"].forEach((evt) => {
+        widthInput.addEventListener(evt, () => refreshAllPreviews());
+        heightInput.addEventListener(evt, () => refreshAllPreviews());
+      });
+
+      function refreshAllPreviews() {
+        if (!files.length) return;
+        files.forEach((file, index) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const svgContent = String(e.target?.result || "");
+            renderSvgToCanvas(svgContent, index);
+          };
+          reader.readAsText(file);
+        });
+      }
+    })();
+
+    // JPG 杞?PNG 宸ュ叿閫昏緫
+    (function initJpgTool() {
+      const uploadArea = document.getElementById("jpgUploadArea");
+      const fileInput = document.getElementById("jpgFileInput");
+      const previewSection = document.getElementById("jpgPreviewSection");
+      const loading = document.getElementById("jpgLoading");
+      const originalImage = document.getElementById("jpgOriginalImage");
+      const convertedImage = document.getElementById("jpgConvertedImage");
+      const originalInfo = document.getElementById("jpgOriginalInfo");
+      const convertedInfo = document.getElementById("jpgConvertedInfo");
+      const downloadBtn = document.getElementById("jpgDownloadBtn");
+      const resetBtn = document.getElementById("jpgResetBtn");
+      const successMessage = document.getElementById("jpgSuccess");
+      const widthInput = document.getElementById("jpgWidthInput");
+      const heightInput = document.getElementById("jpgHeightInput");
+      const keepAspect = document.getElementById("jpgKeepAspect");
+      const applySizeBtn = document.getElementById("jpgApplySizeBtn");
+      const preset81 = document.getElementById("jpgPreset81");
+      const preset128 = document.getElementById("jpgPreset128");
+      const preset256 = document.getElementById("jpgPreset256");
+
+      if (!uploadArea) return;
+
+      let convertedDataUrl = null;
+      let originalImageData = null;
+      let originalWidth = 0;
+      let originalHeight = 0;
+      let currentWidth = 81;
+      let currentHeight = 81;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) handleFile(file);
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file && (file.type === "image/jpeg" || file.type === "image/jpg")) {
+          handleFile(file);
+        } else {
+          alert("璇蜂笂浼?JPG 鎴?JPEG 鏍煎紡鐨勫浘鐗囷紒");
+        }
+      });
+
+      function handleFile(file) {
+        if (file.size > 10 * 1024 * 1024) {
+          alert("鏂囦欢澶у皬涓嶈兘瓒呰繃 10MB锛?);
+          return;
+        }
+        if (file.type !== "image/jpeg" && file.type !== "image/jpg") {
+          alert("璇蜂笂浼?JPG 鎴?JPEG 鏍煎紡鐨勫浘鐗囷紒");
+          return;
+        }
+
+        loading.classList.add("active");
+        previewSection.classList.remove("active");
+        successMessage.classList.remove("active");
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            originalImageData = img;
+            originalWidth = img.width;
+            originalHeight = img.height;
+            currentWidth = originalWidth;
+            currentHeight = originalHeight;
+
+            widthInput.value = originalWidth;
+            heightInput.value = originalHeight;
+
+            originalImage.src = String(e.target?.result || "");
+            originalInfo.innerHTML = `
+              <div class="image-info-item"><strong>灏哄锛?/strong>${img.width} 脳 ${img.height} 鍍忕礌</div>
+              <div class="image-info-item"><strong>澶у皬锛?/strong>${formatFileSize(file.size)}</div>
+            `;
+
+            convertToPNG(img, currentWidth, currentHeight);
+          };
+          img.src = String(e.target?.result || "");
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function convertToPNG(img, width, height) {
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        convertedDataUrl = canvas.toDataURL("image/png");
+        convertedImage.src = convertedDataUrl;
+
+        const pngSize = Math.round((convertedDataUrl.length - 22) * 0.75);
+        convertedInfo.innerHTML = `
+          <div class="image-info-item"><strong>灏哄锛?/strong>${width} 脳 ${height} 鍍忕礌</div>
+          <div class="image-info-item"><strong>澶у皬锛?/strong>绾?${formatFileSize(pngSize)}</div>
+        `;
+
+        loading.classList.remove("active");
+        previewSection.classList.add("active");
+        successMessage.classList.add("active");
+      }
+
+      downloadBtn.addEventListener("click", () => {
+        if (!convertedDataUrl) return;
+        const link = document.createElement("a");
+        link.download = "converted-image.png";
+        link.href = convertedDataUrl;
+        link.click();
+      });
+
+      applySizeBtn.addEventListener("click", () => {
+        if (!originalImageData) return;
+
+        let newWidth = parseInt(widthInput.value, 10) || originalWidth;
+        let newHeight = parseInt(heightInput.value, 10) || originalHeight;
+
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          newHeight = Math.round(newWidth / aspect);
+          heightInput.value = String(newHeight);
+        }
+
+        newWidth = Math.max(1, Math.min(2048, newWidth));
+        newHeight = Math.max(1, Math.min(2048, newHeight));
+
+        currentWidth = newWidth;
+        currentHeight = newHeight;
+
+        loading.classList.add("active");
+        convertToPNG(originalImageData, currentWidth, currentHeight);
+      });
+
+      widthInput.addEventListener("input", () => {
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          const val = parseInt(widthInput.value, 10);
+          if (!isNaN(val)) {
+            const newHeight = Math.round(val / aspect);
+            heightInput.value = String(newHeight);
+          }
+        }
+      });
+
+      heightInput.addEventListener("input", () => {
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          const val = parseInt(heightInput.value, 10);
+          if (!isNaN(val)) {
+            const newWidth = Math.round(val * aspect);
+            widthInput.value = String(newWidth);
+          }
+        }
+      });
+
+      function applyPreset(width, height) {
+        widthInput.value = String(width);
+        heightInput.value = String(height);
+        if (width !== height) {
+          keepAspect.checked = false;
+        }
+        if (originalImageData) {
+          currentWidth = width;
+          currentHeight = height;
+          loading.classList.add("active");
+          convertToPNG(originalImageData, currentWidth, currentHeight);
+        }
+      }
+
+      preset81.addEventListener("click", () => applyPreset(81, 81));
+      preset128.addEventListener("click", () => applyPreset(128, 128));
+      preset256.addEventListener("click", () => applyPreset(256, 256));
+
+      resetBtn.addEventListener("click", () => {
+        fileInput.value = "";
+        previewSection.classList.remove("active");
+        successMessage.classList.remove("active");
+        convertedDataUrl = null;
+        originalImageData = null;
+        originalWidth = 0;
+        originalHeight = 0;
+        currentWidth = 81;
+        currentHeight = 81;
+        widthInput.value = "81";
+        heightInput.value = "81";
+        keepAspect.checked = true;
+      });
+
+      function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      }
+    })();
+
+    // PNG 杞?JPG 宸ュ叿閫昏緫
+    (function initPngToJpgTool() {
+      const uploadArea = document.getElementById("png2JpgUploadArea");
+      const fileInput = document.getElementById("png2JpgFileInput");
+      const previewSection = document.getElementById("png2JpgPreviewSection");
+      const loading = document.getElementById("png2JpgLoading");
+      const originalImage = document.getElementById("png2JpgOriginalImage");
+      const convertedImage = document.getElementById("png2JpgConvertedImage");
+      const originalInfo = document.getElementById("png2JpgOriginalInfo");
+      const convertedInfo = document.getElementById("png2JpgConvertedInfo");
+      const downloadBtn = document.getElementById("png2JpgDownloadBtn");
+      const resetBtn = document.getElementById("png2JpgResetBtn");
+      const successMessage = document.getElementById("png2JpgSuccess");
+
+      const widthInput = document.getElementById("png2JpgWidthInput");
+      const heightInput = document.getElementById("png2JpgHeightInput");
+      const keepAspect = document.getElementById("png2JpgKeepAspect");
+      const applySizeBtn = document.getElementById("png2JpgApplySizeBtn");
+      const preset81 = document.getElementById("png2JpgPreset81");
+      const preset128 = document.getElementById("png2JpgPreset128");
+      const preset256 = document.getElementById("png2JpgPreset256");
+
+      if (!uploadArea || !fileInput) return;
+
+      let convertedDataUrl = null;
+      let currentFileName = "image";
+      let originalImageData = null;
+      let originalWidth = 0;
+      let originalHeight = 0;
+      let currentWidth = 81;
+      let currentHeight = 81;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) handleFile(file);
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file && file.type === "image/png") {
+          handleFile(file);
+        } else {
+          alert("璇蜂笂浼?PNG 鏍煎紡鐨勫浘鐗囷紒");
+        }
+      });
+
+      function handleFile(file) {
+        if (file.size > 10 * 1024 * 1024) {
+          alert("鏂囦欢澶у皬涓嶈兘瓒呰繃 10MB锛?);
+          return;
+        }
+        if (file.type !== "image/png") {
+          alert("璇蜂笂浼?PNG 鏍煎紡鐨勫浘鐗囷紒");
+          return;
+        }
+
+        loading.classList.add("active");
+        previewSection.style.display = "none";
+        successMessage.style.display = "none";
+        currentFileName = file.name || "image";
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            originalImageData = img;
+            originalWidth = img.width;
+            originalHeight = img.height;
+            currentWidth = img.width;
+            currentHeight = img.height;
+
+            widthInput.value = String(img.width);
+            heightInput.value = String(img.height);
+
+            originalImage.src = String(e.target?.result || "");
+            originalInfo.textContent = `灏哄锛?{img.width} 脳 ${img.height} 鍍忕礌锛涘ぇ灏忥細${formatFileSizePng2Jpg(
+              file.size
+            )}`;
+            convertToJpg(img, currentWidth, currentHeight);
+          };
+          img.src = String(e.target?.result || "");
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function convertToJpg(img, width, height) {
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, width, height);
+
+        convertedDataUrl = canvas.toDataURL("image/jpeg", 0.92);
+        convertedImage.src = convertedDataUrl;
+
+        const approxSize = Math.round((convertedDataUrl.length - 22) * 0.75);
+        convertedInfo.textContent = `灏哄锛?{width} 脳 ${height} 鍍忕礌锛涘ぇ灏忕害锛?{formatFileSizePng2Jpg(
+          approxSize
+        )}`;
+
+        loading.classList.remove("active");
+        previewSection.style.display = "block";
+        successMessage.style.display = "block";
+      }
+
+      downloadBtn.addEventListener("click", () => {
+        if (!convertedDataUrl) return;
+        const a = document.createElement("a");
+        const baseName = currentFileName.replace(/\.png$/i, "") || "image";
+        a.download = `${baseName}.jpg`;
+        a.href = convertedDataUrl;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+
+      resetBtn.addEventListener("click", () => {
+        fileInput.value = "";
+        previewSection.style.display = "none";
+        successMessage.style.display = "none";
+        convertedDataUrl = null;
+        currentFileName = "image";
+        originalImageData = null;
+        originalWidth = 0;
+        originalHeight = 0;
+        currentWidth = 81;
+        currentHeight = 81;
+        widthInput.value = "81";
+        heightInput.value = "81";
+        keepAspect.checked = true;
+      });
+
+      function formatFileSizePng2Jpg(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      }
+
+      applySizeBtn.addEventListener("click", () => {
+        if (!originalImageData) return;
+
+        let newWidth = parseInt(widthInput.value, 10) || originalWidth;
+        let newHeight = parseInt(heightInput.value, 10) || originalHeight;
+
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          newHeight = Math.round(newWidth / aspect);
+          heightInput.value = String(newHeight);
+        }
+
+        newWidth = Math.max(1, Math.min(4096, newWidth));
+        newHeight = Math.max(1, Math.min(4096, newHeight));
+
+        currentWidth = newWidth;
+        currentHeight = newHeight;
+
+        loading.classList.add("active");
+        convertToJpg(originalImageData, currentWidth, currentHeight);
+      });
+
+      widthInput.addEventListener("input", () => {
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          const val = parseInt(widthInput.value, 10);
+          if (!isNaN(val)) {
+            const newHeight = Math.round(val / aspect);
+            heightInput.value = String(newHeight);
+          }
+        }
+      });
+
+      heightInput.addEventListener("input", () => {
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          const val = parseInt(heightInput.value, 10);
+          if (!isNaN(val)) {
+            const newWidth = Math.round(val * aspect);
+            widthInput.value = String(newWidth);
+          }
+        }
+      });
+
+      function applyPreset(width, height) {
+        widthInput.value = String(width);
+        heightInput.value = String(height);
+        if (width !== height) {
+          keepAspect.checked = false;
+        }
+        if (originalImageData) {
+          currentWidth = width;
+          currentHeight = height;
+          loading.classList.add("active");
+          convertToJpg(originalImageData, currentWidth, currentHeight);
+        }
+      }
+
+      preset81.addEventListener("click", () => applyPreset(81, 81));
+      preset128.addEventListener("click", () => applyPreset(128, 128));
+      preset256.addEventListener("click", () => applyPreset(256, 256));
+    })();
+
+    // PNG 杞?SVG 宸ュ叿閫昏緫锛堜綅鍥惧祵鍏ワ級
+    (function initPngToSvgTool() {
+      const uploadArea = document.getElementById("png2SvgUploadArea");
+      const fileInput = document.getElementById("png2SvgFileInput");
+      const previewSection = document.getElementById("png2SvgPreviewSection");
+      const originalImage = document.getElementById("png2SvgOriginalImage");
+      const originalInfo = document.getElementById("png2SvgOriginalInfo");
+      const previewImage = document.getElementById("png2SvgPreviewImage");
+      const convertedInfo = document.getElementById("png2SvgConvertedInfo");
+      const widthInput = document.getElementById("png2SvgWidthInput");
+      const heightInput = document.getElementById("png2SvgHeightInput");
+      const keepAspect = document.getElementById("png2SvgKeepAspect");
+      const applySizeBtn = document.getElementById("png2SvgApplySizeBtn");
+      const preset81 = document.getElementById("png2SvgPreset81");
+      const preset128 = document.getElementById("png2SvgPreset128");
+      const preset256 = document.getElementById("png2SvgPreset256");
+      const downloadBtn = document.getElementById("png2SvgDownloadBtn");
+      const resetBtn = document.getElementById("png2SvgResetBtn");
+
+      if (!uploadArea || !fileInput) return;
+
+      let currentSvgBlobUrl = null;
+      let currentFileName = "image";
+      let originalWidth = 0;
+      let originalHeight = 0;
+      let currentWidth = 81;
+      let currentHeight = 81;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) handleFile(file);
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file && file.type === "image/png") {
+          handleFile(file);
+        } else {
+          alert("璇蜂笂浼?PNG 鏍煎紡鐨勫浘鐗囷紒");
+        }
+      });
+
+      function handleFile(file) {
+        if (file.size > 10 * 1024 * 1024) {
+          alert("鏂囦欢澶у皬涓嶈兘瓒呰繃 10MB锛?);
+          return;
+        }
+        if (file.type !== "image/png") {
+          alert("璇蜂笂浼?PNG 鏍煎紡鐨勫浘鐗囷紒");
+          return;
+        }
+
+        if (currentSvgBlobUrl) {
+          URL.revokeObjectURL(currentSvgBlobUrl);
+          currentSvgBlobUrl = null;
+        }
+
+        currentFileName = file.name || "image";
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const dataUrl = String(e.target?.result || "");
+          const img = new Image();
+          img.onload = () => {
+            originalImage.src = dataUrl;
+            originalWidth = img.width;
+            originalHeight = img.height;
+            currentWidth = img.width;
+            currentHeight = img.height;
+
+            widthInput.value = String(img.width);
+            heightInput.value = String(img.height);
+
+            originalInfo.textContent = `灏哄锛?{img.width} 脳 ${img.height} 鍍忕礌锛涘ぇ灏忥細${formatFileSizeCommon(
+              file.size
+            )}`;
+
+            const svgText =
+              `<svg xmlns="http://www.w3.org/2000/svg" width="${currentWidth}" height="${currentHeight}">` +
+              `<image href="${dataUrl}" width="${currentWidth}" height="${currentHeight}" />` +
+              `</svg>`;
+
+            const svgBlob = new Blob([svgText], { type: "image/svg+xml" });
+            currentSvgBlobUrl = URL.createObjectURL(svgBlob);
+            previewImage.src = currentSvgBlobUrl;
+
+            convertedInfo.textContent = `鐢熸垚鐨?SVG 鍐呴儴宓屽叆 PNG 浣嶅浘锛屽昂瀵革細${currentWidth} 脳 ${currentHeight} 鍍忕礌`;
+            previewSection.style.display = "block";
+          };
+          img.src = dataUrl;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      downloadBtn.addEventListener("click", () => {
+        if (!currentSvgBlobUrl) return;
+        const a = document.createElement("a");
+        const baseName = currentFileName.replace(/\.png$/i, "") || "image";
+        a.download = `${baseName}.svg`;
+        a.href = currentSvgBlobUrl;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+
+      resetBtn.addEventListener("click", () => {
+        fileInput.value = "";
+        previewSection.style.display = "none";
+        if (currentSvgBlobUrl) {
+          URL.revokeObjectURL(currentSvgBlobUrl);
+          currentSvgBlobUrl = null;
+        }
+        currentFileName = "image";
+        originalWidth = 0;
+        originalHeight = 0;
+        currentWidth = 81;
+        currentHeight = 81;
+        widthInput.value = "81";
+        heightInput.value = "81";
+        keepAspect.checked = true;
+      });
+
+      function formatFileSizeCommon(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      }
+
+      applySizeBtn.addEventListener("click", () => {
+        if (!originalWidth || !originalHeight || !currentSvgBlobUrl) return;
+
+        let newWidth = parseInt(widthInput.value, 10) || originalWidth;
+        let newHeight = parseInt(heightInput.value, 10) || originalHeight;
+
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          newHeight = Math.round(newWidth / aspect);
+          heightInput.value = String(newHeight);
+        }
+
+        newWidth = Math.max(1, Math.min(4096, newWidth));
+        newHeight = Math.max(1, Math.min(4096, newHeight));
+
+        currentWidth = newWidth;
+        currentHeight = newHeight;
+
+        // 閲嶆柊鍒涘缓 SVG
+        const href = previewImage.src;
+        const svgText =
+          `<svg xmlns="http://www.w3.org/2000/svg" width="${currentWidth}" height="${currentHeight}">` +
+          `<image href="${href}" width="${currentWidth}" height="${currentHeight}" />` +
+          `</svg>`;
+        if (currentSvgBlobUrl) {
+          URL.revokeObjectURL(currentSvgBlobUrl);
+        }
+        const svgBlob = new Blob([svgText], { type: "image/svg+xml" });
+        currentSvgBlobUrl = URL.createObjectURL(svgBlob);
+        previewImage.src = currentSvgBlobUrl;
+        convertedInfo.textContent = `鐢熸垚鐨?SVG 鍐呴儴宓屽叆 PNG 浣嶅浘锛屽昂瀵革細${currentWidth} 脳 ${currentHeight} 鍍忕礌`;
+      });
+
+      widthInput.addEventListener("input", () => {
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          const val = parseInt(widthInput.value, 10);
+          if (!isNaN(val)) {
+            const newHeight = Math.round(val / aspect);
+            heightInput.value = String(newHeight);
+          }
+        }
+      });
+
+      heightInput.addEventListener("input", () => {
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          const val = parseInt(heightInput.value, 10);
+          if (!isNaN(val)) {
+            const newWidth = Math.round(val * aspect);
+            widthInput.value = String(newWidth);
+          }
+        }
+      });
+
+      function applyPreset(width, height) {
+        widthInput.value = String(width);
+        heightInput.value = String(height);
+        if (width !== height) {
+          keepAspect.checked = false;
+        }
+        if (originalWidth && originalHeight && currentSvgBlobUrl) {
+          currentWidth = width;
+          currentHeight = height;
+          applySizeBtn.click();
+        }
+      }
+
+      preset81.addEventListener("click", () => applyPreset(81, 81));
+      preset128.addEventListener("click", () => applyPreset(128, 128));
+      preset256.addEventListener("click", () => applyPreset(256, 256));
+    })();
+
+    // JPG 杞?SVG 宸ュ叿閫昏緫锛堜綅鍥惧祵鍏ワ級
+    (function initJpgToSvgTool() {
+      const uploadArea = document.getElementById("jpg2SvgUploadArea");
+      const fileInput = document.getElementById("jpg2SvgFileInput");
+      const previewSection = document.getElementById("jpg2SvgPreviewSection");
+      const originalImage = document.getElementById("jpg2SvgOriginalImage");
+      const originalInfo = document.getElementById("jpg2SvgOriginalInfo");
+      const previewImage = document.getElementById("jpg2SvgPreviewImage");
+      const convertedInfo = document.getElementById("jpg2SvgConvertedInfo");
+      const widthInput = document.getElementById("jpg2SvgWidthInput");
+      const heightInput = document.getElementById("jpg2SvgHeightInput");
+      const keepAspect = document.getElementById("jpg2SvgKeepAspect");
+      const applySizeBtn = document.getElementById("jpg2SvgApplySizeBtn");
+      const preset81 = document.getElementById("jpg2SvgPreset81");
+      const preset128 = document.getElementById("jpg2SvgPreset128");
+      const preset256 = document.getElementById("jpg2SvgPreset256");
+      const downloadBtn = document.getElementById("jpg2SvgDownloadBtn");
+      const resetBtn = document.getElementById("jpg2SvgResetBtn");
+
+      if (!uploadArea || !fileInput) return;
+
+      let currentSvgBlobUrl = null;
+      let currentFileName = "image";
+      let originalWidth = 0;
+      let originalHeight = 0;
+      let currentWidth = 81;
+      let currentHeight = 81;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) handleFile(file);
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file && (file.type === "image/jpeg" || file.type === "image/jpg")) {
+          handleFile(file);
+        } else {
+          alert("璇蜂笂浼?JPG / JPEG 鏍煎紡鐨勫浘鐗囷紒");
+        }
+      });
+
+      function handleFile(file) {
+        if (file.size > 10 * 1024 * 1024) {
+          alert("鏂囦欢澶у皬涓嶈兘瓒呰繃 10MB锛?);
+          return;
+        }
+        if (file.type !== "image/jpeg" && file.type !== "image/jpg") {
+          alert("璇蜂笂浼?JPG / JPEG 鏍煎紡鐨勫浘鐗囷紒");
+          return;
+        }
+
+        if (currentSvgBlobUrl) {
+          URL.revokeObjectURL(currentSvgBlobUrl);
+          currentSvgBlobUrl = null;
+        }
+
+        currentFileName = file.name || "image";
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const dataUrl = String(e.target?.result || "");
+          const img = new Image();
+          img.onload = () => {
+            originalImage.src = dataUrl;
+            originalWidth = img.width;
+            originalHeight = img.height;
+            currentWidth = img.width;
+            currentHeight = img.height;
+
+            widthInput.value = String(img.width);
+            heightInput.value = String(img.height);
+
+            originalInfo.textContent = `灏哄锛?{img.width} 脳 ${img.height} 鍍忕礌锛涘ぇ灏忥細${formatFileSizeCommon(
+              file.size
+            )}`;
+
+            const svgText =
+              `<svg xmlns="http://www.w3.org/2000/svg" width="${currentWidth}" height="${currentHeight}">` +
+              `<image href="${dataUrl}" width="${currentWidth}" height="${currentHeight}" />` +
+              `</svg>`;
+
+            const svgBlob = new Blob([svgText], { type: "image/svg+xml" });
+            currentSvgBlobUrl = URL.createObjectURL(svgBlob);
+            previewImage.src = currentSvgBlobUrl;
+
+            convertedInfo.textContent = `鐢熸垚鐨?SVG 鍐呴儴宓屽叆 JPG 浣嶅浘锛屽昂瀵革細${currentWidth} 脳 ${currentHeight} 鍍忕礌`;
+            previewSection.style.display = "block";
+          };
+          img.src = dataUrl;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      downloadBtn.addEventListener("click", () => {
+        if (!currentSvgBlobUrl) return;
+        const a = document.createElement("a");
+        const baseName = currentFileName.replace(/\.(jpg|jpeg)$/i, "") || "image";
+        a.download = `${baseName}.svg`;
+        a.href = currentSvgBlobUrl;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+
+      resetBtn.addEventListener("click", () => {
+        fileInput.value = "";
+        previewSection.style.display = "none";
+        if (currentSvgBlobUrl) {
+          URL.revokeObjectURL(currentSvgBlobUrl);
+          currentSvgBlobUrl = null;
+        }
+        currentFileName = "image";
+        originalWidth = 0;
+        originalHeight = 0;
+        currentWidth = 81;
+        currentHeight = 81;
+        widthInput.value = "81";
+        heightInput.value = "81";
+        keepAspect.checked = true;
+      });
+
+      function formatFileSizeCommon(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      }
+
+      applySizeBtn.addEventListener("click", () => {
+        if (!originalWidth || !originalHeight || !currentSvgBlobUrl) return;
+
+        let newWidth = parseInt(widthInput.value, 10) || originalWidth;
+        let newHeight = parseInt(heightInput.value, 10) || originalHeight;
+
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          newHeight = Math.round(newWidth / aspect);
+          heightInput.value = String(newHeight);
+        }
+
+        newWidth = Math.max(1, Math.min(4096, newWidth));
+        newHeight = Math.max(1, Math.min(4096, newHeight));
+
+        currentWidth = newWidth;
+        currentHeight = newHeight;
+
+        const href = previewImage.src;
+        const svgText =
+          `<svg xmlns="http://www.w3.org/2000/svg" width="${currentWidth}" height="${currentHeight}">` +
+          `<image href="${href}" width="${currentWidth}" height="${currentHeight}" />` +
+          `</svg>`;
+        if (currentSvgBlobUrl) {
+          URL.revokeObjectURL(currentSvgBlobUrl);
+        }
+        const svgBlob = new Blob([svgText], { type: "image/svg+xml" });
+        currentSvgBlobUrl = URL.createObjectURL(svgBlob);
+        previewImage.src = currentSvgBlobUrl;
+        convertedInfo.textContent = `鐢熸垚鐨?SVG 鍐呴儴宓屽叆 JPG 浣嶅浘锛屽昂瀵革細${currentWidth} 脳 ${currentHeight} 鍍忕礌`;
+      });
+
+      widthInput.addEventListener("input", () => {
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          const val = parseInt(widthInput.value, 10);
+          if (!isNaN(val)) {
+            const newHeight = Math.round(val / aspect);
+            heightInput.value = String(newHeight);
+          }
+        }
+      });
+
+      heightInput.addEventListener("input", () => {
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          const val = parseInt(heightInput.value, 10);
+          if (!isNaN(val)) {
+            const newWidth = Math.round(val * aspect);
+            widthInput.value = String(newWidth);
+          }
+        }
+      });
+
+      function applyPreset(width, height) {
+        widthInput.value = String(width);
+        heightInput.value = String(height);
+        if (width !== height) {
+          keepAspect.checked = false;
+        }
+        if (originalWidth && originalHeight && currentSvgBlobUrl) {
+          currentWidth = width;
+          currentHeight = height;
+          applySizeBtn.click();
+        }
+      }
+
+      preset81.addEventListener("click", () => applyPreset(81, 81));
+      preset128.addEventListener("click", () => applyPreset(128, 128));
+      preset256.addEventListener("click", () => applyPreset(256, 256));
+    })();
+
+    // SVG 杞?JPG 宸ュ叿閫昏緫
+    (function initSvgToJpgTool() {
+      const uploadArea = document.getElementById("svg2JpgUploadArea");
+      const fileInput = document.getElementById("svg2JpgFileInput");
+      const previewSection = document.getElementById("svg2JpgPreviewSection");
+      const loading = document.getElementById("svg2JpgLoading");
+      const originalImage = document.getElementById("svg2JpgOriginalImage");
+      const convertedImage = document.getElementById("svg2JpgConvertedImage");
+      const originalInfo = document.getElementById("svg2JpgOriginalInfo");
+      const convertedInfo = document.getElementById("svg2JpgConvertedInfo");
+      const downloadBtn = document.getElementById("svg2JpgDownloadBtn");
+      const resetBtn = document.getElementById("svg2JpgResetBtn");
+      const successMessage = document.getElementById("svg2JpgSuccess");
+
+      const widthInput = document.getElementById("svg2JpgWidthInput");
+      const heightInput = document.getElementById("svg2JpgHeightInput");
+      const keepAspect = document.getElementById("svg2JpgKeepAspect");
+      const applySizeBtn = document.getElementById("svg2JpgApplySizeBtn");
+      const preset81 = document.getElementById("svg2JpgPreset81");
+      const preset128 = document.getElementById("svg2JpgPreset128");
+      const preset256 = document.getElementById("svg2JpgPreset256");
+
+      if (!uploadArea || !fileInput) return;
+
+      let convertedDataUrl = null;
+      let currentFileName = "image";
+      let originalWidth = 512;
+      let originalHeight = 512;
+      let currentWidth = 512;
+      let currentHeight = 512;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) handleFile(file);
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file && (file.name.toLowerCase().endsWith(".svg") || file.type === "image/svg+xml")) {
+          handleFile(file);
+        } else {
+          alert("璇蜂笂浼?SVG 鏂囦欢锛?);
+        }
+      });
+
+      function handleFile(file) {
+        if (file.size > 5 * 1024 * 1024) {
+          alert("鏂囦欢澶у皬涓嶈兘瓒呰繃 5MB锛?);
+          return;
+        }
+
+        loading.classList.add("active");
+        previewSection.style.display = "none";
+        successMessage.style.display = "none";
+        currentFileName = file.name || "image";
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const svgText = String(e.target?.result || "");
+          const svgBlob = new Blob([svgText], { type: "image/svg+xml;charset=utf-8" });
+          const url = URL.createObjectURL(svgBlob);
+          const img = new Image();
+          img.onload = () => {
+            originalImage.src = url;
+            originalWidth = img.width || 512;
+            originalHeight = img.height || 512;
+            currentWidth = originalWidth;
+            currentHeight = originalHeight;
+
+            widthInput.value = String(currentWidth);
+            heightInput.value = String(currentHeight);
+
+            originalInfo.textContent = `娓叉煋灏哄锛?{img.width} 脳 ${img.height} 鍍忕礌锛涙簮鏂囦欢澶у皬锛?{formatFileSizeCommon(
+              file.size
+            )}`;
+            convertSvgToJpg(img, currentWidth, currentHeight);
+            URL.revokeObjectURL(url);
+          };
+          img.onerror = () => {
+            URL.revokeObjectURL(url);
+            loading.classList.remove("active");
+            alert("鏃犳硶瑙ｆ瀽 SVG 鏂囦欢锛岃妫€鏌ユ枃浠舵槸鍚︽湁鏁堛€?);
+          };
+          img.src = url;
+        };
+        reader.readAsText(file);
+      }
+
+      function convertSvgToJpg(img, width, height) {
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, width, height);
+        ctx.drawImage(img, 0, 0, width, height);
+
+        convertedDataUrl = canvas.toDataURL("image/jpeg", 0.92);
+        convertedImage.src = convertedDataUrl;
+
+        const approxSize = Math.round((convertedDataUrl.length - 22) * 0.75);
+        convertedInfo.textContent = `灏哄锛?{width} 脳 ${height} 鍍忕礌锛涘ぇ灏忕害锛?{formatFileSizeCommon(
+          approxSize
+        )}`;
+
+        loading.classList.remove("active");
+        previewSection.style.display = "block";
+        successMessage.style.display = "block";
+      }
+
+      downloadBtn.addEventListener("click", () => {
+        if (!convertedDataUrl) return;
+        const a = document.createElement("a");
+        const baseName = currentFileName.replace(/\.svg$/i, "") || "image";
+        a.download = `${baseName}.jpg`;
+        a.href = convertedDataUrl;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+
+      resetBtn.addEventListener("click", () => {
+        fileInput.value = "";
+        previewSection.style.display = "none";
+        successMessage.style.display = "none";
+        convertedDataUrl = null;
+        currentFileName = "image";
+        originalWidth = 512;
+        originalHeight = 512;
+        currentWidth = 512;
+        currentHeight = 512;
+        widthInput.value = "512";
+        heightInput.value = "512";
+        keepAspect.checked = true;
+      });
+
+      function formatFileSizeCommon(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      }
+
+      applySizeBtn.addEventListener("click", () => {
+        if (!convertedDataUrl) return;
+
+        let newWidth = parseInt(widthInput.value, 10) || originalWidth;
+        let newHeight = parseInt(heightInput.value, 10) || originalHeight;
+
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          newHeight = Math.round(newWidth / aspect);
+          heightInput.value = String(newHeight);
+        }
+
+        newWidth = Math.max(1, Math.min(4096, newWidth));
+        newHeight = Math.max(1, Math.min(4096, newHeight));
+
+        currentWidth = newWidth;
+        currentHeight = newHeight;
+
+        const img = new Image();
+        img.onload = () => {
+          loading.classList.add("active");
+          convertSvgToJpg(img, currentWidth, currentHeight);
+        };
+        img.src = originalImage.src;
+      });
+
+      widthInput.addEventListener("input", () => {
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          const val = parseInt(widthInput.value, 10);
+          if (!isNaN(val)) {
+            const newHeight = Math.round(val / aspect);
+            heightInput.value = String(newHeight);
+          }
+        }
+      });
+
+      heightInput.addEventListener("input", () => {
+        if (keepAspect.checked && originalWidth && originalHeight) {
+          const aspect = originalWidth / originalHeight;
+          const val = parseInt(heightInput.value, 10);
+          if (!isNaN(val)) {
+            const newWidth = Math.round(val * aspect);
+            widthInput.value = String(newWidth);
+          }
+        }
+      });
+
+      function applyPreset(width, height) {
+        widthInput.value = String(width);
+        heightInput.value = String(height);
+        if (width !== height) {
+          keepAspect.checked = false;
+        }
+        applySizeBtn.click();
+      }
+
+      preset81.addEventListener("click", () => applyPreset(81, 81));
+      preset128.addEventListener("click", () => applyPreset(128, 128));
+      preset256.addEventListener("click", () => applyPreset(256, 256));
+    })();
+
+    // 鑳屾櫙閫忔槑宸ュ叿閫昏緫
+    (function initBgTool() {
+      const uploadArea = document.getElementById("bgUploadArea");
+      const fileInput = document.getElementById("bgFileInput");
+      const previewSection = document.getElementById("bgPreviewSection");
+      const loading = document.getElementById("bgLoading");
+      const originalImage = document.getElementById("bgOriginalImage");
+      const transparentImage = document.getElementById("bgTransparentImage");
+      const originalInfo = document.getElementById("bgOriginalInfo");
+      const transparentInfo = document.getElementById("bgTransparentInfo");
+      const colorPicker = document.getElementById("bgColorPicker");
+      const colorPreview = document.getElementById("bgColorPreview");
+      const toleranceSlider = document.getElementById("bgToleranceSlider");
+      const toleranceValue = document.getElementById("bgToleranceValue");
+      const processBtn = document.getElementById("bgProcessBtn");
+      const downloadBtn = document.getElementById("bgDownloadBtn");
+      const resetBtn = document.getElementById("bgResetBtn");
+
+      if (!uploadArea) return;
+
+      let currentImage = null;
+      let transparentDataUrl = null;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) handleFile(file);
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file && file.type.startsWith("image/")) {
+          handleFile(file);
+        } else {
+          alert("璇蜂笂浼犲浘鐗囨枃浠讹紒");
+        }
+      });
+
+      function handleFile(file) {
+        if (file.size > 10 * 1024 * 1024) {
+          alert("鏂囦欢澶у皬涓嶈兘瓒呰繃 10MB锛?);
+          return;
+        }
+        if (!file.type.startsWith("image/")) {
+          alert("璇蜂笂浼犲浘鐗囨枃浠讹紒");
+          return;
+        }
+
+        loading.classList.add("active");
+        previewSection.classList.remove("active");
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            currentImage = img;
+            const src = String(e.target?.result || "");
+            originalImage.src = src;
+            originalInfo.innerHTML = `
+              <div class="image-info-item"><strong>灏哄锛?/strong>${img.width} 脳 ${img.height} 鍍忕礌</div>
+              <div class="image-info-item"><strong>澶у皬锛?/strong>${formatFileSizeBg(file.size)}</div>
+            `;
+
+            transparentImage.src = src;
+            transparentInfo.innerHTML = `
+              <div class="image-info-item"><strong>鏍煎紡锛?/strong>PNG锛堥€忔槑鑳屾櫙锛?/div>
+              <div class="image-info-item"><strong>灏哄锛?/strong>${img.width} 脳 ${img.height} 鍍忕礌</div>
+              <div class="image-info-item" style="color: rgba(255,255,255,0.7);">鐐瑰嚮鈥滃鐞嗗浘鐗団€濇寜閽紑濮?/div>
+            `;
+
+            autoDetectBackgroundColor(img);
+
+            loading.classList.remove("active");
+            previewSection.classList.add("active");
+            downloadBtn.disabled = true;
+            downloadBtn.style.opacity = "0.7";
+          };
+          img.src = String(e.target?.result || "");
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function formatFileSizeBg(bytes) {
+        if (bytes === 0) return "0 Bytes";
+        const k = 1024;
+        const sizes = ["Bytes", "KB", "MB", "GB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
+      }
+
+      function autoDetectBackgroundColor(img) {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+        const corners = [
+          [0, 0],
+          [canvas.width - 1, 0],
+          [0, canvas.height - 1],
+          [canvas.width - 1, canvas.height - 1],
+        ];
+
+        let r = 0,
+          g = 0,
+          b = 0;
+        corners.forEach(([x, y]) => {
+          const index = (y * canvas.width + x) * 4;
+          r += data[index];
+          g += data[index + 1];
+          b += data[index + 2];
+        });
+        r = Math.round(r / 4);
+        g = Math.round(g / 4);
+        b = Math.round(b / 4);
+
+        const hexColor =
+          "#" +
+          [r, g, b]
+            .map((x) => {
+              const hex = x.toString(16);
+              return hex.length === 1 ? "0" + hex : hex;
+            })
+            .join("");
+
+        colorPicker.value = hexColor;
+        colorPreview.style.backgroundColor = hexColor;
+      }
+
+      colorPicker.addEventListener("input", (e) => {
+        colorPreview.style.backgroundColor = e.target.value;
+      });
+
+      toleranceSlider.addEventListener("input", (e) => {
+        toleranceValue.textContent = String(e.target.value);
+      });
+
+      originalImage.addEventListener("click", (e) => {
+        if (!currentImage) return;
+
+        const canvas = document.createElement("canvas");
+        canvas.width = currentImage.width;
+        canvas.height = currentImage.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(currentImage, 0, 0);
+
+        const rect = originalImage.getBoundingClientRect();
+        const x = Math.floor(((e.clientX - rect.left) * currentImage.width) / rect.width);
+        const y = Math.floor(((e.clientY - rect.top) * currentImage.height) / rect.height);
+
+        const imageData = ctx.getImageData(x, y, 1, 1);
+        const [r, g, b] = imageData.data;
+        const hexColor =
+          "#" +
+          [r, g, b]
+            .map((x) => {
+              const hex = x.toString(16);
+              return hex.length === 1 ? "0" + hex : hex;
+            })
+            .join("");
+
+        colorPicker.value = hexColor;
+        colorPreview.style.backgroundColor = hexColor;
+      });
+
+      processBtn.addEventListener("click", () => {
+        if (!currentImage) {
+          alert("璇峰厛涓婁紶鍥剧墖锛?);
+          return;
+        }
+        loading.classList.add("active");
+        setTimeout(() => {
+          removeBackground(currentImage);
+        }, 80);
+      });
+
+      function removeBackground(img) {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+
+        const targetColor = hexToRgb(colorPicker.value);
+        const tolerance = parseInt(toleranceSlider.value, 10);
+
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          const distance = Math.sqrt(
+            Math.pow(r - targetColor.r, 2) + Math.pow(g - targetColor.g, 2) + Math.pow(b - targetColor.b, 2)
+          );
+          if (distance <= tolerance) {
+            data[i + 3] = 0;
+          }
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+        transparentDataUrl = canvas.toDataURL("image/png");
+        transparentImage.src = transparentDataUrl;
+
+        transparentInfo.innerHTML = `
+          <div class="image-info-item"><strong>鏍煎紡锛?/strong>PNG锛堥€忔槑鑳屾櫙锛?/div>
+          <div class="image-info-item"><strong>灏哄锛?/strong>${img.width} 脳 ${img.height} 鍍忕礌</div>
+          <div class="image-info-item" style="color:#2ed573;">鉁?澶勭悊瀹屾垚锛?/div>
+        `;
+
+        loading.classList.remove("active");
+        downloadBtn.disabled = false;
+        downloadBtn.style.opacity = "1";
+      }
+
+      function hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result
+          ? {
+              r: parseInt(result[1], 16),
+              g: parseInt(result[2], 16),
+              b: parseInt(result[3], 16),
+            }
+          : { r: 255, g: 255, b: 255 };
+      }
+
+      downloadBtn.addEventListener("click", () => {
+        if (!transparentDataUrl) return;
+        const link = document.createElement("a");
+        link.download = "transparent-background.png";
+        link.href = transparentDataUrl;
+        link.click();
+      });
+
+      resetBtn.addEventListener("click", () => {
+        fileInput.value = "";
+        previewSection.classList.remove("active");
+        currentImage = null;
+        transparentDataUrl = null;
+        downloadBtn.disabled = true;
+        downloadBtn.style.opacity = "0.7";
+      });
+    })();
+
+    // 鏂囨。杞崲宸ュ叿閫昏緫锛圵ord -> PDF锛?
+    (function initDocTool() {
+      const uploadArea = document.getElementById("docUploadArea");
+      const fileInput = document.getElementById("docFileInput");
+      const previewSection = document.getElementById("docPreviewSection");
+      const loading = document.getElementById("docLoading");
+      const fileInfo = document.getElementById("docFileInfo");
+      const convertBtn = document.getElementById("docConvertBtn");
+      const resetBtn = document.getElementById("docResetBtn");
+      const cancelBtn = document.getElementById("docCancelBtn");
+      const successEl = document.getElementById("docSuccess");
+
+      if (!uploadArea || !fileInput) return;
+
+      /** @type {File | null} */
+      let currentFile = null;
+      /** @type {AbortController | null} */
+      let abortController = null;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) {
+          handleFile(file);
+        }
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file) {
+          handleFile(file);
+        }
+      });
+
+      function handleFile(file) {
+        const ext = (file.name || "").toLowerCase();
+        if (!ext.endsWith(".doc") && !ext.endsWith(".docx")) {
+          alert("璇蜂笂浼?.doc 鎴?.docx 鏍煎紡鐨?Word 鏂囨。");
+          return;
+        }
+        if (file.size > 20 * 1024 * 1024) {
+          alert("鏂囦欢澶у皬涓嶈兘瓒呰繃 20MB锛?);
+          return;
+        }
+
+        currentFile = file;
+        if (previewSection) previewSection.style.display = "block";
+        if (successEl) successEl.style.display = "none";
+        if (fileInfo) {
+          fileInfo.textContent = `鏂囦欢锛?{file.name}锛?{formatFileSize(file.size)}锛塦;
+        }
+      }
+
+      if (convertBtn) {
+        convertBtn.addEventListener("click", async () => {
+          if (!currentFile) {
+            alert("璇峰厛閫夋嫨涓€涓?Word 鏂囨。");
+            return;
+          }
+          if (loading) loading.classList.add("active");
+          if (successEl) successEl.style.display = "none";
+
+          // 鍒涘缓鏂扮殑 AbortController
+          abortController = new AbortController();
+
+          try {
+            const fd = new FormData();
+            fd.append("file", currentFile);
+
+            const resp = await fetch("/api/convert/word-to-pdf", {
+              method: "POST",
+              body: fd,
+              signal: abortController.signal,
+            });
+
+            if (!resp.ok) {
+              try {
+                const errorData = await resp.json();
+                let errorMsg = errorData.message || `杞崲澶辫触 (${resp.status})`;
+                if (errorData.tips && errorData.tips.length > 0) {
+                  errorMsg += '\n\n' + errorData.tips.join('\n');
+                }
+                alert(errorMsg);
+              } catch {
+                alert(`杞崲澶辫触 (${resp.status})锛岃绋嶅悗閲嶈瘯鎴栨鏌ュ悗绔湇鍔°€傗灐锔?npm run dev:server`);
+              }
+              console.error("convert error:", resp.status);
+              return;
+            }
+
+            const blob = await resp.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            const baseName = (currentFile.name || "document").replace(/\.(docx?|DOCX?)$/, "");
+            a.href = url;
+            a.download = `${baseName || "document"}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            if (successEl) successEl.style.display = "block";
+            abortController = null;
+          } catch (e) {
+            if (e.name === "AbortError") {
+              console.log("涓婁紶宸插彇娑?);
+              if (successEl) successEl.style.display = "none";
+            } else {
+              console.error("convert exception:", e);
+              alert("杞崲杩囩▼涓嚭鐜伴敊璇紝璇锋鏌ョ綉缁滄垨鍚庣鏈嶅姟銆?);
+            }
+          } finally {
+            if (loading) loading.classList.remove("active");
+          }
+        });
+      }
+
+      if (cancelBtn) {
+        cancelBtn.addEventListener("click", () => {
+          if (abortController) {
+            abortController.abort();
+            abortController = null;
+            if (loading) loading.classList.remove("active");
+            if (successEl) successEl.style.display = "none";
+            alert("宸插彇娑堜笂浼?);
+          }
+        });
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener("click", () => {
+          if (abortController) {
+            abortController.abort();
+            abortController = null;
+          }
+          currentFile = null;
+          fileInput.value = "";
+          if (previewSection) previewSection.style.display = "none";
+          if (successEl) successEl.style.display = "none";
+        });
+      }
+
+      function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      }
+    })();
+
+    // 鏂囨。杞崲宸ュ叿閫昏緫锛堝浘鐗?-> 鍚堝苟 PDF锛?
+    (function initImageToPdfTool() {
+      const uploadArea = document.getElementById("imgPdfUploadArea");
+      const fileInput = document.getElementById("imgPdfFileInput");
+      const previewSection = document.getElementById("imgPdfPreviewSection");
+      const loading = document.getElementById("imgPdfLoading");
+      const fileInfo = document.getElementById("imgPdfFileInfo");
+      const convertBtn = document.getElementById("imgPdfConvertBtn");
+      const resetBtn = document.getElementById("imgPdfResetBtn");
+      const cancelBtn = document.getElementById("imgPdfCancelBtn");
+      const successEl = document.getElementById("imgPdfSuccess");
+      const fileListEl = document.getElementById("imgPdfFileList");
+      const listDetailsEl = document.getElementById("imgPdfListDetails");
+      const selectDirBtn = document.getElementById("imgPdfSelectDirBtn");
+      const dirInput = document.getElementById("imgPdfDirInput");
+
+      if (!uploadArea || !fileInput) return;
+
+      /** @type {File[]} */
+      let images = [];
+      /** @type {AbortController | null} */
+      let abortController = null;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const files = Array.from(e.target.files || []);
+        handleFiles(files);
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const files = Array.from(e.dataTransfer.files || []);
+        handleFiles(files);
+      });
+
+      // 浠庢枃浠跺す瀵煎叆锛氱偣鍑绘寜閽Е鍙戠洰褰曢€夋嫨
+      if (selectDirBtn && dirInput) {
+        selectDirBtn.addEventListener("click", () => {
+          dirInput.click();
+        });
+
+        dirInput.addEventListener("change", (e) => {
+          const files = Array.from(e.target.files || []);
+          if (!files.length) return;
+          // 浣跨敤 webkitRelativePath / name 鎸夎矾寰勯『搴忔帓搴忥紝灏介噺璐磋繎鏂囦欢澶逛腑鐨勯『搴?
+          files.sort((a, b) => {
+            const pa = (a.webkitRelativePath || a.name).toLowerCase();
+            const pb = (b.webkitRelativePath || b.name).toLowerCase();
+            return pa.localeCompare(pb);
+          });
+          handleFiles(files);
+        });
+      }
+
+      function handleFiles(files) {
+        const valid = [];
+        for (const f of files) {
+          if (!f.type.startsWith("image/")) continue;
+          if (f.size > 10 * 1024 * 1024) {
+            alert(`鍥剧墖 ${f.name} 瓒呰繃 10MB锛屽凡璺宠繃`);
+            continue;
+          }
+          valid.push(f);
+        }
+        if (!valid.length) {
+          alert("璇蜂笂浼?JPG / PNG / WEBP 鏍煎紡鐨勫浘鐗囷紙鍗曞紶 鈮?10MB锛夈€?);
+          return;
+        }
+        // 绱Н娣诲姞鍥剧墖锛屽娆￠€夋嫨浼氫笉鏂拷鍔?
+        images = images.concat(valid);
+        if (previewSection) previewSection.style.display = "block";
+        if (successEl) successEl.style.display = "none";
+        if (fileInfo) {
+          const totalSize = images.reduce((sum, f) => sum + f.size, 0);
+          fileInfo.textContent = `鍏?${images.length} 寮犲浘鐗囷紝鎬诲ぇ灏忕害 ${formatFileSize(totalSize)}`;
+        }
+        if (fileListEl) {
+          fileListEl.innerHTML = "";
+          images.forEach((img) => {
+            const li = document.createElement("li");
+            li.textContent = img.name;
+            fileListEl.appendChild(li);
+          });
+        }
+        if (listDetailsEl) {
+          listDetailsEl.open = false;
+        }
+      }
+
+      if (convertBtn) {
+        convertBtn.addEventListener("click", async () => {
+          if (!images.length) {
+            alert("璇峰厛閫夋嫨鑷冲皯涓€寮犲浘鐗?);
+            return;
+          }
+          if (loading) loading.classList.add("active");
+          if (successEl) successEl.style.display = "none";
+
+          // 鍒涘缓鏂扮殑 AbortController
+          abortController = new AbortController();
+
+          try {
+            const fd = new FormData();
+            images.forEach((img) => fd.append("images", img));
+
+            const resp = await fetch("/api/convert/image-to-pdf", {
+              method: "POST",
+              body: fd,
+              signal: abortController.signal,
+            });
+
+            if (!resp.ok) {
+              try {
+                const errorData = await resp.json();
+                let errorMsg = errorData.message || `鐢熸垚 PDF 澶辫触 (${resp.status})`;
+                if (errorData.tips && errorData.tips.length > 0) {
+                  errorMsg += '\n\n' + errorData.tips.join('\n');
+                }
+                alert(errorMsg);
+              } catch {
+                alert(`鐢熸垚 PDF 澶辫触 (${resp.status})锛岃绋嶅悗閲嶈瘯鎴栨鏌ュ悗绔湇鍔°€傗灐锔?npm run dev:server`);
+              }
+              console.error("image->pdf error:", resp.status);
+              return;
+            }
+
+            const blob = await resp.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "images.pdf";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            if (successEl) successEl.style.display = "block";
+            abortController = null;
+          } catch (e) {
+            if (e.name === "AbortError") {
+              console.log("涓婁紶宸插彇娑?);
+              if (successEl) successEl.style.display = "none";
+            } else {
+              console.error("image->pdf exception:", e);
+              alert("鐢熸垚 PDF 杩囩▼涓嚭鐜伴敊璇紝璇锋鏌ョ綉缁滄垨鍚庣鏈嶅姟銆?);
+            }
+          } finally {
+            if (loading) loading.classList.remove("active");
+          }
+        });
+      }
+
+      if (cancelBtn) {
+        cancelBtn.addEventListener("click", () => {
+          if (abortController) {
+            abortController.abort();
+            abortController = null;
+            if (loading) loading.classList.remove("active");
+            if (successEl) successEl.style.display = "none";
+            alert("宸插彇娑堜笂浼?);
+          }
+        });
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener("click", () => {
+          if (abortController) {
+            abortController.abort();
+            abortController = null;
+          }
+          images = [];
+          fileInput.value = "";
+          if (previewSection) previewSection.style.display = "none";
+          if (successEl) successEl.style.display = "none";
+          if (fileListEl) fileListEl.innerHTML = "";
+        });
+      }
+
+      function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      }
+    })();
+
+    // 鏂囨。杞崲宸ュ叿閫昏緫锛圥DF -> Word锛?
+    (function initPdfToWordTool() {
+      const uploadArea = document.getElementById("pdf2WordUploadArea");
+      const fileInput = document.getElementById("pdf2WordFileInput");
+      const previewSection = document.getElementById("pdf2WordPreviewSection");
+      const loading = document.getElementById("pdf2WordLoading");
+      const fileInfo = document.getElementById("pdf2WordFileInfo");
+      const convertBtn = document.getElementById("pdf2WordConvertBtn");
+      const resetBtn = document.getElementById("pdf2WordResetBtn");
+      const cancelBtn = document.getElementById("pdf2WordCancelBtn");
+      const successEl = document.getElementById("pdf2WordSuccess");
+
+      if (!uploadArea || !fileInput) return;
+
+      /** @type {File | null} */
+      let currentFile = null;
+      /** @type {AbortController | null} */
+      let abortController = null;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) handleFile(file);
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file) handleFile(file);
+      });
+
+      function handleFile(file) {
+        const name = (file.name || "").toLowerCase();
+        if (!name.endsWith(".pdf")) {
+          alert("璇蜂笂浼?.pdf 鏍煎紡鐨勬枃浠?);
+          return;
+        }
+        if (file.size > 20 * 1024 * 1024) {
+          alert("鏂囦欢澶у皬涓嶈兘瓒呰繃 20MB锛?);
+          return;
+        }
+
+        currentFile = file;
+        if (previewSection) previewSection.style.display = "block";
+        if (successEl) successEl.style.display = "none";
+        if (fileInfo) {
+          fileInfo.textContent = `鏂囦欢锛?{file.name}锛?{formatFileSize(file.size)}锛塦;
+        }
+      }
+
+      if (convertBtn) {
+        convertBtn.addEventListener("click", async () => {
+          if (!currentFile) {
+            alert("璇峰厛閫夋嫨涓€涓?PDF 鏂囦欢");
+            return;
+          }
+          if (loading) loading.classList.add("active");
+          if (successEl) successEl.style.display = "none";
+
+          // 鍒涘缓鏂扮殑 AbortController
+          abortController = new AbortController();
+
+          try {
+            const fd = new FormData();
+            fd.append("file", currentFile);
+
+            const resp = await fetch("/api/convert/pdf-to-word", {
+              method: "POST",
+              body: fd,
+              signal: abortController.signal,
+            });
+
+            if (!resp.ok) {
+              try {
+                const errorData = await resp.json();
+                let errorMsg = errorData.message || `杞崲澶辫触 (${resp.status})`;
+                if (errorData.tips && errorData.tips.length > 0) {
+                  errorMsg += '\n\n' + errorData.tips.join('\n');
+                }
+                alert(errorMsg);
+              } catch {
+                alert(`杞崲澶辫触 (${resp.status})锛岃绋嶅悗閲嶈瘯鎴栨鏌ュ悗绔湇鍔°€傗灐锔?npm run dev:server`);
+              }
+              console.error("pdf->word error:", resp.status);
+              return;
+            }
+
+            const blob = await resp.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            const baseName = (currentFile.name || "document").replace(/\.pdf$/i, "");
+            a.href = url;
+            a.download = `${baseName || "document"}.docx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            if (successEl) successEl.style.display = "block";
+            abortController = null;
+          } catch (e) {
+            if (e.name === "AbortError") {
+              console.log("涓婁紶宸插彇娑?);
+              if (successEl) successEl.style.display = "none";
+            } else {
+              console.error("pdf->word exception:", e);
+              alert("杞崲杩囩▼涓嚭鐜伴敊璇紝璇锋鏌ョ綉缁滄垨鍚庣鏈嶅姟銆?);
+            }
+          } finally {
+            if (loading) loading.classList.remove("active");
+          }
+        });
+      }
+
+      if (cancelBtn) {
+        cancelBtn.addEventListener("click", () => {
+          if (abortController) {
+            abortController.abort();
+            abortController = null;
+            if (loading) loading.classList.remove("active");
+            if (successEl) successEl.style.display = "none";
+            alert("宸插彇娑堜笂浼?);
+          }
+        });
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener("click", () => {
+          if (abortController) {
+            abortController.abort();
+            abortController = null;
+          }
+          currentFile = null;
+          fileInput.value = "";
+          if (previewSection) previewSection.style.display = "none";
+          if (successEl) successEl.style.display = "none";
+        });
+      }
+
+      function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      }
+    })();
+
+    // 鏂囨。杞崲宸ュ叿閫昏緫锛圥DF -> PPTX锛?
+    (function initPdfToPptTool() {
+      const uploadArea = document.getElementById("pdf2PptUploadArea");
+      const fileInput = document.getElementById("pdf2PptFileInput");
+      const previewSection = document.getElementById("pdf2PptPreviewSection");
+      const loading = document.getElementById("pdf2PptLoading");
+      const fileInfo = document.getElementById("pdf2PptFileInfo");
+      const convertBtn = document.getElementById("pdf2PptConvertBtn");
+      const resetBtn = document.getElementById("pdf2PptResetBtn");
+      const cancelBtn = document.getElementById("pdf2PptCancelBtn");
+      const successEl = document.getElementById("pdf2PptSuccess");
+
+      if (!uploadArea || !fileInput) return;
+
+      /** @type {File | null} */
+      let currentFile = null;
+      /** @type {AbortController | null} */
+      let abortController = null;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) handleFile(file);
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file) handleFile(file);
+      });
+
+      function handleFile(file) {
+        const name = (file.name || "").toLowerCase();
+        if (!name.endsWith(".pdf")) {
+          alert("璇蜂笂浼?.pdf 鏍煎紡鐨勬枃浠?);
+          return;
+        }
+        if (file.size > 20 * 1024 * 1024) {
+          alert("鏂囦欢澶у皬涓嶈兘瓒呰繃 20MB锛?);
+          return;
+        }
+
+        currentFile = file;
+        if (previewSection) previewSection.style.display = "block";
+        if (successEl) successEl.style.display = "none";
+        if (fileInfo) {
+          fileInfo.textContent = `鏂囦欢锛?{file.name}锛?{formatFileSize(file.size)}锛塦;
+        }
+      }
+
+      if (convertBtn) {
+        convertBtn.addEventListener("click", async () => {
+          if (!currentFile) {
+            alert("璇峰厛閫夋嫨涓€涓?PDF 鏂囦欢");
+            return;
+          }
+          if (loading) loading.classList.add("active");
+          if (successEl) successEl.style.display = "none";
+
+          // 鍒涘缓鏂扮殑 AbortController
+          abortController = new AbortController();
+
+          try {
+            const fd = new FormData();
+            fd.append("file", currentFile);
+
+            const resp = await fetch("/api/convert/pdf-to-ppt", {
+              method: "POST",
+              body: fd,
+              signal: abortController.signal,
+            });
+
+            if (!resp.ok) {
+              try {
+                const errorData = await resp.json();
+                let errorMsg = errorData.message || `杞崲澶辫触 (${resp.status})`;
+                if (errorData.tips && errorData.tips.length > 0) {
+                  errorMsg += '\n\n' + errorData.tips.join('\n');
+                }
+                alert(errorMsg);
+              } catch {
+                alert(`杞崲澶辫触 (${resp.status})锛岃绋嶅悗閲嶈瘯鎴栨鏌ュ悗绔湇鍔°€傗灐锔?npm run dev:server`);
+              }
+              console.error("pdf->ppt error:", resp.status);
+              return;
+            }
+
+            const blob = await resp.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            const baseName = (currentFile.name || "slides").replace(/\.pdf$/i, "");
+            a.href = url;
+            a.download = `${baseName || "slides"}.pptx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            if (successEl) successEl.style.display = "block";
+            abortController = null;
+          } catch (e) {
+            if (e.name === "AbortError") {
+              console.log("涓婁紶宸插彇娑?);
+              if (successEl) successEl.style.display = "none";
+            } else {
+              console.error("pdf->ppt exception:", e);
+              alert("杞崲杩囩▼涓嚭鐜伴敊璇紝璇锋鏌ョ綉缁滄垨鍚庣鏈嶅姟銆?);
+            }
+          } finally {
+            if (loading) loading.classList.remove("active");
+          }
+        });
+      }
+
+      if (cancelBtn) {
+        cancelBtn.addEventListener("click", () => {
+          if (abortController) {
+            abortController.abort();
+            abortController = null;
+            if (loading) loading.classList.remove("active");
+            if (successEl) successEl.style.display = "none";
+            alert("宸插彇娑堜笂浼?);
+          }
+        });
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener("click", () => {
+          if (abortController) {
+            abortController.abort();
+            abortController = null;
+          }
+          currentFile = null;
+          fileInput.value = "";
+          if (previewSection) previewSection.style.display = "none";
+          if (successEl) successEl.style.display = "none";
+        });
+      }
+
+      function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      }
+    })();
+
+    // 闊抽杞崲宸ュ叿閫昏緫
+    (function initAudioTool() {
+      const uploadArea = document.getElementById("audioUploadArea");
+      const fileInput = document.getElementById("audioFileInput");
+      const previewSection = document.getElementById("audioPreviewSection");
+      const loading = document.getElementById("audioLoading");
+      const fileInfo = document.getElementById("audioFileInfo");
+      const formatSelect = document.getElementById("audioFormatSelect");
+      const convertBtn = document.getElementById("audioConvertBtn");
+      const resetBtn = document.getElementById("audioResetBtn");
+      const cancelBtn = document.getElementById("audioCancelBtn");
+      const successEl = document.getElementById("audioSuccess");
+      const supportedFormats = ["mp3", "wav", "flac", "aac", "m4a", "ogg", "opus", "wma", "aiff"];
+
+      if (!uploadArea || !fileInput) return;
+
+      let currentFile = null;
+      let abortController = null;
+
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) {
+          handleFile(file);
+        }
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file) {
+          handleFile(file);
+        }
+      });
+
+      function getExtension(fileName) {
+        const parts = String(fileName || "").toLowerCase().split(".");
+        return parts.length > 1 ? parts.pop() : "";
+      }
+
+      function handleFile(file) {
+        const ext = getExtension(file.name);
+        if (!supportedFormats.includes(ext)) {
+          alert("璇蜂笂浼?MP3 / WAV / FLAC / AAC / M4A / OGG / OPUS / WMA / AIFF 鏍煎紡鐨勯煶棰戞枃浠?);
+          return;
+        }
+        if (file.size > 100 * 1024 * 1024) {
+          alert("闊抽鏂囦欢澶у皬涓嶈兘瓒呰繃 100MB锛?);
+          return;
+        }
+
+        currentFile = file;
+        if (previewSection) previewSection.style.display = "block";
+        if (successEl) successEl.style.display = "none";
+        if (formatSelect) {
+          formatSelect.value = ext === "mp3" ? "wav" : "mp3";
+        }
+        if (fileInfo) {
+          fileInfo.textContent = `鏂囦欢锛?{file.name}锛?{formatFileSize(file.size)}锛塦;
+        }
+      }
+
+      if (convertBtn) {
+        convertBtn.addEventListener("click", async () => {
+          if (!currentFile) {
+            alert("璇峰厛閫夋嫨涓€涓煶棰戞枃浠?);
+            return;
+          }
+          const targetFormat = formatSelect ? formatSelect.value : "mp3";
+          if (!supportedFormats.includes(targetFormat)) {
+            alert("璇烽€夋嫨鏈夋晥鐨勭洰鏍囬煶棰戞牸寮?);
+            return;
+          }
+
+          if (loading) loading.classList.add("active");
+          if (successEl) successEl.style.display = "none";
+          abortController = new AbortController();
+
+          try {
+            const fd = new FormData();
+            fd.append("file", currentFile);
+            fd.append("format", targetFormat);
+
+            const resp = await fetch("/api/convert/audio", {
+              method: "POST",
+              body: fd,
+              signal: abortController.signal,
+            });
+
+            if (!resp.ok) {
+              try {
+                const errorData = await resp.json();
+                alert(errorData.message || `杞崲澶辫触 (${resp.status})`);
+              } catch {
+                alert(`杞崲澶辫触 (${resp.status})锛岃绋嶅悗閲嶈瘯鎴栨鏌ュ悗绔湇鍔°€俙);
+              }
+              console.error("audio convert error:", resp.status);
+              return;
+            }
+
+            const blob = await resp.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            const baseName = (currentFile.name || "audio").replace(/\.[^.]+$/, "");
+            a.href = url;
+            a.download = `${baseName || "audio"}.${targetFormat}`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            if (successEl) successEl.style.display = "block";
+            abortController = null;
+          } catch (e) {
+            if (e.name === "AbortError") {
+              console.log("涓婁紶宸插彇娑?);
+              if (successEl) successEl.style.display = "none";
+            } else {
+              console.error("audio convert exception:", e);
+              alert("杞崲杩囩▼涓嚭鐜伴敊璇紝璇锋鏌ョ綉缁滄垨鍚庣鏈嶅姟銆?);
+            }
+          } finally {
+            if (loading) loading.classList.remove("active");
+          }
+        });
+      }
+
+      if (cancelBtn) {
+        cancelBtn.addEventListener("click", () => {
+          if (abortController) {
+            abortController.abort();
+            abortController = null;
+            if (loading) loading.classList.remove("active");
+            if (successEl) successEl.style.display = "none";
+            alert("宸插彇娑堜笂浼?);
+          }
+        });
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener("click", () => {
+          if (abortController) {
+            abortController.abort();
+            abortController = null;
+          }
+          currentFile = null;
+          fileInput.value = "";
+          if (previewSection) previewSection.style.display = "none";
+          if (successEl) successEl.style.display = "none";
+        });
+      }
+
+      function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      }
+    })();
+
+  </script>
+</body>
+</html>
+
+

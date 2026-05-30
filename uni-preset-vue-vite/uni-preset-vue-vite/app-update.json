@@ -1,0 +1,7 @@
+{
+  "versionCode": 104,
+  "versionName": "1.0.4",
+  "apkUrl": "/filetools-app.apk",
+  "force": false,
+  "notes": "新增多张图片按选择顺序合并为一个 PDF；继续保留软件内更新、打开、分享、保存功能。"
+}
